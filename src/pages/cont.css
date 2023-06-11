@@ -1,0 +1,225 @@
+
+/* body {
+    background: url('../../public/dist/img/worldmap.png');
+    user-select: none;
+} */
+
+.mikro {
+    float: left;
+    width: 360px;
+    height: 220px;
+    border-radius: 1% 1% 40% 1%;
+    background: rgb(46, 178, 255);
+}
+
+.mikro > img {
+    width: 350px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.prov {
+    float: right;
+    /* margin-top: 50px; */
+    /* padding-right: 50px; */
+}
+
+
+.prov > img {
+    width: 350px;
+    object-fit: cover;
+}
+
+.prov-color {
+    color: orange;
+}
+
+.hit {
+    line-height: 40px;
+}
+
+.pad {
+    /* margin: 30px; */
+    padding-left: 10px;
+}
+
+.sales-stamp {
+    /* position: fixed; */
+    width: 350px;
+    height: 180px;
+    border: 2px solid rgb(83, 82, 82);
+}
+
+.customer-stamp {
+    /* position: fixed; */
+    width: 400px;
+    height: 180px;
+    border: 2px solid rgb(83, 82, 82);
+}
+
+.cus-sign {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    /* margin-left: 50%;
+    transform: translate(-50%); */
+}
+
+.cus-sign > div {
+    margin-left: 50%;
+    transform: translate(-50%);
+}
+
+.sales-footer {
+    /* float: right; */
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    margin-top: 50px;
+    width: 100%;
+    height: 100px;
+    /* border-radius: 30% 30% 1% 1%; */
+    background: rgb(46, 178, 255);
+    color: white;
+}
+
+.sales {
+    padding-top: 10px;
+    padding-left: 30px;
+}
+
+.finance {
+    padding-top: 10px;
+    padding-left: 30px;
+}
+
+.support {
+    padding-top: 10px;
+    padding-left: 30px;
+}
+
+.notee {
+    float: right;
+    font-size: 18px;
+}
+
+.modal input {
+    border: none;
+}
+
+.modal select {
+    border: none;
+    background-color: #fff;
+}
+
+#summernotes {
+    border: none;
+    padding: 10px;
+    width: 100%;
+    height: 150px;
+}
+
+@media print {
+    #printSec {
+        background-color: white;
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        /* margin: 0; */
+        margin-left: 1.2cm;
+        margin-right: 1.2cm;
+        margin-top: 8cm;
+        /* padding: 15px; */
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 18px;
+    }
+    footer {
+        display: none;
+    }
+
+    .callout-info {
+        display: none;
+    }
+
+    .card-title {
+        display: none;
+    }
+
+    .step {
+        display: none;
+    }
+
+    .bs-stepper-label {
+        display: none;
+    }
+
+    .timeline {
+        display: none;
+    }
+
+    .modal-header {
+        display: none;
+    }
+
+    .modal {
+        z-index: 999;
+    }
+
+    #searchForm {
+        display: none;
+    }
+
+    table {
+        display: none;
+    }
+
+    #prineted {
+        display: none;
+    }
+
+    .modal-footer {
+        display: none;
+    }
+
+    #summernotes {
+        display: none;
+    }
+}
+
+.fa-angle-right-m {
+    font-size: 3rem;
+}
+
+.fa-angle-left-m {
+    font-size: 3rem;
+    border-radius: 10rem;
+    width: 4rem;
+    height: 4rem;
+    text-align: center;
+    padding: 8px;
+    color: grey;
+}
+
+.fa-angle-left-m:hover {
+    background-color: rgb(224, 224, 224);
+    cursor: pointer;
+}
+
+.marginLeft {
+    margin-bottom: 0.5rem;
+}
+
+.smaller{
+    min-width: 2rem;
+    width: 3rem;
+}
+
+.marginer{
+    padding-left: 1rem;
+}
+
+
