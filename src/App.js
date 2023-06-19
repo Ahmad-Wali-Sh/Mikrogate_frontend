@@ -27,7 +27,8 @@ import TroubleshootDetails from "./TaskManager/pages/Troubleshoot/TroubleshootDe
 import OnlineSupportDetails from "./TaskManager/pages/OnlineSupport/OnlineSupportDetails";
 import ChangeLocationDetails from "./TaskManager/pages/ChangeLocation/ChangeLocationDetails";
 import AmendmentDetails from "./TaskManager/pages/Amendment/AmendmentDetails";
-import NOC from "./pages/NOC";
+import NocContractList from "./pages/Dashboards/NOC/NocContractList";
+import NocDashboard from "./pages/Dashboards/NOC/NocDashboard";
 
 export default function App() {
   const { user } = useContext(Context);
@@ -58,7 +59,8 @@ export default function App() {
           <Route path="/task-manager/online_support" element={<OnlineSupportDetails />} />
           <Route path="/task-manager/change_location" element={<ChangeLocationDetails />} />
           <Route path="/task-manager/amendment" element={<AmendmentDetails />} />
-          <Route path="/task-manager/noc" element={<NOC />} />
+          <Route path="/task-manager/noc" element={<NocDashboard />} />
+          <Route path="/task-manager/noc-contracts" element={<NocContractList />} />
         </Routes>
         {user ? <Footer /> : ""}
       </Router>

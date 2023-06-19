@@ -2,12 +2,12 @@ import axios from "axios";
 import React from "react";
 import { useState, useEffect, useRef, useContext } from "react";
 import NotificationManager from "react-notifications/lib/NotificationManager";
-import Troubleshoot from "../TaskManager/components/Troubleshoot";
-import ChangeLocation from "../TaskManager/pages/ChangeLocation/components/ChangeLocation";
-import Amendment from "../TaskManager/pages/Amendment/components/Amendment";
-import { Context } from "../context/Context";
+import Troubleshoot from "../../../TaskManager/components/Troubleshoot";
+import ChangeLocation from "../../../TaskManager/pages/ChangeLocation/components/ChangeLocation";
+import Amendment from "../../../TaskManager/pages/Amendment/components/Amendment";
+import { Context } from "../../../context/Context";
 
-export default function NOC() {
+export default function NocContractList() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
   const token = useContext(Context);
 
@@ -346,6 +346,176 @@ export default function NOC() {
         <div className="container-fluid">
           <div className="row">
             <div className="col-12">
+            <section className="content">
+            <div className="container-fluid">
+              <h2 className="text-center display-4 mb-5 pt-5">
+                Search Contracts
+              </h2>
+              <form  id="searchForm">
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="row">
+                      <br />
+                      <div className="col-6">
+                        <div class="form-group">
+                          <div className="form-group">
+                            <label>Created by:</label>
+                            <select
+                              className="form-control"
+                              style={{ width: "100%" }}
+                              name="created_by"
+                            >
+                              <option value="">Any</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-3">
+                        <div className="form-group">
+                          <label>Sort Order:</label>
+                          <select
+                            className="form-control"
+                            style={{ width: "100%" }}
+                          >
+                            <option value="ASC">ASC</option>
+                            <option value="DESC">DESC</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="col-3">
+                        <div className="form-group">
+                          <label>Order By:</label>
+                          <select
+                            className="form-control"
+                            style={{ width: "100%" }}
+                          >
+                            <option value="Title">Contract Number</option>
+                            <option value="Date">Date</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-3">
+                        <div className="form-group">
+                          <label htmlFor="dateRange">From:</label>
+
+                          <div className="input-group">
+                            <input
+                              type="date"
+                              className="form-control"
+                              id="reservation"
+                              name="date1"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-3">
+                        <div className="form-group">
+                          <label htmlFor="dateRange">To:</label>
+
+                          <div className="input-group">
+                            <input
+                              type="date"
+                              className="form-control"
+                              id="reservation"
+                              name="date2"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-3">
+                        <div className="form-group">
+                          <label>Status:</label>
+                          <select
+                            className="form-select border border-dark"
+                            aria-label="Default select example"
+                            name="status"
+                            id="status"
+                          >
+                            <option value="">Any</option>
+                           
+                          </select>
+                        </div>
+                      </div>
+                      <div className="col-3">
+                        <div className="form-group">
+                          <label>Device Condition</label>
+                          <select
+                            className="form-control"
+                            name="device_condition"
+                            style={{ width: "100%" }}
+                          >
+                            <option value="">Any</option>
+                            <option value="Sold">Sold</option>
+                            <option value="Lease">Lease</option>
+                            <option value="Test">Test</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-6">
+                        <div className="form-group">
+                          <label>Package:</label>
+                          <select
+                            className="form-control"
+                            name="package"
+                            style={{ width: "100%" }}
+                          >
+                            <option value="">Any</option>
+
+                          </select>
+                        </div>
+                      </div>
+                      <div className="col-3">
+                        <div className="form-group">
+                          <label>Antenna:</label>
+                          <select
+                            className="form-control"
+                            name="antenna"
+                            style={{ width: "100%" }}
+                          >
+                            <option value="">Any</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="col-3">
+                        <div className="form-group">
+                          <label>Router:</label>
+                          <select
+                            className="form-control"
+                            name="router"
+                            style={{ width: "100%" }}
+                          >
+                            <option value="">Any</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <div className="input-group input-group-lg">
+                        <input
+                          type="search"
+                          className="form-control form-control-lg"
+                          placeholder="Type your keywords here"
+                          name="query"
+                        />
+                        <div className="input-group-append">
+                          <button
+                            type="submit"
+                            className="btn btn-lg btn-default"
+                          >
+                            <i className="fa fa-search"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </section>
               <div className="card">
                 <div className="card-header">
                   <h3 className="card-title">New Customers</h3>
