@@ -158,10 +158,12 @@ export class MainDetails extends Component {
                           className={
                             items.stage.name == "New"
                               ? "dot bg-secondary"
-                              : items.stage.name == "In-Progress"
+                              : items.stage.name == "Progress"
                               ? "dot bg-primary"
-                              : items.stage.name == "Completed"
+                              : items.stage.name == "Done"
                               ? "dot color--success"
+                              : items.stage.name == "Pending" 
+                              ? "dot bg-warning"
                               : "dot bg-dark"
                           }
                         ></div>

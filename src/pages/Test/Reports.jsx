@@ -2,8 +2,8 @@ import "../cont.css";
 import React, { Component } from "react";
 import axios, { AxiosError } from "axios";
 import { Link } from "react-router-dom";
-import { NotificationManager } from "react-notifications";
 import cx from "classnames";
+import { NotificationManager } from "react-notifications";
 
 export default class Search extends Component {
   constructor(props) {

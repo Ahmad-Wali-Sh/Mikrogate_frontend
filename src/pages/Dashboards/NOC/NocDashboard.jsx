@@ -108,20 +108,26 @@ export default function NocDashboard() {
                 </Link>
               </div>
               <div className="col-lg-4 col-6">
-                <div className="small-box bg-info">
+                <Link
+                  to={{
+                    pathname: "/task-manager/noc-tasks",
+                  }}
+                >
+                  <div className="small-box bg-info">
                   <div className="inner">
-                    <h3>{newCon}</h3>
-
-                    <p>Tasks View</p>
+                      <h3>5</h3>
+                      <p>Tasks List</p>
+                    </div>
+                    <div className="icon">
+                      <i className="ion ion-bag"></i>
+                    </div>
+                    <a className="small-box-footer">
+                      More info <i className="fas fa-arrow-circle-right"></i>
+                    </a>
                   </div>
-                  <div className="icon">
-                    <i className="ion ion-bag"></i>
-                  </div>
-                  <a className="small-box-footer">
-                    More info <i className="fas fa-arrow-circle-right"></i>
-                  </a>
-                </div>
+                </Link>
               </div>
+              
               <div className="col-lg-4 col-6">
                 <div className="small-box bg-warning">
                   <div className="inner">

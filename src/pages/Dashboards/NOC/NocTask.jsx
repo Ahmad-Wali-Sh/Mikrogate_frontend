@@ -10,11 +10,23 @@ import { Link } from "react-router-dom";
 import cx from "classnames";
 import { useForm } from "react-hook-form"
 
-export default function NocContractList() {
+export default function NocTask() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
   const token = useContext(Context);
 
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm()
 
+  const [contracts, setContracts] = useState([]);
+  const [contractNumber, setContractNumber] = useState([]);
+  const [projecter, setProjecter] = useState([]);
+  const [tag, setTag] = useState([]);
+
+  
   const CONTRACT = process.env.REACT_APP_NEW_CONTRACT;
   const STAGE_URL = process.env.REACT_APP_STAGE;
   const PROJECT_URL = process.env.REACT_APP_PROJECT;
@@ -28,16 +40,66 @@ export default function NocContractList() {
   const PACKAGES_URL = process.env.REACT_APP_PACKAGE
   const STATUS_URL = process.env.REACT_APP_CONTRACT_STATUS
 
-  const [contracts, setContracts] = useState([]);
-  const [contractNumber, setContractNumber] = useState([]);
+
+  const [users, setUsers] = React.useState([])
+  const [tasks, setTasks] = React.useState([]);
   
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm()
-  
+  React.useEffect(() => {
+    axios
+      .get(TASK_URL, {
+        header: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => {
+        setTasks(res.data.results);
+      });
+
+    axios
+      .get(USERS_URL, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => {
+        setUsers(res.data.results);
+      });
+
+    axios
+      .get(PROJECT_URL, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => {
+        setProjecter(res.data.results);
+      });
+
+      axios
+      .get(TAG_URL, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => {
+        setTag(res.data.results);
+      });
+
+  }, [])
+
+  const TaskSearchHandle = (data) => {
+      axios
+        .get(TASK_URL + `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${data.project}&stage=${data.stage}&tag=${data.tag}&user=${data.user}&assigned__id=${data.assigned}&contract__contract_id=${data.contract__contract_id}` ,
+        {
+            headers: {
+                Authorization: "Token " + token.user.token
+            }
+        })
+        .then((res) => {
+            console.log(res)
+            setTasks(res.data.results)
+        })
+  }
 
   console.log(contractNumber);
 
@@ -50,59 +112,6 @@ export default function NocContractList() {
       })
       .then((res) => setContracts(res.data.results));
   }, []);
-
-  const [users, setUsers] = React.useState([])
-  const [packages, setPackages] = React.useState([])
-  const [status, setStatus] = React.useState([])
-  
-  React.useEffect(() => {
-
-
-    axios
-      .get(USERS_URL, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => {
-        setUsers(res.data.results);
-      });
-      
-    axios
-      .get(PACKAGES_URL, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => {
-        setPackages(res.data.results);
-      });
-    axios
-      .get(STATUS_URL, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => {
-        setStatus(res.data.results);
-      });
-
-  }, [])
-
-
-  const ContractSearchHandle = (data) => {
-    axios
-      .get(CONTRACT + `?user=${data.user}&contract_number=${data.contract_number}&contract_id=${data.contract_id}&date_after=${data.date_after}&date_before=${data.date_before}&activation=${""}&valid=&status=${data.contract__status}&contract_type=${""}&contractpackage__package=${data.contract__package}&contractrouter__router=${""}&ordering=${data.sort_order}${data.order_by}&contractantenna__antenna=${""}` , 
-      {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res)=> {
-        setContracts(res.data.results)
-      })
-
-  }
 
   let i = 0;
   console.log(contracts);
@@ -123,7 +132,6 @@ export default function NocContractList() {
   };
 
 
-
   const [payment, setPayment] = React.useState([]);
   const [installtionCofirm, setInstallationConfirm] = React.useState([]);
 
@@ -139,6 +147,8 @@ export default function NocContractList() {
       .then((res) => setUser(res.data));
     console.log(user);
   }, []);
+
+
 
   const [project, setProject] = useState(taskProjectState);
 
@@ -187,10 +197,6 @@ export default function NocContractList() {
   const [findInput, setFindInput] = React.useState({
     input: "",
   });
-
-
-
-
   const handleSubmit123 = async (e) => {
     e.preventDefault();
     warningNotification();
@@ -242,11 +248,10 @@ export default function NocContractList() {
   }, []);
 
   const [stage, setStage] = useState([]);
-  const [projecter, setProjecter] = useState([]);
-  const [tag, setTag] = useState([]);
+
+
   const [member, setMember] = useState([]);
 
- 
 
   React.useEffect(() => {
     axios
@@ -272,29 +277,7 @@ export default function NocContractList() {
       });
   }, []);
 
-  React.useEffect(() => {
-    axios
-      .get(PROJECT_URL, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => {
-        setProjecter(res.data.results);
-      });
-  }, []);
 
-  React.useEffect(() => {
-    axios
-      .get(TAG_URL, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => {
-        setTag(res.data.results);
-      });
-  }, []);
 
   let [form, setForm] = React.useState({
     title: "",
@@ -415,11 +398,6 @@ export default function NocContractList() {
       });
   };
 
-
-
-
-  
-
   return (
     <div className="content-wrapper">
       <div className="content-header">
@@ -429,9 +407,11 @@ export default function NocContractList() {
               <section className="content">
                 <div className="container-fluid">
                   <h2 className="text-center display-4 mb-5 pt-5">
-                    Search Contracts
+                    Search Tasks
                   </h2>
-                  <form id="searchForm" onSubmit={handleSubmit(ContractSearchHandle)}>
+                  <form id="searchForm"
+                  onSubmit={handleSubmit(TaskSearchHandle)}
+                  >
                     <div className="row">
                       <div className="col-md-12">
                         <div className="row">
@@ -447,8 +427,8 @@ export default function NocContractList() {
                                   {...register("user")}
                                 >
                                   <option value="">Any</option>
-                                  {users.map((user)=> (
-                                    <option value={user.id}>{user.name}</option>
+                                  {users.map((user) => (
+                                      <option value={user.id}>{user.name}</option>
                                   ))}
                                 </select>
                               </div>
@@ -462,8 +442,8 @@ export default function NocContractList() {
                                 style={{ width: "100%" }}
                                 {...register("sort_order")}
                               >
-                                <option value="">[A - Z][1-2-3]</option>
-                                <option value="-">[Z - A][3-2-1]</option>
+                                <option value="">ASC</option>
+                                <option value="-">DESC</option>
                               </select>
                             </div>
                           </div>
@@ -475,8 +455,9 @@ export default function NocContractList() {
                                 style={{ width: "100%" }}
                                 {...register("order_by")}
                               >
-                                <option value="contract_number">Contract Number</option>
-                                <option value="date">Date</option>
+                                <option value="contract">Contract</option>
+                                <option value="created">Date</option>
+                                <option value="deadline">Deadline</option>
                               </select>
                             </div>
                           </div>
@@ -485,14 +466,13 @@ export default function NocContractList() {
                           <div className="col-3">
                             <div className="form-group">
                               <label htmlFor="dateRange">From:</label>
-
                               <div className="input-group">
                                 <input
                                   type="date"
                                   className="form-control"
                                   id="reservation"
                                   name="date1"
-                                  {...register("date_after")}
+                                  {...register("created_after")}
                                 />
                               </div>
                             </div>
@@ -507,24 +487,24 @@ export default function NocContractList() {
                                   className="form-control"
                                   id="reservation"
                                   name="date2"
-                                  {...register("date_before")}
+                                  {...register("created_before")}
                                 />
                               </div>
                             </div>
                           </div>
                           <div className="col-3">
                             <div className="form-group">
-                              <label>Status:</label>
+                              <label>Stage:</label>
                               <select
-                                className="form-select border border-dark"
+                                className="form-control "
                                 aria-label="Default select example"
                                 name="status"
                                 id="status"
-                                {...register("contract__status")}
+                                {...register("stage")}
                               >
                                 <option value="">Any</option>
-                                {status.map((stat) => (
-                                  <option value={stat.id}>{stat.name}</option>
+                                {stage.map((stage)=> (
+                                    <option value={stage.id}>{stage.name}</option>
                                 ))}
                               </select>
                             </div>
@@ -532,52 +512,68 @@ export default function NocContractList() {
                           <div className="col-3">
                             <div className="form-group">
                               <label>ID</label>
-                              <input 
-                                type="text"
-                                className="form-control"
-                                {...register("contract_id")}
-                              />
+                              <input type="text" className="form-control" {...register("contract__contract_id")} />
                             </div>
                           </div>
                         </div>
                         <div className="row">
-                          <div className="col-6">
+                          <div className="col-3">
                             <div className="form-group">
-                              <label>Package:</label>
+                              <label>Project:</label>
                               <select
-                                className="form-control"
-                                name="package"
+                                className="form-control "
+                                name="antenna"
                                 style={{ width: "100%" }}
-                                {...register("contract__package")}
+                                {...register("project")}
                               >
                                 <option value="">Any</option>
-                                {packages.map((pack) => (
-                                  <option value={pack.id}>{pack.name}</option>
+                                {projecter.map((project) => (
+                                    <option value={project.id}>{project.name}</option>
                                 ))}
                               </select>
                             </div>
                           </div>
                           <div className="col-3">
                             <div className="form-group">
-                              <label>Antenna:</label>
+                              <label>Tag:</label>
                               <select
                                 className="form-control"
-                                name="antenna"
+                                name="router"
                                 style={{ width: "100%" }}
+                                {...register("tag")}
                               >
                                 <option value="">Any</option>
+                                {tag.map((tag)=> (
+                                    <option value={tag.id}>{tag.name}</option>
+                                ))}
                               </select>
                             </div>
                           </div>
                           <div className="col-3">
                             <div className="form-group">
-                              <label>Router:</label>
+                              <label>Deadline:</label>
+                              <input
+                                type="date"
+                                className="form-control"
+                                name="date2"
+                                {...register("deadline")}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-3">
+                            <div className="form-group">
+                              <label>Assigned:</label>
                               <select
                                 className="form-control"
                                 name="router"
-                                style={{ width: "100%" }}
+                                style={{ width: "100%", height: "2.4rem" }}
+                                {...register("assigned")}
+                                
                               >
                                 <option value="">Any</option>
+                                {users.map((user)=> (
+                                    <option value={user.id}>{user.name}</option>
+                                ))}
                               </select>
                             </div>
                           </div>
@@ -589,7 +585,7 @@ export default function NocContractList() {
                               className="form-control form-control-lg"
                               placeholder="Contract Number"
                               name="query"
-                              {...register("contract_number")}
+                              {...register("contract")}
                             />
                             <div className="input-group-append">
                               <button
@@ -607,6 +603,8 @@ export default function NocContractList() {
                 </div>
               </section>
               <div className="card">
+                <div className="card-header">
+                  <h3 className="card-title">Tasks</h3>
                   <div
                     className="modal fade"
                     id="addTaskModal"
@@ -946,186 +944,93 @@ export default function NocContractList() {
                         </div>
                       </div>
                     </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {/* <div className="card-body p-0">
+      <div className="card-body p-0">
         <table className="table projects">
           <thead>
             <tr>
               <th style={{ width: "1%" }}>#</th>
-              <th>Contract Number</th>
-              <th>POC Name</th>
-              <th>POC Number</th>
-              <th>Address</th>
-              <th>Task Creation</th>
+              <th style={{ width: "14%" }}>Contract_Number</th>
+              <th style={{ width: "13%" }}>Title</th>
+              <th style={{ width: "13%" }}>Project</th>
+              <th style={{ width: "14%" }}>Assigned</th>
+              <th style={{ width: "14%" }}>Stage</th>
+              <th style={{ width: "14%" }}>User</th>
+              <th style={{ width: "14%" }}>Info</th>
             </tr>
           </thead>
           <tbody>
-            {contracts.map((contract) => (
-              <tr key={contract.id}>
-                <td>{++i}.</td>
-                <td>
-                  <a>{contract.contract_number}</a>
-                  <br />
-                  <small>{new Date(contract.date).toDateString()}</small>
-                </td>
-                <td>{contract.name}</td>
-                <td className="project_progress">{contract.contact}</td>
-                <td>{contract.address}</td>
-                <td>
-                  <button
-                    type="button"
-                    name="addTask"
-                    className="btn btn-secondary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#addTaskModal"
-                    onClick={()=> (
-                        setContractNumber(contract.contract_number),
-                        setFind(contract)
-                    )}
-                  >
-                    Create Task
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>f
-        </table>
-      </div> */}
-      <section className="content">
-        <div className="container-fluid">
-          <div className="row" id="prineted">
-            <div className="col-md-12">
-              <div className="card">
-                <div className="card-header">
-                  <h3 className="card-title mt-5">All Customers</h3>
-
-                  <div className="card-tools">
-                    <ul className="pagination pagination-sm float-right">
-                      <li className="page-item">
-                        <a className="page-link">&laquo;</a>
-                      </li>
-                      <li className="page-item">
-                        <a className="page-link">1</a>
-                      </li>
-                      <li className="page-item">
-                        <a className="page-link">2</a>
-                      </li>
-                      <li className="page-item">
-                        <a className="page-link">3</a>
-                      </li>
-                      <li className="page-item">
-                        <a className="page-link">&raquo;</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="card-body p-0">
-                  <table className="table projects" id="allcontractstable">
-                    <thead>
-                      <tr>
-                        <th style={{ width: "1%" }}>#</th>
-                        <th>Contract_Number</th>
-                        <th style={{ width: "10%" }}>ID</th>
-                        <th>POC Name</th>
-                        <th>POC Number</th>
-                        <th>Address</th>
-                        <th>
-                          <div>Type</div>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {contracts.map((contract) => (
-                        <tr key={contract.id}>
-                          <td>{++i}.</td>
-                          <td style={{ maxWidth: "10rem" }}>
-                            <div style={{ maxWidth: "10rem" }}>
-                              {contract.contract_number}
-                            </div>
-                            <small
-                              className={cx({
-                                "badge badge-pill badge-success":
-                                  contract.status.name === "Done",
-                                "badge badge-pill badge-primary":
-                                  contract.status.name === "New",
-                                "badge badge-pill badge-danger":
-                                  contract.status.name === "Canceled",
-                                "badge badge-pill badge-warning":
-                                  contract.status.name === "Pending",
-                                "badge badge-pill badge-secondary":
-                                  contract.status.name === "Terminated",
-                              })}
-                            >
-                              {contract.status.name}
-                            </small>
-                          </td>
-                          <td>
-                            <div style={{ width: "4rem" }}>
-                              {contract.contract_id}
-                            </div>
-                          </td>
-                          <td>
-                            <div style={{ width: "5rem" }}>{contract.name}</div>
-                          </td>
-                          <td>
-                            <div style={{ width: "6rem" }}>
-                              {contract.contact}
-                            </div>
-                          </td>
-                          <td>
-                            <div style={{ width: "10rem" }}>
-                              {contract.address}
-                            </div>
-                          </td>
-                          <td>{contract.contract_type.name}</td>
-                          <td
-                            className="project-actions text-right"
-                            style={{ minWidth: "7rem" }}
-                          >
-                            <Link
-                              className="btn btn-primary btn-sm mr-1"
-                              to={{
-                                pathname: "/contract-details",
-                              }}
-                              state={{ contract: contract }}
-                            >
-                              <i className="fa-solid fa-folder-open"></i>
-                            </Link>
-                            <button
-                              type="button"
-                              name="addTask"
-                              className="btn btn-secondary btn-sm mr-1"
-                              data-bs-toggle="modal"
-                              data-bs-target="#addTaskModal"
-                              onClick={() => (
-                                setContractNumber(contract.contract_number),
-                                setFind(contract)
-                              )}
-                            >
-                             <i class="fa-solid fa-plus"></i>
-                            </button>
-                          </td>
-                        </tr>
+            {tasks.map((task) => (
+              <>
+                <tr key={task.id}>
+                  <td>{++i}.</td>
+                  <td>
+                    <a>{task.contract.contract_number}</a>
+                    <br />
+                    {/* <small>{new Date(task.date).toDateString()}</small> */}
+                  </td>
+                  <td>{task.title}</td>
+                  <td>{task.project.name}</td>
+                  <td>
+                    <select className="form-control">
+                      <option hidden>Click To See</option>
+                      {task.assigned.map((assigne) => (
+                        <option disabled>{assigne.name}</option>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                <div>
-                  <div className="float-left mt-5 ml-2">
-                    <b>Result:</b>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+                    </select>
+                  </td>
+                  <td>
+                    <small
+                      className={cx({
+                        "badge badge-pill badge-success":
+                          task.stage.name === "Done",
+                        "badge badge-pill badge-primary":
+                          task.stage.name === "Progress",
+                        "badge badge-pill badge-danger":
+                          task.stage.name === "Canceled",
+                        "badge badge-pill badge-warning":
+                          task.stage.name === "Pending",
+                        "badge badge-pill badge-secondary":
+                          task.stage.name === "Terminated",
+                      })}
+                    >
+                      {task.stage.name}
+                    </small>
+                  </td>
+                  <td>{task.user.name}</td>
+                  <td>
+                    <Link
+                      className="text-decoration-none"
+                      to={
+                        task.project.name == "Installation"
+                          ? "/task-manager/details"
+                          : task.project.name == "Troubleshoot"
+                          ? "/task-manager/troubleshoot"
+                          : task.project.name == "Online Support"
+                          ? "/task-manager/online_support"
+                          : task.project.name == "Change Location"
+                          ? "/task-manager/change_location"
+                          : task.project.name == "Amendment"
+                          ? "/task-manager/amendment"
+                          : ""
+                      }
+                      state={{ data: task }}
+                    >
+                      More...
+                    </Link>
+                  </td>
+                </tr>
+              </>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
