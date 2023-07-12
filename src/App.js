@@ -30,6 +30,7 @@ import AmendmentDetails from "./TaskManager/pages/Amendment/AmendmentDetails";
 import NocContractList from "./pages/Dashboards/NOC/NocContractList";
 import NocDashboard from "./pages/Dashboards/NOC/NocDashboard";
 import NocTask from "./pages/Dashboards/NOC/NocTask";
+import TechniciansDashboard from "./pages/Dashboards/Technicians/TechniciansDashboard";
 
 export default function App() {
   const { user } = useContext(Context);
@@ -63,6 +64,7 @@ export default function App() {
           <Route path="/task-manager/noc" element={<NocDashboard />} />
           <Route path="/task-manager/noc-contracts" element={<NocContractList />} />
           <Route path="/task-manager/noc-tasks" element={<NocTask />} />
+          <Route path="/task-manager/technicians" element={<TechniciansDashboard />} />
         </Routes>
         {user ? <Footer /> : ""}
       </Router>
