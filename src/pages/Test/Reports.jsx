@@ -303,12 +303,24 @@ export default class Search extends Component {
     const package_type = this.state.package;
     const created_by = this.state.created_by;
 
-    console.log(created_by);
+    // const ContractSearchHandle = (data) => {
+    //   axios
+    //     .get(CONTRACT + `?user=${data.user}&contract_number=${data.contract_number}&contract_id=${data.contract_id}&date_after=${data.date_after}&date_before=${data.date_before}&activation=${""}&valid=&status=${data.contract__status}&contract_type=${""}&contractpackage__package=${data.contract__package}&contractrouter__router=${""}&ordering=${data.sort_order}${data.order_by}&contractantenna__antenna=${""}` , 
+    //     {
+    //       headers: {
+    //         Authorization: "Token " + token.user.token,
+    //       },
+    //     })
+    //     .then((res)=> {
+    //       setContracts(res.data.results)
+    //     })
+  
+    // }
 
     try {
       await axios({
         method: "GET",
-        url: `${this.ContractUrl}?query=${query}&created_by=${created_by}&contract-status=${status}&start_date=${start_date}&end_date=${end_date}`,
+        url: `${this.ContractUrl}?user=${created_by}&contract_number=${query}&contract_id=${this.state.contract_id}&date_after=${start_date}&date_before=${end_date}&status=${status}&contractpackage__package=${this.state.package}`,
         // data: data,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -316,7 +328,7 @@ export default class Search extends Component {
         },
       }).then((res) => {
         const contracts = res.data.results;
-        this.setState({ contracts });
+        this.setState({ contracts: contracts });
         this.setState({ count: res.data.count });
         this.setState({ nextUrl: res.data.next });
         this.setState({ previousUrl: res.data.previous });
@@ -531,8 +543,15 @@ export default class Search extends Component {
                       </div>
                       <div className="col-3">
                         <div className="form-group">
-                          <label>Device Condition</label>
-                          <select
+                          <label>ID</label>
+                          <input
+                              type="text"
+                              className="form-control"
+                              id="reservation"
+                              name="contract_id"
+                              onChange={this.onChange}
+                            />
+                          {/* <select
                             className="form-control"
                             name="device_condition"
                             style={{ width: "100%" }}
@@ -542,7 +561,7 @@ export default class Search extends Component {
                             <option value="Sold">Sold</option>
                             <option value="Lease">Lease</option>
                             <option value="Test">Test</option>
-                          </select>
+                          </select> */}
                         </div>
                       </div>
                     </div>
@@ -559,7 +578,7 @@ export default class Search extends Component {
                             <option value="">Any</option>
 
                             {this.state.packages.map((pkg) => (
-                              <option value={pkg.name}>{pkg.name}</option>
+                              <option value={pkg.id}>{pkg.name}</option>
                             ))}
                           </select>
                         </div>
