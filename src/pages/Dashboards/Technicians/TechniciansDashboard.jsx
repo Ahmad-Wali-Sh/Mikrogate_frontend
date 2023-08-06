@@ -8,7 +8,7 @@ import Amendment from "../../../TaskManager/pages/Amendment/components/Amendment
 import { Context } from "../../../context/Context";
 import { Link } from "react-router-dom";
 import cx from "classnames";
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 
 export default function TechniciansDashboard() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
@@ -19,14 +19,13 @@ export default function TechniciansDashboard() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm()
+  } = useForm();
 
   const [contracts, setContracts] = useState([]);
   const [contractNumber, setContractNumber] = useState([]);
   const [projecter, setProjecter] = useState([]);
   const [tag, setTag] = useState([]);
 
-  
   const CONTRACT = process.env.REACT_APP_NEW_CONTRACT;
   const STAGE_URL = process.env.REACT_APP_STAGE;
   const PROJECT_URL = process.env.REACT_APP_PROJECT;
@@ -38,9 +37,9 @@ export default function TechniciansDashboard() {
   const PAYMENT_URL = process.env.REACT_APP_PAYMENT_URL;
   const INSTALL_UR = process.env.REACT_APP_INSTALLATION_CONFIRM;
 
-  const [users, setUsers] = React.useState([])
+  const [users, setUsers] = React.useState([]);
   const [tasks, setTasks] = React.useState([]);
-  
+
   React.useEffect(() => {
     axios
       .get(TASK_URL, {
@@ -72,7 +71,7 @@ export default function TechniciansDashboard() {
         setProjecter(res.data.results);
       });
 
-      axios
+    axios
       .get(TAG_URL, {
         headers: {
           Authorization: "Token " + token.user.token,
@@ -81,22 +80,24 @@ export default function TechniciansDashboard() {
       .then((res) => {
         setTag(res.data.results);
       });
-
-  }, [])
+  }, []);
 
   const TaskSearchHandle = (data) => {
-      axios
-        .get(TASK_URL + `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${data.project}&stage=${data.stage}&tag=${data.tag}&assigned__id=${user.id}&contract__contract_id=${data.contract__contract_id}` ,
+    axios
+      .get(
+        TASK_URL +
+          `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${data.project}&stage=${data.stage}&tag=${data.tag}&assigned__id=${user.id}&contract__contract_id=${data.contract__contract_id}`,
         {
-            headers: {
-                Authorization: "Token " + token.user.token
-            }
-        })
-        .then((res) => {
-            console.log(res)
-            setTasks(res.data.results)
-        })
-  }
+          headers: {
+            Authorization: "Token " + token.user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        setTasks(res.data.results);
+      });
+  };
 
   useEffect(() => {
     axios
@@ -126,10 +127,8 @@ export default function TechniciansDashboard() {
     selectedProject: "",
   };
 
-
   const [payment, setPayment] = React.useState([]);
   const [installtionCofirm, setInstallationConfirm] = React.useState([]);
-
 
   const [user, setUser] = React.useState({});
   React.useEffect(() => {
@@ -142,8 +141,6 @@ export default function TechniciansDashboard() {
       .then((res) => setUser(res.data));
     console.log(user);
   }, []);
-
-
 
   const [project, setProject] = useState(taskProjectState);
 
@@ -236,9 +233,7 @@ export default function TechniciansDashboard() {
 
   const [stage, setStage] = useState([]);
 
-
   const [member, setMember] = useState([]);
-
 
   React.useEffect(() => {
     axios
@@ -263,8 +258,6 @@ export default function TechniciansDashboard() {
         setMember(res.data.results);
       });
   }, []);
-
-
 
   let [form, setForm] = React.useState({
     title: "",
@@ -396,14 +389,14 @@ export default function TechniciansDashboard() {
                   <h2 className="text-center display-4 mb-5 pt-5">
                     Search Tasks
                   </h2>
-                  <form id="searchForm"
-                  onSubmit={handleSubmit(TaskSearchHandle)}
+                  <form
+                    id="searchForm"
+                    onSubmit={handleSubmit(TaskSearchHandle)}
                   >
                     <div className="row">
                       <div className="col-md-12">
                         <div className="row">
                           <br />
-                         
                         </div>
                         <div className="row">
                           <div className="col-3">
@@ -446,8 +439,8 @@ export default function TechniciansDashboard() {
                                 {...register("stage")}
                               >
                                 <option value="">Any</option>
-                                {stage.map((stage)=> (
-                                    <option value={stage.id}>{stage.name}</option>
+                                {stage.map((stage) => (
+                                  <option value={stage.id}>{stage.name}</option>
                                 ))}
                               </select>
                             </div>
@@ -455,7 +448,11 @@ export default function TechniciansDashboard() {
                           <div className="col-3">
                             <div className="form-group">
                               <label>ID</label>
-                              <input type="text" className="form-control" {...register("contract__contract_id")} />
+                              <input
+                                type="text"
+                                className="form-control"
+                                {...register("contract__contract_id")}
+                              />
                             </div>
                           </div>
                         </div>
@@ -471,7 +468,9 @@ export default function TechniciansDashboard() {
                               >
                                 <option value="">Any</option>
                                 {projecter.map((project) => (
-                                    <option value={project.id}>{project.name}</option>
+                                  <option value={project.id}>
+                                    {project.name}
+                                  </option>
                                 ))}
                               </select>
                             </div>
@@ -486,8 +485,8 @@ export default function TechniciansDashboard() {
                                 {...register("tag")}
                               >
                                 <option value="">Any</option>
-                                {tag.map((tag)=> (
-                                    <option value={tag.id}>{tag.name}</option>
+                                {tag.map((tag) => (
+                                  <option value={tag.id}>{tag.name}</option>
                                 ))}
                               </select>
                             </div>
@@ -912,22 +911,65 @@ export default function TechniciansDashboard() {
                     </select>
                   </td>
                   <td>
-                    <small
+                    <select
                       className={cx({
                         "badge badge-pill badge-success":
-                          task.stage.name === "Done",
+                          task.stage.name === "Completed",
+                        "badge badge-pill badge-info":
+                          task.stage.name === "New",
                         "badge badge-pill badge-primary":
-                          task.stage.name === "Progress",
+                          task.stage.name === "In-Progress",
                         "badge badge-pill badge-danger":
                           task.stage.name === "Canceled",
                         "badge badge-pill badge-warning":
                           task.stage.name === "Pending",
                         "badge badge-pill badge-secondary":
-                          task.stage.name === "Terminated",
+                          task.stage.name === "Archieved",
                       })}
+                      onClick={
+                        handleSubmit(TaskSearchHandle)
+                      }
+                      onChange={(e) => {
+                        const StageForm = new FormData();
+                        StageForm.append("stage", e.target.value);
+                        axios
+                          .patch(TASK_URL + task.id + "/", StageForm, {
+                            headers: {
+                              Authorization: "Token " + token.user.token,
+                            },
+                          })
+                          .then((res) => {
+                            console.log(res.data);
+                            handleSubmit(TaskSearchHandle);
+                          })
+                          .catch((err) => console.log(err));
+                      }}
                     >
+                      <option
+                        style={{ color: "green" }}
+                        selected={task.stage.id}
+                      >
+                        {task.stage.name}
+                      </option>
+                      {task.stage.name != "Archieved" &&
+                        stage.map(
+                          (stage) =>
+                            stage.name != "Archieved" &&
+                            stage.name != "New" &&
+                            stage.name != "Canceled" &&
+                            stage.name != task.stage.name && (
+                              <option
+                                value={stage.id}
+                                onClick={
+                                  handleSubmit(TaskSearchHandle)
+                                }
+                              >
+                                {stage.name}
+                              </option>
+                            )
+                        )}
                       {task.stage.name}
-                    </small>
+                    </select>
                   </td>
                   <td>{task.user.name}</td>
                   <td>

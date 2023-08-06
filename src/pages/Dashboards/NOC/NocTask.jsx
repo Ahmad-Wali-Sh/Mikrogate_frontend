@@ -986,22 +986,62 @@ export default function NocTask() {
                     </select>
                   </td>
                   <td>
-                    <small
+                  <select
                       className={cx({
                         "badge badge-pill badge-success":
-                          task.stage.name === "Done",
+                          task.stage.name === "Completed",
+                        "badge badge-pill badge-info":
+                          task.stage.name === "New",
                         "badge badge-pill badge-primary":
-                          task.stage.name === "Progress",
+                          task.stage.name === "In-Progress",
                         "badge badge-pill badge-danger":
                           task.stage.name === "Canceled",
                         "badge badge-pill badge-warning":
                           task.stage.name === "Pending",
                         "badge badge-pill badge-secondary":
-                          task.stage.name === "Terminated",
+                          task.stage.name === "Archieved",
                       })}
+                      onClick={
+                        handleSubmit(TaskSearchHandle)
+                      }
+                      onChange={(e) => {
+                        const StageForm = new FormData();
+                        StageForm.append("stage", e.target.value);
+                        axios
+                          .patch(TASK_URL + task.id + "/", StageForm, {
+                            headers: {
+                              Authorization: "Token " + token.user.token,
+                            },
+                          })
+                          .then((res) => {
+                            console.log(res.data);
+                            handleSubmit(TaskSearchHandle);
+                          })
+                          .catch((err) => console.log(err));
+                      }}
                     >
+                      <option
+                        style={{ color: "green" }}
+                        selected={task.stage.id}
+                      >
+                        {task.stage.name}
+                      </option>
+                      {
+                        stage.map(
+                          (stage) =>
+                            stage.name != task.stage.name && (
+                              <option
+                                value={stage.id}
+                                onClick={
+                                  handleSubmit(TaskSearchHandle)
+                                }
+                              >
+                                {stage.name}
+                              </option>
+                            )
+                        )}
                       {task.stage.name}
-                    </small>
+                    </select>
                   </td>
                   <td>{task.user.name}</td>
                   <td>
