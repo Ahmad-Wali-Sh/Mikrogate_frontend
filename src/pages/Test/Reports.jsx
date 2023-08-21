@@ -157,35 +157,35 @@ export default class Search extends Component {
     //   this.setState({ previousUrl: res.data.previous });
     // });
 
-      axios({
-          method: "GET",
-          url: this.contractPackageURL,
-          // data: data,
-          headers: {
-            Authorization: "Token " + this.token,
-            "Content-Type": "application/json",
-          }}).then((res) => {
-          const contractsPackages = res.data.results;
-          this.setState({ contractsPackages });
-          this.setState({ count: res.data.count });
-          this.setState({ nextUrl: res.data.next });
-          this.setState({ previousUrl: res.data.previous });
+      // axios({
+      //     method: "GET",
+      //     url: this.contractPackageURL,
+      //     // data: data,
+      //     headers: {
+      //       Authorization: "Token " + this.token,
+      //       "Content-Type": "application/json",
+      //     }}).then((res) => {
+      //     const contractsPackages = res.data.results;
+      //     this.setState({ contractsPackages });
+      //     this.setState({ count: res.data.count });
+      //     this.setState({ nextUrl: res.data.next });
+      //     this.setState({ previousUrl: res.data.previous });
 
-          for (let i = 2; i <= Math.ceil(res.data.count / 100) ; i++){
-            axios({
-              method: "GET",
-              url: this.contractPackageURL + `?page=${i}`,
-              headers: {
-                Authorization: "Token " + this.token,
-                "Content-Type": "application/json",
-              }
-            }).then((res)=>{
-              const contractsPackages2 = res.data.results
-              console.log(res)
-              this.setState({...contractsPackages.push(...contractsPackages2)})
-            })
-          }
-        });
+      //     for (let i = 2; i <= Math.ceil(res.data.count / 100) ; i++){
+      //       axios({
+      //         method: "GET",
+      //         url: this.contractPackageURL + `?page=${i}`,
+      //         headers: {
+      //           Authorization: "Token " + this.token,
+      //           "Content-Type": "application/json",
+      //         }
+      //       }).then((res)=>{
+      //         const contractsPackages2 = res.data.results
+      //         console.log(res)
+      //         this.setState({...contractsPackages.push(...contractsPackages2)})
+      //       })
+      //     }
+      //   });
 
     axios
       .get(this.user_url, {
