@@ -59,23 +59,23 @@ export default function Sidebar() {
           
 
           {/* <!-- Sidebar Menu --> */}
-          <nav className="mt-2">
+          <nav className="mt-2" role="navigation">
             <ul
               className="nav nav-pills nav-sidebar flex-column"
               data-widget="treeview"
-              role="menu"
-              data-accordion="false"
+              role="navigation"
+              data-accordion="true"
+              
             >
-              <li className="nav-item">
-                <div className="nav-link active">
+              <li className="nav-item menu-close">
+                <div className="nav-link">
                   <i className="nav-icon fa-solid fa-gauge"></i>
                   <p>
-                    Dashboard
+                  Administration
                     <i className="fas fa-angle-left right"></i>
                   </p>
                 </div>
                 <ul className="nav nav-treeview">
-                  <div className="nav-header">Administration</div>
                   <li className="nav-item">
                     <Link to="/task-manager/noc" className="nav-link">
                       <i className="fa-solid fa-people-roof nav-icon"></i>
@@ -88,30 +88,34 @@ export default function Sidebar() {
                       <p>Manager</p>
                     </Link>
                   </li>
-                  <div className="nav-header">Network Operations Center</div>
+                </ul>
+              </li>
+              <li className="nav-item">
+                <div className="nav-link">
+                  <i className="nav-icon fa-solid fa-gauge"></i>
+                  <p>
+                  N.O.C
+                    <i className="fas fa-angle-left right"></i>
+                  </p>
+                </div>
+                <ul className="nav nav-treeview">
                   <li className="nav-item">
                     <Link to="/task-manager/noc" className="nav-link">
                       <i className="fa-solid fa-people-roof nav-icon"></i>
                       <p>NOC</p>
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item ">
                     <Link to="/task-manager/technicians" className="nav-link">
                       <i className="fa-solid fa-clipboard-user nav-icon"></i>
                       <p>Technicians</p>
                     </Link>
                   </li>
-                  <div className="nav-header">Sales</div>
-                  <li className="nav-item">
-                    <Link to="/search" className="nav-link">
-                      <i className="fa-solid fa-cart-shopping nav-icon"></i>
-                      <p>Sales</p>
-                    </Link>
-                  </li>
+                 
                 </ul>
               </li>
-              <li className="nav-item">
-                <div className="nav-link active">
+              <li className="nav-item menu-close">
+                <div className="nav-link">
                   <i className="nav-icon fa-solid fa-cart-shopping"></i>
                   <p>
                     SALES
@@ -175,8 +179,8 @@ export default function Sidebar() {
                   </li>
                 </ul>
               </li>
-              <li className="nav-item ">
-                <div className="nav-link active">
+              <li className="nav-item menu-close">
+                <div className="nav-link">
                   <i className="nav-icon fa-solid fa-bars-progress"></i>
                   <p>
                     Task Manager
@@ -188,6 +192,12 @@ export default function Sidebar() {
                     <Link to="/task-manager" className="nav-link">
                       <i className="fa-solid fa-clipboard-user nav-icon"></i>
                       <p>Task Manager</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item ">
+                    <Link to="/task-manager/technicians" className="nav-link">
+                      <i className="fa-solid fa-clipboard-user nav-icon"></i>
+                      <p>Technician</p>
                     </Link>
                   </li>
                 </ul>
