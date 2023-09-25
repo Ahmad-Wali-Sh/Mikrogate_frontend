@@ -8,12 +8,11 @@ import Amendment from "../../../TaskManager/pages/Amendment/components/Amendment
 import { Context } from "../../../context/Context";
 import { Link } from "react-router-dom";
 import cx from "classnames";
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 
 export default function NocContractList() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
   const token = useContext(Context);
-
 
   const CONTRACT = process.env.REACT_APP_NEW_CONTRACT;
   const STAGE_URL = process.env.REACT_APP_STAGE;
@@ -25,19 +24,18 @@ export default function NocContractList() {
   const TASK_URL = process.env.REACT_APP_TASK;
   const PAYMENT_URL = process.env.REACT_APP_PAYMENT_URL;
   const INSTALL_UR = process.env.REACT_APP_INSTALLATION_CONFIRM;
-  const PACKAGES_URL = process.env.REACT_APP_PACKAGE
-  const STATUS_URL = process.env.REACT_APP_CONTRACT_STATUS
+  const PACKAGES_URL = process.env.REACT_APP_PACKAGE;
+  const STATUS_URL = process.env.REACT_APP_CONTRACT_STATUS;
 
   const [contracts, setContracts] = useState([]);
   const [contractNumber, setContractNumber] = useState([]);
-  
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm()
-  
+  } = useForm();
 
   console.log(contractNumber);
 
@@ -51,13 +49,11 @@ export default function NocContractList() {
       .then((res) => setContracts(res.data.results));
   }, []);
 
-  const [users, setUsers] = React.useState([])
-  const [packages, setPackages] = React.useState([])
-  const [status, setStatus] = React.useState([])
-  
+  const [users, setUsers] = React.useState([]);
+  const [packages, setPackages] = React.useState([]);
+  const [status, setStatus] = React.useState([]);
+
   React.useEffect(() => {
-
-
     axios
       .get(USERS_URL, {
         headers: {
@@ -67,7 +63,7 @@ export default function NocContractList() {
       .then((res) => {
         setUsers(res.data.results);
       });
-      
+
     axios
       .get(PACKAGES_URL, {
         headers: {
@@ -86,23 +82,33 @@ export default function NocContractList() {
       .then((res) => {
         setStatus(res.data.results);
       });
-
-  }, [])
-
+  }, []);
 
   const ContractSearchHandle = (data) => {
     axios
-      .get(CONTRACT + `?user=${data.user}&contract_number=${data.contract_number}&contract_id=${data.contract_id}&date_after=${data.date_after}&date_before=${data.date_before}&activation=${""}&valid=&status=${data.contract__status}&contract_type=${""}&contractpackage__package=${data.contract__package}&contractrouter__router=${""}&ordering=${data.sort_order}${data.order_by}&contractantenna__antenna=${""}` , 
-      {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res)=> {
-        setContracts(res.data.results)
-      })
-
-  }
+      .get(
+        CONTRACT +
+          `?user=${data.user}&contract_number=${
+            data.contract_number
+          }&contract_id=${data.contract_id}&date_after=${
+            data.date_after
+          }&date_before=${data.date_before}&activation=${""}&valid=&status=${
+            data.contract__status
+          }&contract_type=${""}&contractpackage__package=${
+            data.contract__package
+          }&contractrouter__router=${""}&ordering=${data.sort_order}${
+            data.order_by
+          }&contractantenna__antenna=${""}`,
+        {
+          headers: {
+            Authorization: "Token " + token.user.token,
+          },
+        }
+      )
+      .then((res) => {
+        setContracts(res.data.results);
+      });
+  };
 
   let i = 0;
   console.log(contracts);
@@ -122,11 +128,8 @@ export default function NocContractList() {
     selectedProject: "",
   };
 
-
-
   const [payment, setPayment] = React.useState([]);
   const [installtionCofirm, setInstallationConfirm] = React.useState([]);
-
 
   const [user, setUser] = React.useState({});
   React.useEffect(() => {
@@ -188,9 +191,6 @@ export default function NocContractList() {
     input: "",
   });
 
-
-
-
   const handleSubmit123 = async (e) => {
     e.preventDefault();
     warningNotification();
@@ -245,8 +245,6 @@ export default function NocContractList() {
   const [projecter, setProjecter] = useState([]);
   const [tag, setTag] = useState([]);
   const [member, setMember] = useState([]);
-
- 
 
   React.useEffect(() => {
     axios
@@ -415,10 +413,10 @@ export default function NocContractList() {
       });
   };
 
-
-
-
-  
+  function getDayName(dateStr, locale) {
+    var date = new Date(dateStr);
+    return date.toLocaleDateString(locale, { weekday: "long" });
+  }
 
   return (
     <div className="content-wrapper">
@@ -431,7 +429,10 @@ export default function NocContractList() {
                   <h2 className="text-center display-4 mb-5 pt-5">
                     Search Contracts
                   </h2>
-                  <form id="searchForm" onSubmit={handleSubmit(ContractSearchHandle)}>
+                  <form
+                    id="searchForm"
+                    onSubmit={handleSubmit(ContractSearchHandle)}
+                  >
                     <div className="row">
                       <div className="col-md-12">
                         <div className="row">
@@ -447,7 +448,7 @@ export default function NocContractList() {
                                   {...register("user")}
                                 >
                                   <option value="">Any</option>
-                                  {users.map((user)=> (
+                                  {users.map((user) => (
                                     <option value={user.id}>{user.name}</option>
                                   ))}
                                 </select>
@@ -475,8 +476,11 @@ export default function NocContractList() {
                                 style={{ width: "100%" }}
                                 {...register("order_by")}
                               >
-                                <option value="contract_number">Contract Number</option>
+                                <option value="contract_number">
+                                  Contract Number
+                                </option>
                                 <option value="date">Date</option>
+                                <option value="contract_id">Contract ID</option>
                               </select>
                             </div>
                           </div>
@@ -532,7 +536,7 @@ export default function NocContractList() {
                           <div className="col-3">
                             <div className="form-group">
                               <label>ID</label>
-                              <input 
+                              <input
                                 type="text"
                                 className="form-control"
                                 {...register("contract_id")}
@@ -607,345 +611,345 @@ export default function NocContractList() {
                 </div>
               </section>
               <div className="card">
-                  <div
-                    className="modal fade"
-                    id="addTaskModal"
-                    tabIndex="-1"
-                    role="dialog"
-                    // aria-lablledby="addTaskModalTitle"
-                    aria-hidden="true"
-                  >
-                    <div className="modal-dialog modal-xl" role="document">
-                      <div className="modal-content">
-                        <div className="modal-header bg-primary">
-                          <h5
-                            className="modal-title cl-light text-light"
-                            id="addTaskModalTitle"
-                          >
-                            New Task
-                          </h5>
-                          <button
-                            type="button"
-                            className="close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                          >
-                            <i className="fa-duotone fa-circle-xmark close-icon"></i>
-                          </button>
-                        </div>
-                        <div className="modal-body">
-                          <ul
-                            className="nav nav-pills nav-justified"
-                            id="mytab"
-                            role="tablist"
-                          >
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="nav-link active"
-                                id="home-tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#home-tab-pane"
-                                type="button"
-                                role="tab"
-                                aria-controls="home-tab-pane"
-                                aria-selected="true"
-                              >
-                                Details
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="nav-link"
-                                id="profile-tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#profile-tab-pane"
-                                type="button"
-                                role="tab"
-                                aria-controls="profile-tab-pane"
-                                aria-selected="false"
-                              >
-                                Members
-                              </button>
-                            </li>
-                          </ul>
-                          <div className="tab-content">
-                            <div
-                              className="tab-pane fade show active"
-                              id="home-tab-pane"
-                              role="tabpanel"
-                              aria-labelledby="home-tab"
-                              tabIndex="2"
+                <div
+                  className="modal fade"
+                  id="addTaskModal"
+                  tabIndex="-1"
+                  role="dialog"
+                  // aria-lablledby="addTaskModalTitle"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog modal-xl" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header bg-primary">
+                        <h5
+                          className="modal-title cl-light text-light"
+                          id="addTaskModalTitle"
+                        >
+                          New Task
+                        </h5>
+                        <button
+                          type="button"
+                          className="close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        >
+                          <i className="fa-duotone fa-circle-xmark close-icon"></i>
+                        </button>
+                      </div>
+                      <div className="modal-body">
+                        <ul
+                          className="nav nav-pills nav-justified"
+                          id="mytab"
+                          role="tablist"
+                        >
+                          <li className="nav-item" role="presentation">
+                            <button
+                              className="nav-link active"
+                              id="home-tab"
+                              data-bs-toggle="tab"
+                              data-bs-target="#home-tab-pane"
+                              type="button"
+                              role="tab"
+                              aria-controls="home-tab-pane"
+                              aria-selected="true"
                             >
-                              <div className="input-group mb-3 mt-3"></div>
+                              Details
+                            </button>
+                          </li>
+                          <li className="nav-item" role="presentation">
+                            <button
+                              className="nav-link"
+                              id="profile-tab"
+                              data-bs-toggle="tab"
+                              data-bs-target="#profile-tab-pane"
+                              type="button"
+                              role="tab"
+                              aria-controls="profile-tab-pane"
+                              aria-selected="false"
+                            >
+                              Members
+                            </button>
+                          </li>
+                        </ul>
+                        <div className="tab-content">
+                          <div
+                            className="tab-pane fade show active"
+                            id="home-tab-pane"
+                            role="tabpanel"
+                            aria-labelledby="home-tab"
+                            tabIndex="2"
+                          >
+                            <div className="input-group mb-3 mt-3"></div>
 
-                              <form onSubmit={createTask}>
+                            <form onSubmit={createTask}>
+                              <div className="row">
+                                <div className="col-1 col-sm-1">
+                                  <label
+                                    htmlFor="project"
+                                    className="col-form-label text-muted"
+                                  >
+                                    Title
+                                  </label>
+                                </div>
+                                <div className="col-11 col-sm-11">
+                                  <div className="input-group mb-3">
+                                    <span
+                                      className="input-group-text"
+                                      id="basic-addon1"
+                                    >
+                                      <i className="fa-solid fa-pen"></i>
+                                    </span>
+                                    <input
+                                      type="text"
+                                      name="title"
+                                      className="form-control"
+                                      aria-label="Username"
+                                      aria-describedby="basic-addon1"
+                                      onChange={handlerChange}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="mb-5">
                                 <div className="row">
                                   <div className="col-1 col-sm-1">
                                     <label
                                       htmlFor="project"
                                       className="col-form-label text-muted"
                                     >
-                                      Title
+                                      Project
                                     </label>
                                   </div>
-                                  <div className="col-11 col-sm-11">
+
+                                  <div className="col-3 col-sm-4">
+                                    <select
+                                      className="form-select"
+                                      id="project"
+                                      aria-label="Default select example"
+                                      ref={projectRef}
+                                      name="project"
+                                      onChange={handlerChange}
+                                    >
+                                      <option selected>Select</option>
+                                      {projecter.map((item) => (
+                                        <option value={item.id}>
+                                          {item.name}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+
+                                  <div className="col-1"></div>
+                                  <div className="col-1 col-sm-1">
+                                    <label
+                                      htmlFor="project"
+                                      className="col-form-label text-muted"
+                                    >
+                                      Customer
+                                    </label>
+                                  </div>
+                                  <div className="col-5 col-sm-5">
                                     <div className="input-group mb-3">
                                       <span
                                         className="input-group-text"
                                         id="basic-addon1"
                                       >
-                                        <i className="fa-solid fa-pen"></i>
+                                        <i className="fa-solid fa-user"></i>
                                       </span>
+
                                       <input
                                         type="text"
-                                        name="title"
                                         className="form-control"
+                                        placeholder="contract"
                                         aria-label="Username"
+                                        name="contract"
                                         aria-describedby="basic-addon1"
-                                        onChange={handlerChange}
+                                        value={contractNumber}
                                       />
                                     </div>
                                   </div>
                                 </div>
-                                <div className="mb-5">
-                                  <div className="row">
-                                    <div className="col-1 col-sm-1">
-                                      <label
-                                        htmlFor="project"
-                                        className="col-form-label text-muted"
-                                      >
-                                        Project
-                                      </label>
+                                <div className="row">
+                                  <div className="col-1 col-sm-1">
+                                    <label
+                                      htmlFor="deadline"
+                                      className="col-form-label text-muted"
+                                    >
+                                      Deadline
+                                    </label>
+                                  </div>
+                                  <div className="col-3 col-sm-4">
+                                    <div className="input-group mb-3">
+                                      <input
+                                        type="date"
+                                        className="form-control"
+                                        name="deadline"
+                                        onChange={handlerChange}
+                                      />
                                     </div>
-
-                                    <div className="col-3 col-sm-4">
+                                  </div>
+                                  <div className="col-1"></div>
+                                  <div className="col-1">
+                                    <label
+                                      htmlFor="tag"
+                                      className="col-form-label text-muted"
+                                    >
+                                      Tag
+                                    </label>
+                                  </div>
+                                  <div className="col-5 col-sm-5">
+                                    <div className="input-group">
+                                      <label
+                                        className="input-group-text"
+                                        htmlFor="tag"
+                                      >
+                                        <i className="fa-solid fa-tag"></i>
+                                      </label>
                                       <select
                                         className="form-select"
-                                        id="project"
+                                        id="tag"
                                         aria-label="Default select example"
-                                        ref={projectRef}
-                                        name="project"
+                                        name="tag"
                                         onChange={handlerChange}
                                       >
                                         <option selected>Select</option>
-                                        {projecter.map((item) => (
+                                        {tag.map((item) => (
                                           <option value={item.id}>
                                             {item.name}
                                           </option>
                                         ))}
                                       </select>
                                     </div>
-
-                                    <div className="col-1"></div>
-                                    <div className="col-1 col-sm-1">
-                                      <label
-                                        htmlFor="project"
-                                        className="col-form-label text-muted"
-                                      >
-                                        Customer
-                                      </label>
-                                    </div>
-                                    <div className="col-5 col-sm-5">
-                                      <div className="input-group mb-3">
-                                        <span
-                                          className="input-group-text"
-                                          id="basic-addon1"
-                                        >
-                                          <i className="fa-solid fa-user"></i>
-                                        </span>
-
-                                        <input
-                                          type="text"
-                                          className="form-control"
-                                          placeholder="contract"
-                                          aria-label="Username"
-                                          name="contract"
-                                          aria-describedby="basic-addon1"
-                                          value={contractNumber}
-                                        />
-                                      </div>
-                                    </div>
                                   </div>
-                                  <div className="row">
-                                    <div className="col-1 col-sm-1">
-                                      <label
-                                        htmlFor="deadline"
-                                        className="col-form-label text-muted"
-                                      >
-                                        Deadline
-                                      </label>
-                                    </div>
-                                    <div className="col-3 col-sm-4">
-                                      <div className="input-group mb-3">
-                                        <input
-                                          type="date"
-                                          className="form-control"
-                                          name="deadline"
-                                          onChange={handlerChange}
-                                        />
-                                      </div>
-                                    </div>
-                                    <div className="col-1"></div>
-                                    <div className="col-1">
-                                      <label
-                                        htmlFor="tag"
-                                        className="col-form-label text-muted"
-                                      >
-                                        Tag
-                                      </label>
-                                    </div>
-                                    <div className="col-5 col-sm-5">
-                                      <div className="input-group">
-                                        <label
-                                          className="input-group-text"
-                                          htmlFor="tag"
-                                        >
-                                          <i className="fa-solid fa-tag"></i>
-                                        </label>
-                                        <select
-                                          className="form-select"
-                                          id="tag"
-                                          aria-label="Default select example"
-                                          name="tag"
-                                          onChange={handlerChange}
-                                        >
-                                          <option selected>Select</option>
-                                          {tag.map((item) => (
-                                            <option value={item.id}>
-                                              {item.name}
-                                            </option>
-                                          ))}
-                                        </select>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div
-                                    className="row mt-1"
-                                    id="pills-tab"
-                                    role="tablist"
-                                  >
-                                    <div className="col-12">
-                                      <nav>
-                                        <div
-                                          className="nav nav-tabs"
-                                          id="nav-tab"
-                                          role="tablist"
-                                        >
-                                          <span
-                                            className="nav-link active"
-                                            id="nav-home-tab"
-                                            data-bs-toggle="tab"
-                                            data-bs-target="#nav-home"
-                                            type="button"
-                                            role="tab"
-                                            aria-controls="nav-home"
-                                            aria-selected="true"
-                                          >
-                                            Description
-                                          </span>
-                                        </div>
-                                      </nav>
+                                </div>
+                                <div
+                                  className="row mt-1"
+                                  id="pills-tab"
+                                  role="tablist"
+                                >
+                                  <div className="col-12">
+                                    <nav>
                                       <div
-                                        className="tab-content"
-                                        id="nav-tabContent"
+                                        className="nav nav-tabs"
+                                        id="nav-tab"
+                                        role="tablist"
                                       >
-                                        <div
-                                          className="tab-pane fade show active"
-                                          id="nav-home"
-                                          role="tabpanel"
-                                          aria-labelledby="nav-home-tab"
+                                        <span
+                                          className="nav-link active"
+                                          id="nav-home-tab"
+                                          data-bs-toggle="tab"
+                                          data-bs-target="#nav-home"
+                                          type="button"
+                                          role="tab"
+                                          aria-controls="nav-home"
+                                          aria-selected="true"
                                         >
-                                          <textarea
-                                            className="form-control border-top-0"
-                                            placeholder="Leave a description here"
-                                            id="floatingTextarea"
-                                            name="description"
-                                            rows="6"
-                                            onChange={handlerChange}
-                                          ></textarea>
-                                        </div>
+                                          Description
+                                        </span>
+                                      </div>
+                                    </nav>
+                                    <div
+                                      className="tab-content"
+                                      id="nav-tabContent"
+                                    >
+                                      <div
+                                        className="tab-pane fade show active"
+                                        id="nav-home"
+                                        role="tabpanel"
+                                        aria-labelledby="nav-home-tab"
+                                      >
+                                        <textarea
+                                          className="form-control border-top-0"
+                                          placeholder="Leave a description here"
+                                          id="floatingTextarea"
+                                          name="description"
+                                          rows="6"
+                                          onChange={handlerChange}
+                                        ></textarea>
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-                                <div className="modal-footer">
-                                  <button
-                                    className="btn btn-primary"
-                                    type="submit"
-                                  >
-                                    Create Task
-                                  </button>
-                                </div>
-                              </form>
-
-                              {project.selectedProject == "troubleshoot" && (
-                                <Troubleshoot />
-                              )}
-                              {project.selectedProject == "changeLocation" && (
-                                <ChangeLocation />
-                              )}
-
-                              {project.selectedProject == "amendment" && (
-                                <Amendment />
-                              )}
-                            </div>
-                            <div
-                              class="tab-pane fade"
-                              id="profile-tab-pane"
-                              role="tabpanel"
-                              aria-labelledby="profile-tab"
-                              tabindex="0"
-                            >
-                              <div className="d-flex justify-content-center m-4"></div>
-                              <div className="col-6 m-auto">
-                                <div className="input-group flex-nowrap">
-                                  <span
-                                    class="input-group-text"
-                                    id="addon-wrapping"
-                                  >
-                                    <i className="fa-solid fa-bars-filter"></i>
-                                  </span>
-                                  <input
-                                    type="text"
-                                    class="form-control"
-                                    placeholder="Filter members"
-                                    aria-label="Username"
-                                    aria-describedby="addon-wrapping"
-                                  />
                                 </div>
                               </div>
-                              <form onSubmit={createTask}>
-                                <div className="col-5 membersbox">
-                                  <ul>
-                                    {member.map((item) => (
-                                      <li className="d-flex justify-content-between padd">
-                                        <div className="list-item">
-                                          <img
-                                            src={item.avatar}
-                                            alt="avatar"
-                                            className="Member-avatar"
-                                          />
-                                          <span className="ml-4">
-                                            {item.name}
-                                          </span>
-                                        </div>
-                                        <input
-                                          type="checkbox"
-                                          className="mt-3 mr-3"
-                                          name="assigned"
-                                          value={item.id}
-                                          onChange={handlerChange}
-                                        />
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              </form>
+                              <div className="modal-footer">
+                                <button
+                                  className="btn btn-primary"
+                                  type="submit"
+                                >
+                                  Create Task
+                                </button>
+                              </div>
+                            </form>
+
+                            {project.selectedProject == "troubleshoot" && (
+                              <Troubleshoot />
+                            )}
+                            {project.selectedProject == "changeLocation" && (
+                              <ChangeLocation />
+                            )}
+
+                            {project.selectedProject == "amendment" && (
+                              <Amendment />
+                            )}
+                          </div>
+                          <div
+                            class="tab-pane fade"
+                            id="profile-tab-pane"
+                            role="tabpanel"
+                            aria-labelledby="profile-tab"
+                            tabindex="0"
+                          >
+                            <div className="d-flex justify-content-center m-4"></div>
+                            <div className="col-6 m-auto">
+                              <div className="input-group flex-nowrap">
+                                <span
+                                  class="input-group-text"
+                                  id="addon-wrapping"
+                                >
+                                  <i className="fa-solid fa-bars-filter"></i>
+                                </span>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Filter members"
+                                  aria-label="Username"
+                                  aria-describedby="addon-wrapping"
+                                />
+                              </div>
                             </div>
+                            <form onSubmit={createTask}>
+                              <div className="col-5 membersbox">
+                                <ul>
+                                  {member.map((item) => (
+                                    <li className="d-flex justify-content-between padd">
+                                      <div className="list-item">
+                                        <img
+                                          src={item.avatar}
+                                          alt="avatar"
+                                          className="Member-avatar"
+                                        />
+                                        <span className="ml-4">
+                                          {item.name}
+                                        </span>
+                                      </div>
+                                      <input
+                                        type="checkbox"
+                                        className="mt-3 mr-3"
+                                        name="assigned"
+                                        value={item.id}
+                                        onChange={handlerChange}
+                                      />
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </form>
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1034,9 +1038,7 @@ export default function NocContractList() {
                         <th>POC Name</th>
                         <th>POC Number</th>
                         <th>Address</th>
-                        <th>
-                          <div>Type</div>
-                        </th>
+                        <th>Date</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1082,7 +1084,22 @@ export default function NocContractList() {
                               {contract.address}
                             </div>
                           </td>
-                          <td>{contract.contract_type.name}</td>
+                          <td>
+                            <small>
+                              {contract.changes[0].timestamp.slice(0, 10)}
+                            </small>
+                            <small style={{ display: "block" }}>
+                              {getDayName(contract.changes[0].timestamp)}
+                            </small>
+                            <small>
+                              {new Date(contract.changes[0].timestamp)
+                                .toLocaleTimeString()
+                                .replace(
+                                  /([\d]+:[\d]{2})(:[\d]{2})(.*)/,
+                                  "$1$3"
+                                )}
+                            </small>
+                          </td>
                           <td
                             className="project-actions text-right"
                             style={{ minWidth: "7rem" }}
@@ -1107,7 +1124,7 @@ export default function NocContractList() {
                                 setFind(contract)
                               )}
                             >
-                             <i class="fa-solid fa-plus"></i>
+                              <i class="fa-solid fa-plus"></i>
                             </button>
                           </td>
                         </tr>

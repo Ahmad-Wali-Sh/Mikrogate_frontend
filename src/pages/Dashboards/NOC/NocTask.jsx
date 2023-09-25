@@ -8,7 +8,7 @@ import Amendment from "../../../TaskManager/pages/Amendment/components/Amendment
 import { Context } from "../../../context/Context";
 import { Link } from "react-router-dom";
 import cx from "classnames";
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 
 export default function NocTask() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
@@ -19,14 +19,13 @@ export default function NocTask() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm()
+  } = useForm();
 
   const [contracts, setContracts] = useState([]);
   const [contractNumber, setContractNumber] = useState([]);
   const [projecter, setProjecter] = useState([]);
   const [tag, setTag] = useState([]);
 
-  
   const CONTRACT = process.env.REACT_APP_NEW_CONTRACT;
   const STAGE_URL = process.env.REACT_APP_STAGE;
   const PROJECT_URL = process.env.REACT_APP_PROJECT;
@@ -37,13 +36,12 @@ export default function NocTask() {
   const TASK_URL = process.env.REACT_APP_TASK;
   const PAYMENT_URL = process.env.REACT_APP_PAYMENT_URL;
   const INSTALL_UR = process.env.REACT_APP_INSTALLATION_CONFIRM;
-  const PACKAGES_URL = process.env.REACT_APP_PACKAGE
-  const STATUS_URL = process.env.REACT_APP_CONTRACT_STATUS
+  const PACKAGES_URL = process.env.REACT_APP_PACKAGE;
+  const STATUS_URL = process.env.REACT_APP_CONTRACT_STATUS;
 
-
-  const [users, setUsers] = React.useState([])
+  const [users, setUsers] = React.useState([]);
   const [tasks, setTasks] = React.useState([]);
-  
+
   React.useEffect(() => {
     axios
       .get(TASK_URL, {
@@ -75,7 +73,7 @@ export default function NocTask() {
         setProjecter(res.data.results);
       });
 
-      axios
+    axios
       .get(TAG_URL, {
         headers: {
           Authorization: "Token " + token.user.token,
@@ -84,22 +82,24 @@ export default function NocTask() {
       .then((res) => {
         setTag(res.data.results);
       });
-
-  }, [])
+  }, []);
 
   const TaskSearchHandle = (data) => {
-      axios
-        .get(TASK_URL + `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${data.project}&stage=${data.stage}&tag=${data.tag}&user=${data.user}&assigned__id=${data.assigned}&contract__contract_id=${data.contract__contract_id}` ,
+    axios
+      .get(
+        TASK_URL +
+          `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${data.project}&stage=${data.stage}&tag=${data.tag}&user=${data.user}&assigned__id=${data.assigned}&contract__contract_id=${data.contract__contract_id}`,
         {
-            headers: {
-                Authorization: "Token " + token.user.token
-            }
-        })
-        .then((res) => {
-            console.log(res)
-            setTasks(res.data.results)
-        })
-  }
+          headers: {
+            Authorization: "Token " + token.user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        setTasks(res.data.results);
+      });
+  };
 
   console.log(contractNumber);
 
@@ -131,10 +131,8 @@ export default function NocTask() {
     selectedProject: "",
   };
 
-
   const [payment, setPayment] = React.useState([]);
   const [installtionCofirm, setInstallationConfirm] = React.useState([]);
-
 
   const [user, setUser] = React.useState({});
   React.useEffect(() => {
@@ -147,8 +145,6 @@ export default function NocTask() {
       .then((res) => setUser(res.data));
     console.log(user);
   }, []);
-
-
 
   const [project, setProject] = useState(taskProjectState);
 
@@ -249,9 +245,7 @@ export default function NocTask() {
 
   const [stage, setStage] = useState([]);
 
-
   const [member, setMember] = useState([]);
-
 
   React.useEffect(() => {
     axios
@@ -276,8 +270,6 @@ export default function NocTask() {
         setMember(res.data.results);
       });
   }, []);
-
-
 
   let [form, setForm] = React.useState({
     title: "",
@@ -409,8 +401,9 @@ export default function NocTask() {
                   <h2 className="text-center display-4 mb-5 pt-5">
                     Search Tasks
                   </h2>
-                  <form id="searchForm"
-                  onSubmit={handleSubmit(TaskSearchHandle)}
+                  <form
+                    id="searchForm"
+                    onSubmit={handleSubmit(TaskSearchHandle)}
                   >
                     <div className="row">
                       <div className="col-md-12">
@@ -428,7 +421,7 @@ export default function NocTask() {
                                 >
                                   <option value="">Any</option>
                                   {users.map((user) => (
-                                      <option value={user.id}>{user.name}</option>
+                                    <option value={user.id}>{user.name}</option>
                                   ))}
                                 </select>
                               </div>
@@ -503,8 +496,8 @@ export default function NocTask() {
                                 {...register("stage")}
                               >
                                 <option value="">Any</option>
-                                {stage.map((stage)=> (
-                                    <option value={stage.id}>{stage.name}</option>
+                                {stage.map((stage) => (
+                                  <option value={stage.id}>{stage.name}</option>
                                 ))}
                               </select>
                             </div>
@@ -512,7 +505,11 @@ export default function NocTask() {
                           <div className="col-3">
                             <div className="form-group">
                               <label>ID</label>
-                              <input type="text" className="form-control" {...register("contract__contract_id")} />
+                              <input
+                                type="text"
+                                className="form-control"
+                                {...register("contract__contract_id")}
+                              />
                             </div>
                           </div>
                         </div>
@@ -528,7 +525,9 @@ export default function NocTask() {
                               >
                                 <option value="">Any</option>
                                 {projecter.map((project) => (
-                                    <option value={project.id}>{project.name}</option>
+                                  <option value={project.id}>
+                                    {project.name}
+                                  </option>
                                 ))}
                               </select>
                             </div>
@@ -543,8 +542,8 @@ export default function NocTask() {
                                 {...register("tag")}
                               >
                                 <option value="">Any</option>
-                                {tag.map((tag)=> (
-                                    <option value={tag.id}>{tag.name}</option>
+                                {tag.map((tag) => (
+                                  <option value={tag.id}>{tag.name}</option>
                                 ))}
                               </select>
                             </div>
@@ -568,11 +567,10 @@ export default function NocTask() {
                                 name="router"
                                 style={{ width: "100%", height: "2.4rem" }}
                                 {...register("assigned")}
-                                
                               >
                                 <option value="">Any</option>
-                                {users.map((user)=> (
-                                    <option value={user.id}>{user.name}</option>
+                                {users.map((user) => (
+                                  <option value={user.id}>{user.name}</option>
                                 ))}
                               </select>
                             </div>
@@ -973,7 +971,15 @@ export default function NocTask() {
                   <td>
                     <a>{task.contract.contract_number}</a>
                     <br />
-                    {/* <small>{new Date(task.date).toDateString()}</small> */}
+                    <small style={{display: 'block'}}>
+                      {new Date(task.created)
+                        .toString().slice(0,16)}
+                    </small>
+                    <small>
+                      {new Date(task.created)
+                        .toLocaleTimeString()
+                        .replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3")}
+                    </small>
                   </td>
                   <td>{task.title}</td>
                   <td>{task.project.name}</td>
@@ -986,7 +992,7 @@ export default function NocTask() {
                     </select>
                   </td>
                   <td>
-                  <select
+                    <select
                       className={cx({
                         "badge badge-pill badge-success":
                           task.stage.name === "Completed",
@@ -1001,9 +1007,7 @@ export default function NocTask() {
                         "badge badge-pill badge-secondary":
                           task.stage.name === "Archieved",
                       })}
-                      onClick={
-                        handleSubmit(TaskSearchHandle)
-                      }
+                      onClick={handleSubmit(TaskSearchHandle)}
                       onChange={(e) => {
                         const StageForm = new FormData();
                         StageForm.append("stage", e.target.value);
@@ -1026,20 +1030,17 @@ export default function NocTask() {
                       >
                         {task.stage.name}
                       </option>
-                      {
-                        stage.map(
-                          (stage) =>
-                            stage.name != task.stage.name && (
-                              <option
-                                value={stage.id}
-                                onClick={
-                                  handleSubmit(TaskSearchHandle)
-                                }
-                              >
-                                {stage.name}
-                              </option>
-                            )
-                        )}
+                      {stage.map(
+                        (stage) =>
+                          stage.name != task.stage.name && (
+                            <option
+                              value={stage.id}
+                              onClick={handleSubmit(TaskSearchHandle)}
+                            >
+                              {stage.name}
+                            </option>
+                          )
+                      )}
                       {task.stage.name}
                     </select>
                   </td>
