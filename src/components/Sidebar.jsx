@@ -18,6 +18,35 @@ export default function Sidebar() {
     };
     fetchUser();
   }, []);
+
+  const [groups, setGroups] = useState({
+    noc_manager: "",
+    sales_manager: "",
+    noc_stuff: "",
+    sales_stuff: "",
+    technician: "",
+    admin: "",
+    manager: "",
+  });
+
+  const checkForGroup = () => {
+    if (user?.groups?.includes(3)) {
+      setGroups({ ...groups, noc_stuff: "active" });
+    }
+    if (user?.groups?.includes(1)) {
+      setGroups({ ...groups, sales_manager: "active" });
+    }
+    if (user?.groups?.includes(4)) {
+      setGroups({ ...groups, sales_stuff: "active" });
+    }
+    if (user?.groups?.includes(5)) {
+      setGroups({ ...groups, technician: "active" });
+    }
+  };
+
+  useEffect(() => {
+    checkForGroup();
+  }, [user]);
   return (
     <div>
       {/* <!-- Main Sidebar Container --> */}
@@ -38,25 +67,24 @@ export default function Sidebar() {
           {/* <!-- Sidebar user panel (optional) --> */}
           <div className="user-panel mt-3 pb-3 mb-3 d-flex">
             {/* {user.map((item) => ( */}
-              <>
-                <div className="image">
-                  <img
-                    src={user.avatar}
-                    className="img-circle elevation-2"
-                    alt=""
-                  />
-                </div>
-                <div className="info">
-                  <a href="#" className="d-block">
-                    {user.name}
-                  </a>
-                </div>
-              </>
+            <>
+              <div className="image">
+                <img
+                  src={user.avatar}
+                  className="img-circle elevation-2"
+                  alt=""
+                />
+              </div>
+              <div className="info">
+                <a href="#" className="d-block">
+                  {user.name}
+                </a>
+              </div>
+            </>
             {/* ))} */}
           </div>
 
           {/* <!-- SidebarSearch Form --> */}
-          
 
           {/* <!-- Sidebar Menu --> */}
           <nav className="mt-2" role="navigation">
@@ -65,13 +93,12 @@ export default function Sidebar() {
               data-widget="treeview"
               role="navigation"
               data-accordion="true"
-              
             >
               <li className="nav-item menu-close">
                 <div className="nav-link">
                   <i className="nav-icon fa-solid fa-gauge"></i>
                   <p>
-                  Administration
+                    Administration
                     <i className="fas fa-angle-left right"></i>
                   </p>
                 </div>
@@ -90,11 +117,19 @@ export default function Sidebar() {
                   </li>
                 </ul>
               </li>
-              <li className="nav-item">
+              <li
+                className={`nav-item ${
+                  groups.noc_stuff == "active"
+                    ? "menu-open"
+                    : groups.noc_manager == "active"
+                    ? "menu-open"
+                    : ""
+                }`}
+              >
                 <div className="nav-link">
                   <i className="nav-icon fa-solid fa-gauge"></i>
                   <p>
-                  N.O.C
+                    N.O.C
                     <i className="fas fa-angle-left right"></i>
                   </p>
                 </div>
@@ -111,10 +146,17 @@ export default function Sidebar() {
                       <p>Technicians</p>
                     </Link>
                   </li>
-                 
                 </ul>
               </li>
-              <li className="nav-item menu-close">
+              <li
+                className={`nav-item ${
+                  groups.sales_stuff == "active"
+                    ? "menu-open"
+                    : groups.sales_manager == "active"
+                    ? "menu-open"
+                    : ""
+                }`}
+              >
                 <div className="nav-link">
                   <i className="nav-icon fa-solid fa-cart-shopping"></i>
                   <p>
@@ -124,7 +166,15 @@ export default function Sidebar() {
                 </div>
                 <ul className="nav nav-treeview">
                   <div className="nav-header">Contracts</div>
-                  <li className="nav-item ">
+                  <li
+                    className={`nav-item ${
+                      groups.sales_stuff == "active"
+                        ? "menu-open"
+                        : groups.sales_manager == "active"
+                        ? "menu-open"
+                        : ""
+                    }`}
+                  >
                     <a href="" className="nav-link">
                       <i className="fa-solid fa-file-contract nav-icon"></i>
                       <p>
@@ -179,7 +229,11 @@ export default function Sidebar() {
                   </li>
                 </ul>
               </li>
-              <li className="nav-item menu-close">
+              <li
+                className={`nav-item ${
+                  groups.technician == "active" ? "menu-open" : ""
+                }`}
+              >
                 <div className="nav-link">
                   <i className="nav-icon fa-solid fa-bars-progress"></i>
                   <p>
@@ -202,7 +256,6 @@ export default function Sidebar() {
                   </li>
                 </ul>
               </li>
-              
             </ul>
           </nav>
           {/* <!-- /.sidebar-menu --> */}
