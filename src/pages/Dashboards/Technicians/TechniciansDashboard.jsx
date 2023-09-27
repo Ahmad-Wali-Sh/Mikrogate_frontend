@@ -896,9 +896,18 @@ export default function TechniciansDashboard() {
                 <tr key={task.id}>
                   <td>{++i}.</td>
                   <td>
+                    <br />
                     <a>{task.contract.contract_number}</a>
                     <br />
-                    {/* <small>{new Date(task.date).toDateString()}</small> */}
+                    <small style={{display: 'block'}}>
+                      {new Date(task.created)
+                        .toString().slice(0,16)}
+                    </small>
+                    <small>
+                      {new Date(task.created)
+                        .toLocaleTimeString()
+                        .replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3")}
+                    </small>
                   </td>
                   <td>{task.title}</td>
                   <td>{task.project.name}</td>

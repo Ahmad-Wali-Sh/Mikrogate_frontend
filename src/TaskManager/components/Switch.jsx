@@ -1,16 +1,83 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useContext } from "react";
 import { Context } from "../../context/Context";
+import { useForm } from "react-hook-form";
+import { NotificationManager } from "react-notifications";
 
 export default function Switch(props) {
   const token = useContext(Context);
   const PAYMENT_URL = process.env.REACT_APP_PAYMENT_URL;
   const INSTALL_URL = process.env.REACT_APP_INSTALLATION_CONFIRM;
+  const ME_URL = process.env.REACT_APP_USER;
+  const [user, setUser] = React.useState({});
+  React.useEffect(() => {
+    axios
+      .get(ME_URL, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => setUser(res.data));
+  }, []);
+
+  const [groups, setGroups] = useState({
+    noc_manager: "",
+    sales_manager: "",
+    noc_stuff: "",
+    sales_stuff: "",
+    technician: "",
+    admin: "",
+    manager: "",
+  });
+
+  const checkForGroup = () => {
+    if (user?.groups?.includes(3)) {
+      setGroups((prev) => ({
+        ...prev,
+        noc_stuff: true,
+      }));
+    }
+    if (user?.groups?.includes(1)) {
+      setGroups((prev) => ({
+        ...prev,
+        sales_manager: true,
+      }));
+    }
+    if (user?.groups?.includes(1)) {
+      setGroups((prev) => ({
+        ...prev,
+        sales_manager: true,
+      }));
+    }
+    if (user?.groups?.includes(2)) {
+      setGroups((prev) => ({
+        ...prev,
+        noc_manager: true,
+      }));
+    }
+    if (user?.groups?.includes(4)) {
+      setGroups((prev) => ({
+        ...prev,
+        sales_stuff: true,
+      }));
+    }
+    if (user?.groups?.includes(5)) {
+      setGroups((prev) => ({
+        ...prev,
+        technician: true,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    checkForGroup();
+  }, [user]);
+
+  const { register, handleSubmit, reset } = useForm()
 
   const [payment, setPayment] = React.useState(null);
   const [installtionCofirm, setInstallationConfirm] = React.useState(null);
-
 
   React.useEffect(() => {
     axios
@@ -19,91 +86,95 @@ export default function Switch(props) {
           Authorization: "Token " + token.user.token,
         },
       })
-      .then((res) => res.data.results.map((pay)=> (
-        pay.task && props.id == pay.task ? setPayment(pay.payment) : ""
-      )));
+      .then((res) =>{
+        setPayment(res.data.results[0])
+        reset({
+          payment: payment?.payment ? payment?.payment : ''
+        })
+      }
+      );
   }, []);
 
   React.useEffect(() => {
+
+    reset({
+      payment: payment?.payment ? payment?.payment : '',
+      installation: installtionCofirm?.confirm ? installtionCofirm.confirm : ''
+    })
+  }, [payment, installtionCofirm])
+
+  React.useEffect(() => {
     axios
-      .get(INSTALL_URL, {
+      .get(INSTALL_URL + '?task=' + props.id, {
         headers: {
           Authorization: "Token " + token.user.token,
         },
       })
-      .then((res) => res.data.results.map((install => (
-       install.task && props.id == install.task ? setInstallationConfirm(install.confirm) : ""
-      ))));
+      .then((res) => {
+        setInstallationConfirm(res.data.results[0])
+        reset({
+          installation: installtionCofirm?.confirm ? installtionCofirm.confirm : ''
+        })
+      }
+      );
   }, []);
 
+  console.log(payment)
+  console.log(installtionCofirm)
 
-  const handleSwitchInstall = async (e) => {
-    let ask = window.confirm("Are You Sure to Confirm This Task Installation?")
 
-    let isChecked = e.target.checked;
-    ask == true ? setInstallationConfirm(true) : setInstallationConfirm(false);
+  const handleSwitchInstall = (data) => {
 
-    const SwitchInstallForm = new FormData();
-    SwitchInstallForm.append("task", props.id);
-    // SwitchInstallForm.append("user", props.data.user);
-    SwitchInstallForm.append("confirm", e.target.checked);
-    
-    // try {
-    //   const response = 
-    //    await axios({
-    //     url: INSTALL_URL,
-    //     method: "POST",
-    //     data: SwitchInstallForm,
-    //     headers: {
-    //       Authorization: "Token " + token.user.token,
-    //     },
-    //   })
-    //   console.log(response)
-    // } catch(err){console.log(err)})
+  }
 
-   ask && await axios({
-      url: INSTALL_URL,
-      method: ask == true ? "POST": "GET",
+  const submitNotification = (type) => {
+    NotificationManager.success("New Task Created!", "", 2000);
+  };
+  const errorNotification = (e) => {
+    NotificationManager.error('Nothing to Add', "Error!", 2000);
+  };
+
+  const SwitchSubmit = (data) => {
+
+    const SwitchInstallForm = new FormData()
+    SwitchInstallForm.append('task', props.id)
+    SwitchInstallForm.append('confirm', data.installation)
+
+
+    const SwitchPaymentForm = new FormData()
+    SwitchPaymentForm.append('task', props.id)
+    SwitchPaymentForm.append('payment', data.payment)
+
+    axios({
+      url: INSTALL_URL + `${installtionCofirm?.id ? installtionCofirm.id + '/' : ''}`,
+      method: installtionCofirm?.id ? 'PATCH' : 'POST',
       data: SwitchInstallForm,
       headers: {
-        Authorization: "Token " + token.user.token,
-      },
-    }).then(res => console.log(res))
+        Authorization: 'Token ' + token.user.token
+      }
+    }).then((res) => {
+      console.log(res.data)
+      submitNotification()
+    }).catch(()=> {
+      errorNotification()
+    })
 
-
-  }
-
-  const handleSwitchPayment = async (e) => {
-    let ask = window.confirm("Sure You Want To Confirm This Task Payment?")
-    let isChecked = e.target.checked;
-    ask == true ? setPayment(true) : setPayment(false)
-
-    const SwitchPayForm = new FormData();
-    SwitchPayForm.append("task", props.id);
-    // SwitchInstallForm.append("user", props.data.user);
-    SwitchPayForm.append("payment", e.target.checked);
-    
-
-    try {
-      const response = 
-      ask && await axios({
-        url: PAYMENT_URL,
-        method: ask == true ? "POST" : "GET",
-        data: SwitchPayForm,
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      console.log(response)
-    } catch(err){console.log(err)}
+    axios({
+      url: PAYMENT_URL + `${payment?.id ? payment?.id + '/' : ''}`,
+      method: payment?.id ? 'PATCH' : 'POST',
+      data: SwitchPaymentForm,
+      headers: {
+        Authorization: 'Token ' + token.user.token
+      }
+    }).then((res) => {
+      console.log(res.data)
+      submitNotification()
+    }).catch(()=> {
+      errorNotification()
+    })
 
   }
-
-  function handleSwitch(e) {
-    setPayment(e.target.checked);
-  }
-
-  console.log(installtionCofirm)
+  
 
   return (
     <>
@@ -111,53 +182,42 @@ export default function Switch(props) {
         <div className="card-body">
           <div className="row mt-2">
             <div className="col-4">Installation confirmed</div>
-            {installtionCofirm != undefined &&
-            <label  className={installtionCofirm == true ? "switch switch-checked": "switch"}>
-               <input
-                type="checkbox"
-                name="installation"
-                className={installtionCofirm == true ? "switch-checked": ""}
-                id="switch"
-                defaultChecked={installtionCofirm}
-                onChange={(e) => handleSwitchInstall(e)}
-              />
-              <span className="slider round"></span>
-            </label>}
-            {installtionCofirm == null &&
-            <label className={installtionCofirm == true ? "switch switch-checked": "switch"}>
-               <input
-                type="checkbox"
-                name="installation"
-                id="switch"
-                className={installtionCofirm == true ? "switch-checked": ""}
-                defaultChecked={installtionCofirm}
-                onChange={(e) => handleSwitchInstall(e)}
-              />
-              <span className="slider round"></span>
-            </label>}
+           
+              <label
+                className={installtionCofirm == true ? "switch " : "switch"}
+              >
+                <input
+                  type="checkbox"
+                  name="installation"
+                  {...register('installation')}
+                  id="switch"
+                  disabled={user?.groups?.includes(5) ? true : false}
+                />
+                <span className="slider round"></span>
+              </label>
+
           </div>
           <div className="row mt-2">
             <div className="col-4">Payment cleared</div>
-            {payment != undefined && <label className={payment == true ? "switch switch-checked": "switch"}>
-               <input
-                type="checkbox"
-                name="payment"
-                id="switch"
-                defaultChecked={payment}
-                onChange={(e)=> handleSwitchPayment(e)}
-              />
-              <span className="slider round"></span>
-            </label>}
-            {payment == null && <label className={payment == true ? "switch switch-checked": "switch"}>
-               <input
-                type="checkbox"
-                name="payment"
-                id="switch"
-                defaultChecked={payment}
-                onChange={(e)=> handleSwitchPayment(e)}
-              />
-              <span className="slider round"></span>
-            </label>}
+            
+              <label className={payment == true ? "switch" : "switch"}>
+                <input
+                  type="checkbox"
+                  name="payment"
+                  id="switch"
+                  {...register('payment')}
+                  disabled={(groups?.noc_manager || groups.noc_stuff) ? false : true}
+                />
+                <span className="slider round"></span>
+              </label>
+
+            {(groups?.noc_manager || groups.noc_stuff) && (
+              <div className="modal-footer">
+              <button className="btn btn-success" type="submit" onClick={handleSubmit(SwitchSubmit)}>
+                Submit
+              </button>
+            </div>
+            )}
           </div>
         </div>
       </div>
