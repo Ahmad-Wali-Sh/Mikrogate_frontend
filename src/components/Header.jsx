@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 export default function Header() {
     const logout = () => {
         localStorage.removeItem("user")
-        window.location.replace('login')
+        window.location.href = 'http://10.80.200.2:3001/'
     }
   return (
     <div>
