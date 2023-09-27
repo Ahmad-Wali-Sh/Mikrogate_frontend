@@ -12,7 +12,7 @@ export default function CheckList() {
 
   const token = useContext(Context);
 
-  const CHECKLIST_URL = process.env.REACT_APP_CHECKLIST;
+  const CHECKLIST_URL = process.env.REACT_APP_CHECKLIST_URL;
 
   useEffect(() => {
     axios.get(CHECKLIST_URL + `?id=${data.id}`, {
@@ -68,6 +68,7 @@ export default function CheckList() {
       );
     });
 
+    console.log(CHECKLIST_URL)
     try {
       const respone = await axios({
         method: count > 0 ? "PATCH" : "POST",
