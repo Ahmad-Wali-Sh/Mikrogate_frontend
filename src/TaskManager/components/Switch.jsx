@@ -191,7 +191,7 @@ export default function Switch(props) {
                   name="installation"
                   {...register('installation')}
                   id="switch"
-                  disabled={user?.groups?.includes(5) ? true : false}
+                  disabled={(groups?.noc_manager || groups.noc_stuff) ? false : true}
                 />
                 <span className="slider round"></span>
               </label>
