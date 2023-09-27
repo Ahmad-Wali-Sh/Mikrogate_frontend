@@ -31,6 +31,7 @@ import NocContractList from "./pages/Dashboards/NOC/NocContractList";
 import NocDashboard from "./pages/Dashboards/NOC/NocDashboard";
 import NocTask from "./pages/Dashboards/NOC/NocTask";
 import TechniciansDashboard from "./pages/Dashboards/Technicians/TechniciansDashboard";
+import Welcome from "./pages/Welcome";
 
 export default function App() {
   const { user } = useContext(Context);
@@ -43,8 +44,8 @@ export default function App() {
         {user ? <Header /> : ""}
         {user ? <Sidebar /> : ""}
         <Routes>
-          <Route path="/login" element={!user ? <Login /> : <Home />} />
-          <Route exact path="/" element={user ? <Home /> : <Login />} />
+          <Route path="/login" element={!user ? <Login /> : <Welcome />} />
+          <Route exact path="/" element={user ? <Welcome /> : <Login />} />
           <Route path="/test" element={<TestWebSocket />} />
           <Route path="/packages" element={<Packages />} />
           <Route path="/routers" element={<Routers />} />

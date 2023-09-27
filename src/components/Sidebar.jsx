@@ -31,22 +31,49 @@ export default function Sidebar() {
 
   const checkForGroup = () => {
     if (user?.groups?.includes(3)) {
-      setGroups({ ...groups, noc_stuff: "active" });
+      setGroups((prev) => ({
+        ...prev,
+        noc_stuff: true,
+      }));
     }
     if (user?.groups?.includes(1)) {
-      setGroups({ ...groups, sales_manager: "active" });
+      setGroups((prev) => ({
+        ...prev,
+        sales_manager: true,
+      }));
+    }
+    if (user?.groups?.includes(1)) {
+      setGroups((prev) => ({
+        ...prev,
+        sales_manager: true,
+      }));
+    }
+    if (user?.groups?.includes(2)) {
+      setGroups((prev) => ({
+        ...prev,
+        noc_manager: true,
+      }));
     }
     if (user?.groups?.includes(4)) {
-      setGroups({ ...groups, sales_stuff: "active" });
+      setGroups((prev) => ({
+        ...prev,
+        sales_stuff: true,
+      }));
     }
     if (user?.groups?.includes(5)) {
-      setGroups({ ...groups, technician: "active" });
+      setGroups((prev) => ({
+        ...prev,
+        technician: true,
+      }));
     }
   };
 
   useEffect(() => {
     checkForGroup();
   }, [user]);
+
+  console.log(groups);
+  console.log(user.groups);
   return (
     <div>
       {/* <!-- Main Sidebar Container --> */}
@@ -94,7 +121,8 @@ export default function Sidebar() {
               role="navigation"
               data-accordion="true"
             >
-              <li className="nav-item menu-close">
+              {(groups.noc_stuff || groups.noc_manager) && (
+                <li className="nav-item menu-close">
                 <div className="nav-link">
                   <i className="nav-icon fa-solid fa-gauge"></i>
                   <p>
@@ -117,145 +145,152 @@ export default function Sidebar() {
                   </li>
                 </ul>
               </li>
-              <li
-                className={`nav-item ${
-                  groups.noc_stuff == "active"
-                    ? "menu-open"
-                    : groups.noc_manager == "active"
-                    ? "menu-open"
-                    : ""
-                }`}
-              >
-                <div className="nav-link">
-                  <i className="nav-icon fa-solid fa-gauge"></i>
-                  <p>
-                    N.O.C
-                    <i className="fas fa-angle-left right"></i>
-                  </p>
-                </div>
-                <ul className="nav nav-treeview">
-                  <li className="nav-item">
-                    <Link to="/task-manager/noc" className="nav-link">
-                      <i className="fa-solid fa-people-roof nav-icon"></i>
-                      <p>NOC</p>
-                    </Link>
-                  </li>
-                  <li className="nav-item ">
-                    <Link to="/task-manager/technicians" className="nav-link">
-                      <i className="fa-solid fa-clipboard-user nav-icon"></i>
-                      <p>Technicians</p>
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li
-                className={`nav-item ${
-                  groups.sales_stuff == "active"
-                    ? "menu-open"
-                    : groups.sales_manager == "active"
-                    ? "menu-open"
-                    : ""
-                }`}
-              >
-                <div className="nav-link">
-                  <i className="nav-icon fa-solid fa-cart-shopping"></i>
-                  <p>
-                    SALES
-                    <i className="fas fa-angle-left right"></i>
-                  </p>
-                </div>
-                <ul className="nav nav-treeview">
-                  <div className="nav-header">Contracts</div>
-                  <li
-                    className={`nav-item ${
-                      groups.sales_stuff == "active"
-                        ? "menu-open"
-                        : groups.sales_manager == "active"
-                        ? "menu-open"
-                        : ""
-                    }`}
-                  >
-                    <a href="" className="nav-link">
-                      <i className="fa-solid fa-file-contract nav-icon"></i>
-                      <p>
-                        Contracts
-                        <i className="right fas fa-angle-left"></i>
-                      </p>
-                    </a>
-                    <ul className="nav nav-treeview">
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/search">
-                          <i className="fa-solid fa-files nav-icon"></i>
-                          <p>All Contracts</p>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/new-contract/">
-                          <i className="fa-solid fa-file-circle-plus nav-icon"></i>
-                          <p>New Contract</p>
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-                  <div className="nav-header">Package</div>
-                  <li className="nav-item">
-                    <Link to="/packages" className="nav-link">
-                      <i className="fa-solid fa-box-open nav-icon"></i>
-                      <p>Package List</p>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <a href="" className="nav-link">
-                      <i className="fa-solid fa-microchip nav-icon"></i>
-                      <p>
-                        Devices
-                        <i className="right fas fa-angle-left"></i>
-                      </p>
-                    </a>
-                    <ul className="nav nav-treeview">
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/antenna">
-                          <i className="fa-solid fa-satellite-dish nav-icon"></i>
-                          <p> Antenna</p>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/routers/">
-                          <i className="fa-solid fa-router nav-icon"></i>
-                          <p> Router</p>
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li
-                className={`nav-item ${
-                  groups.technician == "active" ? "menu-open" : ""
-                }`}
-              >
-                <div className="nav-link">
-                  <i className="nav-icon fa-solid fa-bars-progress"></i>
-                  <p>
-                    Task Manager
-                    <i className="fas fa-angle-left right"></i>
-                  </p>
-                </div>
-                <ul className="nav nav-treeview">
-                  <li className="nav-item">
-                    <Link to="/task-manager" className="nav-link">
-                      <i className="fa-solid fa-clipboard-user nav-icon"></i>
-                      <p>Task Manager</p>
-                    </Link>
-                  </li>
-                  <li className="nav-item ">
-                    <Link to="/task-manager/technicians" className="nav-link">
-                      <i className="fa-solid fa-clipboard-user nav-icon"></i>
-                      <p>Technician</p>
-                    </Link>
-                  </li>
-                </ul>
-              </li>
+              )}
+              {(groups.noc_stuff || groups.noc_manager) && (
+                <li
+                  className={`nav-item ${
+                    groups.noc_stuff == true
+                      ? "menu-open"
+                      : groups.noc_manager == true
+                      ? "menu-open"
+                      : ""
+                  }`}
+                >
+                  <div className="nav-link">
+                    <i className="nav-icon fa-solid fa-gauge"></i>
+                    <p>
+                      N.O.C
+                      <i className="fas fa-angle-left right"></i>
+                    </p>
+                  </div>
+                  <ul className="nav nav-treeview">
+                    <li className="nav-item">
+                      <Link to="/task-manager/noc" className="nav-link">
+                        <i className="fa-solid fa-people-roof nav-icon"></i>
+                        <p>NOC</p>
+                      </Link>
+                    </li>
+                    <li className="nav-item ">
+                      <Link to="/task-manager/technicians" className="nav-link">
+                        <i className="fa-solid fa-clipboard-user nav-icon"></i>
+                        <p>Technicians</p>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              )}
+              {(groups.sales_manager || groups.sales_stuff) && (
+                <li
+                  className={`nav-item ${
+                    groups.sales_stuff == true
+                      ? "menu-open"
+                      : groups.sales_manager == true
+                      ? "menu-open"
+                      : ""
+                  }`}
+                >
+                  <div className="nav-link">
+                    <i className="nav-icon fa-solid fa-cart-shopping"></i>
+                    <p>
+                      SALES
+                      <i className="fas fa-angle-left right"></i>
+                    </p>
+                  </div>
+                  <ul className="nav nav-treeview">
+                    <div className="nav-header">Contracts</div>
+                    <li
+                      className={`nav-item ${
+                        groups.sales_stuff == true
+                          ? "menu-open"
+                          : groups.sales_manager == true
+                          ? "menu-open"
+                          : ""
+                      }`}
+                    >
+                      <a href="" className="nav-link">
+                        <i className="fa-solid fa-file-contract nav-icon"></i>
+                        <p>
+                          Contracts
+                          <i className="right fas fa-angle-left"></i>
+                        </p>
+                      </a>
+                      <ul className="nav nav-treeview">
+                        <li className="nav-item">
+                          <Link className="nav-link" to="/search">
+                            <i className="fa-solid fa-files nav-icon"></i>
+                            <p>All Contracts</p>
+                          </Link>
+                        </li>
+                        <li className="nav-item">
+                          <Link className="nav-link" to="/new-contract/">
+                            <i className="fa-solid fa-file-circle-plus nav-icon"></i>
+                            <p>New Contract</p>
+                          </Link>
+                        </li>
+                      </ul>
+                    </li>
+                    <div className="nav-header">Package</div>
+                    <li className="nav-item">
+                      <Link to="/packages" className="nav-link">
+                        <i className="fa-solid fa-box-open nav-icon"></i>
+                        <p>Package List</p>
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <a href="" className="nav-link">
+                        <i className="fa-solid fa-microchip nav-icon"></i>
+                        <p>
+                          Devices
+                          <i className="right fas fa-angle-left"></i>
+                        </p>
+                      </a>
+                      <ul className="nav nav-treeview">
+                        <li className="nav-item">
+                          <Link className="nav-link" to="/antenna">
+                            <i className="fa-solid fa-satellite-dish nav-icon"></i>
+                            <p> Antenna</p>
+                          </Link>
+                        </li>
+                        <li className="nav-item">
+                          <Link className="nav-link" to="/routers/">
+                            <i className="fa-solid fa-router nav-icon"></i>
+                            <p> Router</p>
+                          </Link>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              )}
+              {groups.technician && (
+                <li
+                  className={`nav-item ${
+                    groups.technician == true ? "menu-open" : ""
+                  }`}
+                >
+                  <div className="nav-link">
+                    <i className="nav-icon fa-solid fa-bars-progress"></i>
+                    <p>
+                      Task Manager
+                      <i className="fas fa-angle-left right"></i>
+                    </p>
+                  </div>
+                  <ul className="nav nav-treeview">
+                    <li className="nav-item">
+                      <Link to="/task-manager" className="nav-link">
+                        <i className="fa-solid fa-clipboard-user nav-icon"></i>
+                        <p>Task Manager</p>
+                      </Link>
+                    </li>
+                    <li className="nav-item ">
+                      <Link to="/task-manager/technicians" className="nav-link">
+                        <i className="fa-solid fa-clipboard-user nav-icon"></i>
+                        <p>Technician</p>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              )}
             </ul>
           </nav>
           {/* <!-- /.sidebar-menu --> */}
