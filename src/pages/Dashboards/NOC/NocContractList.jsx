@@ -38,8 +38,6 @@ export default function NocContractList() {
     formState: { errors },
   } = useForm();
 
-  console.log(contractNumber);
-
   useEffect(() => {
     axios
       .get(contractUrl, {
@@ -112,7 +110,6 @@ export default function NocContractList() {
   };
 
   let i = 0;
-  console.log(contracts);
 
   // const token = true
 
@@ -141,18 +138,11 @@ export default function NocContractList() {
         },
       })
       .then((res) => setUser(res.data));
-    console.log(user);
   }, []);
 
   const [project, setProject] = useState(taskProjectState);
 
-  const contractNoRef = useRef();
   const projectRef = useRef();
-
-  function handleSwitch(e) {
-    let isChecked = e.target.checked;
-    console.log(isChecked);
-  }
 
   React.useEffect(() => {
     axios
@@ -192,72 +182,9 @@ export default function NocContractList() {
     input: "",
   });
 
-  const handleSubmit123 = async (e) => {
-    e.preventDefault();
-    warningNotification();
-    try {
-      const res = await axios.get(
-        CONTRACT + `?query=${contractNoRef.current.value}`,
-        {
-          headers: {
-            Authorization: "Token " + token.user.token,
-          },
-        }
-      );
-      console.log(res.data.results);
-      console.log(contractNoRef.current.value);
-      setFind(res.data.results[0]);
-
-      // for (let i = 1; i <= Math.ceil(res.data.count / 100 ); i++){
-      //   axios.get(CONTRACT + `?page=${i}`, {headers: { Authorization: "Token " + token.user.token}}).then((res)=>{
-      //     setMyData({...myData.push(...res.data.results)})
-      //     myData.map((contracted)=> (
-      //       contracted.contract_number == findInput.input && setFindCheck(contracted)
-      //     )
-      //   )})
-      // }
-      searchSuccessNotification();
-    } catch (err) {
-      console.log(err);
-      const errorNotification = (e) => {
-        NotificationManager.error(err.message, "Error!", 2000);
-      };
-      errorNotification();
-    }
-  };
-  const [contenter, setContenter] = React.useState([]);
-
-  console.log(find);
-  console.log(installtionCofirm);
-
-  React.useEffect(() => {
-    axios
-      .get(TASK_URL, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => {
-        setContenter(res.data.results);
-      });
-  }, []);
-
-  const [stage, setStage] = useState([]);
   const [projecter, setProjecter] = useState([]);
   const [tag, setTag] = useState([]);
   const [member, setMember] = useState([]);
-
-  React.useEffect(() => {
-    axios
-      .get(STAGE_URL, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => {
-        setStage(res.data.results);
-      });
-  }, []);
 
   React.useEffect(() => {
     axios
@@ -270,6 +197,7 @@ export default function NocContractList() {
         setMember(res.data.results);
       });
   }, []);
+
 
   React.useEffect(() => {
     axios
@@ -306,13 +234,6 @@ export default function NocContractList() {
     tag: 1,
   });
 
-  const changeHandle = (e) => {
-    setFindInput({
-      ...findInput,
-      input: e.target.value,
-    });
-  };
-
   let handlerChange = (event) => {
     if (event.target.name !== "assigned") {
       setForm({
@@ -339,14 +260,6 @@ export default function NocContractList() {
 
   document.addEventListener("touchstart", function () {}, true);
 
-  // useEffect(() => {
-  //   socket.on("getNotification", (data) => {
-  //     console.log(data);
-  //     {
-  //       data.receiverName.includes(user.id) && receiveNotification();
-  //     }
-  //   });
-  // }, [user]);
   const navigate = useNavigate();
 
   const createTask = async (event) => {
@@ -372,32 +285,38 @@ export default function NocContractList() {
           Authorization: "Token " + token.user.token,
         },
       }).then((res) => {
-        console.log(res)
         axios
-        .get(TASK_URL + res.data.id + '/', {
-          headers: {
-            Authorization: "Token " + token.user.token,
-          },
-        })
-        .then((res) => {
-          console.log(res.data.project.name)
-          if (res.data.project.name == 'Installation') {
-            navigate("/task-manager/details", { state: {data: res.data} });
-          }
-          if (res.data.project.name == 'Troubleshoot') {
-            navigate("/task-manager/troubleshoot", { state: {data: res.data} });
-          }
-          if (res.data.project.name == 'Online Support') {
-            navigate("/task-manager/online_support", { state: {data: res.data} });
-          }
-          if (res.data.project.name == 'Change Location') {
-            navigate("/task-manager/change_location", { state: {data: res.data} });
-          }
-          if (res.data.project.name == 'Amendment') {
-            navigate("/task-manager/amendment", { state: {data: res.data} });
-          }
-        });
-      })
+          .get(TASK_URL + res.data.id + "/", {
+            headers: {
+              Authorization: "Token " + token.user.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.project.name == "Installation") {
+              navigate("/task-manager/details", { state: { data: res.data } });
+            }
+            if (res.data.project.name == "Troubleshoot") {
+              navigate("/task-manager/troubleshoot", {
+                state: { data: res.data },
+              });
+            }
+            if (res.data.project.name == "Online Support") {
+              navigate("/task-manager/online_support", {
+                state: { data: res.data },
+              });
+            }
+            if (res.data.project.name == "Change Location") {
+              navigate("/task-manager/change_location", {
+                state: { data: res.data },
+              });
+            }
+            if (res.data.project.name == "Amendment") {
+              navigate("/task-manager/amendment", {
+                state: { data: res.data },
+              });
+            }
+          });
+      });
       submitNotification();
     } catch (error) {
       console.log(error);
@@ -408,7 +327,7 @@ export default function NocContractList() {
     }
   };
 
-  const [content, setContent] = useState([]);
+  console.log(form.assigned)
 
   const [search, setSearch] = React.useState({
     search: "",
@@ -431,7 +350,6 @@ export default function NocContractList() {
         },
       })
       .then((res) => {
-        setContenter(res.data.results);
         searchSuccessNotification();
       });
   };
@@ -439,6 +357,18 @@ export default function NocContractList() {
   function getDayName(dateStr, locale) {
     var date = new Date(dateStr);
     return date.toLocaleDateString(locale, { weekday: "long" });
+  }
+
+  const FilterMember = (e) => {
+    axios
+    .get(MEMBER_URL + '?name=' + e.target.value, {
+      headers: {
+        Authorization: "Token " + token.user.token,
+      },
+    })
+    .then((res) => {
+      setMember(res.data.results);
+    });
   }
 
   return (
@@ -940,33 +870,87 @@ export default function NocContractList() {
                                   placeholder="Filter members"
                                   aria-label="Username"
                                   aria-describedby="addon-wrapping"
+                                  onChange={FilterMember}
                                 />
                               </div>
                             </div>
-                            <form onSubmit={createTask}>
-                              <div className="col-5 membersbox">
+                            <div className="">
+                             <h5>Selected:</h5>
+                             <div>
+                             {
+                               member.map((member) => (
+                                 form.assigned.map((assignedIndex) => (
+                                   member.id == assignedIndex && (<span>{member.name}, </span>)
+                                 ))
+                               ))
+                             }
+                             </div>
+                            </div>
+                            <form
+                              onSubmit={createTask}
+                              className="members-columns"
+                            >
+                              
+                              <div className="col-5 membersbox ">
+                                <h4 className="members-text">NOC Stuff</h4>
                                 <ul>
-                                  {member.map((item) => (
-                                    <li className="d-flex justify-content-between padd">
-                                      <div className="list-item">
-                                        <img
-                                          src={item.avatar}
-                                          alt="avatar"
-                                          className="Member-avatar"
-                                        />
-                                        <span className="ml-4">
-                                          {item.name}
-                                        </span>
-                                      </div>
-                                      <input
-                                        type="checkbox"
-                                        className="mt-3 mr-3"
-                                        name="assigned"
-                                        value={item.id}
-                                        onChange={handlerChange}
-                                      />
-                                    </li>
-                                  ))}
+                                  {member.map(
+                                    (item) =>
+                                      item.groups.includes(3) ? (
+                                        <div>
+                                          <li className="d-flex justify-content-between padd">
+                                            <div className="list-item">
+                                              <img
+                                                src={item.avatar}
+                                                alt="avatar"
+                                                className="Member-avatar"
+                                              />
+                                              <span className="ml-4">
+                                                {item.name}
+                                              </span>
+                                            </div>
+                                            <input
+                                              type="checkbox"
+                                              className="mt-3 mr-3"
+                                              name="assigned"
+                                              value={item.id}
+                                              onChange={handlerChange}
+                                            />
+                                          </li>
+                                        </div>
+                                      ) : <div></div>
+                                  )}
+                                </ul>
+                              </div>
+                              <div className="col-5 membersbox ">
+                                <h4 className="members-text">Technicians</h4>
+                                <ul>
+                                  {member.map(
+                                    (item) =>
+                                      item.groups.includes(5) ? (
+                                        <div>
+                                          <li className="d-flex justify-content-between padd">
+                                            <div className="list-item">
+                                              <img
+                                                src={item.avatar}
+                                                alt="avatar"
+                                                className="Member-avatar"
+                                              />
+                                              <span className="ml-4">
+                                                {item.name}
+                                              </span>
+                                            </div>
+                                            <input
+                                              type="checkbox"
+                                              className="mt-3 mr-3"
+                                              name="assigned"
+                                              value={item.id}
+                                              onChange={handlerChange}
+                                            />
+                                          </li>
+                                        </div>
+                                      ) : <div></div>
+                                  )}
                                 </ul>
                               </div>
                             </form>

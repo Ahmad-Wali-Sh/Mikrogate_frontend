@@ -652,6 +652,14 @@ input, select {
   margin-right: 10rem;
 }
 
+.members-columns {
+  display: flex;
+}
+
+
+.members-text{
+  text-align: center;
+}
 
 
 
