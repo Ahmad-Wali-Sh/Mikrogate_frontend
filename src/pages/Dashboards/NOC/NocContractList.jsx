@@ -9,6 +9,7 @@ import { Context } from "../../../context/Context";
 import { Link } from "react-router-dom";
 import cx from "classnames";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 export default function NocContractList() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
@@ -346,6 +347,7 @@ export default function NocContractList() {
   //     }
   //   });
   // }, [user]);
+  const navigate = useNavigate();
 
   const createTask = async (event) => {
     event.preventDefault();
@@ -369,13 +371,34 @@ export default function NocContractList() {
         headers: {
           Authorization: "Token " + token.user.token,
         },
-      });
-      console.log(respone);
+      }).then((res) => {
+        console.log(res)
+        axios
+        .get(TASK_URL + res.data.id + '/', {
+          headers: {
+            Authorization: "Token " + token.user.token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data.project.name)
+          if (res.data.project.name == 'Installation') {
+            navigate("/task-manager/details", { state: {data: res.data} });
+          }
+          if (res.data.project.name == 'Troubleshoot') {
+            navigate("/task-manager/troubleshoot", { state: {data: res.data} });
+          }
+          if (res.data.project.name == 'Online Support') {
+            navigate("/task-manager/online_support", { state: {data: res.data} });
+          }
+          if (res.data.project.name == 'Change Location') {
+            navigate("/task-manager/change_location", { state: {data: res.data} });
+          }
+          if (res.data.project.name == 'Amendment') {
+            navigate("/task-manager/amendment", { state: {data: res.data} });
+          }
+        });
+      })
       submitNotification();
-      // socket.emit("sendNotification", {
-      //   senderName: user.name,
-      //   receiverName: respone.data.assigned,
-      // });
     } catch (error) {
       console.log(error);
       const errorNotification = (e) => {
@@ -876,6 +899,8 @@ export default function NocContractList() {
                                 <button
                                   className="btn btn-primary"
                                   type="submit"
+                                  data-bs-dismiss="modal"
+                                  aria-label="Close"
                                 >
                                   Create Task
                                 </button>

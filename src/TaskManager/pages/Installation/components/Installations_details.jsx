@@ -46,6 +46,7 @@ const Installations_details = (props) => {
   const handleChange = (e) => {
     setSettings({
       ...settings,
+      pppoe_user: props.contract_id.contract.contract_id,
       [e.target.name]: e.target.value,
     });
   };
@@ -82,6 +83,7 @@ const Installations_details = (props) => {
       errorNotification()
     }
   };
+
 
   return (
     <div>
@@ -218,6 +220,7 @@ const Installations_details = (props) => {
                     class="form-control"
                     id="pppoe_user"
                     name="pppoe_user"
+                    value={props.contract_id.contract.contract_id}
                     onChange={handleChange}
                   />
                 </div>

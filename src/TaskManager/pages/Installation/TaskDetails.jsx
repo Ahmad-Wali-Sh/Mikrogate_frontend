@@ -18,7 +18,7 @@ const TaskDetails = () => {
         <section>
           <Header />
           <GeneralDetails />
-          <Installations_details id={data.id} />
+          <Installations_details id={data.id} contract_id={data}/>
           <Link_Details data={[data]} id={data.id} />
           <Switch data={[data]} id={data.id}/>
           <LogMessage data={[data]} id={data.id}/>
