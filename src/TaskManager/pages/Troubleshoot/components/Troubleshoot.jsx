@@ -21,6 +21,8 @@ export default function Troubleshoot() {
   const troubleshoot_details = singleTroubleshootTask.map((item) => item.id);
   const TROUBLE_URL = process.env.REACT_APP_TROUBLE;
 
+  const [trigger, setTrigger] = useState(0)
+
   useEffect(() => {
     axios
       .get(TROUBLE_URL + `?id=${data.id}`, {
@@ -32,7 +34,7 @@ export default function Troubleshoot() {
         setSingleTroubleshootTask(res.data.results);
         console.log(res.data.count);
       });
-  }, []);
+  }, [trigger]);
 
   const submitNotification = (e) => {
     NotificationManager.success("Sent!", "", 2000);
@@ -85,6 +87,7 @@ export default function Troubleshoot() {
         },
       });
       console.log(response);
+      setTrigger(prev => prev + 1)
       submitNotification();
     } catch (err) {
       console.log(err.message);
