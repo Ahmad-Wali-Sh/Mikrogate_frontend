@@ -825,16 +825,7 @@ export default function NocContractList() {
                                   </div>
                                 </div>
                               </div>
-                              <div className="modal-footer">
-                                <button
-                                  className="btn btn-primary"
-                                  type="submit"
-                                  data-bs-dismiss="modal"
-                                  aria-label="Close"
-                                >
-                                  Create Task
-                                </button>
-                              </div>
+                              
                             </form>
 
                             {project.selectedProject == "troubleshoot" && (
@@ -888,16 +879,16 @@ export default function NocContractList() {
                             </div>
                             <form
                               onSubmit={createTask}
-                              className="members-columns"
-                            >
                               
+                            >
+                              <div className="members-columns">
                               <div className="col-5 membersbox ">
                                 <h4 className="members-text">NOC Stuff</h4>
                                 <ul>
                                   {member.map(
                                     (item) =>
                                       item.groups.includes(3) ? (
-                                        <div>
+                                        <div key={item.id}>
                                           <li className="d-flex justify-content-between padd">
                                             <div className="list-item">
                                               <img
@@ -922,13 +913,14 @@ export default function NocContractList() {
                                   )}
                                 </ul>
                               </div>
+                              
                               <div className="col-5 membersbox ">
                                 <h4 className="members-text">Technicians</h4>
                                 <ul>
                                   {member.map(
                                     (item) =>
                                       item.groups.includes(5) ? (
-                                        <div>
+                                        <div key={item.id}>
                                           <li className="d-flex justify-content-between padd">
                                             <div className="list-item">
                                               <img
@@ -951,7 +943,18 @@ export default function NocContractList() {
                                         </div>
                                       ) : <div></div>
                                   )}
-                                </ul>
+                                </ul>  
+                              </div>
+                              </div>
+                              <div className="modal-footer">
+                                <button
+                                  className="btn btn-primary"
+                                  type="submit"
+                                  data-bs-dismiss="modal"
+                                  aria-label="Close"
+                                >
+                                  Create Task
+                                </button>
                               </div>
                             </form>
                           </div>

@@ -5,6 +5,7 @@ import { Context } from "../../context/Context";
 import { useContext } from "react";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
+import { useGroup } from "../../components/useUser";
 
 export default function Header() {
   const location = useLocation();
@@ -154,6 +155,7 @@ export default function Header() {
   };
   const assign = details.map((item) => item.id);
   console.log(assign)
+  const groups = useGroup()
   return (
     <>
       <h1>{data.title}</h1>
@@ -171,7 +173,7 @@ export default function Header() {
               />
             </li>
           ))}
-          <button
+          {(groups.noc_manager || groups.noc_stuff) && <button
             type="button"
             name="addTask"
             className="btn btn-secondary rounded-circle circle-width mx-3"
@@ -179,7 +181,7 @@ export default function Header() {
             data-bs-target="#membersModal"
           >
             <i className="fa-solid fa-plus "></i>
-          </button>
+          </button>}
         </ul>
 
         <div
@@ -333,6 +335,7 @@ export default function Header() {
                 <select
                   className="form-select"
                   id="project"
+                  disabled
                   aria-label="Default select example"
                   name="project"
                 >
@@ -355,6 +358,7 @@ export default function Header() {
                     className="form-control"
                     placeholder="contract name"
                     aria-label="Username"
+                    disabled
                     aria-describedby="basic-addon1"
                     defaultValue={data.contract.contract_number}
                   />
@@ -372,6 +376,7 @@ export default function Header() {
                   <input
                     type="date"
                     name="deadline"
+                    disabled
                     className="form-control"
                     defaultValue={data.deadline.slice(0, 10)}
                   />
@@ -390,6 +395,7 @@ export default function Header() {
                   <select
                     className="form-select"
                     id="tag"
+                    disabled
                     aria-label="Default select example"
                   >
                     <option defaultValue={data.tag.id}>{data.tag.name}</option>

@@ -5,10 +5,12 @@ import { useLocation } from "react-router-dom";
 import { Context } from "../../context/Context";
 import { useContext } from "react";
 import NotificationManager from "react-notifications/lib/NotificationManager";
+import { useGroup } from "../../components/useUser";
 
 export default function CheckList() {
   const location = useLocation();
   const data = location.state?.data;
+  const groups = useGroup()
 
   const token = useContext(Context);
 
@@ -91,7 +93,7 @@ export default function CheckList() {
 
   return (
     <>
-      {taskCheckList == false && (
+      {taskCheckList == false && groups.technician && (
         <button
           type="button"
           class="btn btn-primary mt-2"

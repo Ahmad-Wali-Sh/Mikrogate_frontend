@@ -3,10 +3,12 @@ import { useContext } from "react";
 import { Context } from "../../../../context/Context";
 import React, { useState } from "react";
 import NotificationManager from "react-notifications/lib/NotificationManager";
+import { useGroup } from "../../../../components/useUser";
 
 const Installations_details = (props) => {
 
   const token = useContext(Context);
+  const groups = useGroup()
 
   const [settings, setSettings] = React.useState({
     pppoe_user: "",
@@ -89,7 +91,7 @@ const Installations_details = (props) => {
     <div>
       <hr />
       <div className="mb-2 mt-2">
-        {installation == false && (
+        {installation == false && (groups?.noc_manager || groups?.noc_stuff) && (
           <button
             type="button"
             class="btn btn-primary"
@@ -120,6 +122,7 @@ const Installations_details = (props) => {
                   id="inputEmail3"
                   placeholder="..."
                   className="form-control"
+                  disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                   onChange={handleChange}
                   defaultValue={item.pppoe_user}
                 />
@@ -139,6 +142,7 @@ const Installations_details = (props) => {
                   placeholder="..."
                   className="form-control"
                   onChange={handleChange}
+                  disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                   defaultValue={item.pppoe_password}
                 />
               </div>
@@ -176,15 +180,16 @@ const Installations_details = (props) => {
               className="form-control border-top-0"
               placeholder="Leave a description here"
               name="description"
+              disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
               id="floatingTextarea"
               rows="6"
               onChange={handleChange}
               defaultValue={item.description}
             ></textarea>
             <div className="modal-footer mt-3">
-              <button className="btn btn-success" type="submit">
+              {(groups.noc_manager || groups.noc_stuff) && <button className="btn btn-success" type="submit">
                 Submit
-              </button>
+              </button>}
             </div>
           </>
         ))}

@@ -5,11 +5,14 @@ import axios from "axios";
 import { Context } from "../../../../context/Context";
 import { useContext } from "react";
 import { NotificationManager } from "react-notifications";
+import { useGroup } from "../../../../components/useUser";
 
 const ChangeLocation = (props) => {
   const location = useLocation();
   const data = location.state?.data;
   const token = useContext(Context);
+
+  const groups = useGroup()
 
   console.log(data.id);
 
@@ -118,7 +121,7 @@ const ChangeLocation = (props) => {
     <>
       {ChangeLocationData == false && (
         <div className="mb-2 mt-2">
-          <button
+          {(groups.noc_manager || groups.noc_stuff) && <button
             type="button"
             class="btn btn-primary"
             data-bs-toggle="modal"
@@ -126,7 +129,7 @@ const ChangeLocation = (props) => {
             data-bs-whatever="@mdo"
           >
             Add Details
-          </button>
+          </button>}
         </div>
       )}
 
@@ -273,6 +276,7 @@ const ChangeLocation = (props) => {
                       name="title"
                       id="troubleshoot_title"
                       placeholder="..."
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       className="form-control"
                       onChange={handlerChange}
                       defaultValue={data.title}
@@ -293,6 +297,7 @@ const ChangeLocation = (props) => {
                       id="troubleshoot_address"
                       placeholder="..."
                       className="form-control"
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       onChange={handlerChange}
                       defaultValue={item.address}
                     />
@@ -311,6 +316,7 @@ const ChangeLocation = (props) => {
                       name="contact"
                       id="troubleshoot_contact"
                       placeholder="..."
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       className="form-control"
                       onChange={handlerChange}
                       defaultValue={item.contact}
@@ -328,6 +334,7 @@ const ChangeLocation = (props) => {
                       name="service_charge"
                       id="troubleshoot_charge"
                       placeholder="..."
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       className="form-control"
                       onChange={handlerChange}
                       defaultValue={item.service_charge}
@@ -364,6 +371,7 @@ const ChangeLocation = (props) => {
                           placeholder="Leave a description here"
                           id="floatingTextarea"
                           rows="6"
+                          disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                           name="description"
                           onChange={handlerChange}
                           defaultValue={item.description}
@@ -374,9 +382,9 @@ const ChangeLocation = (props) => {
                 </div>
               </div>
               <div className="card-footer">
-                <button type="submit" className="btn btn-success">
+                {(groups.noc_manager || groups.noc_stuff) && <button type="submit" className="btn btn-success">
                   Submit
-                </button>
+                </button>}
               </div>
             </form>
           </div>

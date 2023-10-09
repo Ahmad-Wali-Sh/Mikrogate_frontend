@@ -153,7 +153,7 @@ export default function NocDashboard() {
               <div className="col-12">
                 <div className="card">
                   <div className="card-header">
-                    <h3 className="card-title">Tasks Overview</h3>
+                    <h3 className="card-title">New Contracts Overview</h3>
                   </div>
                   <div className="card-body p-0">
                     <table className="table projects">

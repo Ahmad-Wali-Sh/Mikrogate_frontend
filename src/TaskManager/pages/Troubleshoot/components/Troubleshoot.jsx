@@ -6,12 +6,14 @@ import { useContext } from "react";
 import { useLocation } from "react-router-dom";
 import CheckList from "../../../components/CheckList";
 import NotificationManager from "react-notifications/lib/NotificationManager";
-
+import { useGroup } from "../../../../components/useUser";
 
 export default function Troubleshoot() {
   const location = useLocation();
   const data = location.state?.data;
   const token = useContext(Context);
+
+  const groups = useGroup();
 
   const [singleTroubleshootTask, setSingleTroubleshootTask] = React.useState(
     []
@@ -20,27 +22,27 @@ export default function Troubleshoot() {
   const TROUBLE_URL = process.env.REACT_APP_TROUBLE;
 
   useEffect(() => {
-    axios.get(TROUBLE_URL + `?id=${data.id}`, {
-      headers: {
-        Authorization: "Token " + token.user.token,
-      }
-    }).then((res) => {
-      setSingleTroubleshootTask(res.data.results);
-      console.log(res.data.count);
-    });
+    axios
+      .get(TROUBLE_URL + `?id=${data.id}`, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => {
+        setSingleTroubleshootTask(res.data.results);
+        console.log(res.data.count);
+      });
   }, []);
 
-  const submitNotification = (e)  => {
-    NotificationManager.success("Sent!", "", 2000)
-  }
-  const errorNotification = (e)  => {
-    NotificationManager.error("Not Sent!", "", 2000)
-  }
-  const warningNotification = (e)  => {
-    NotificationManager.warning("Sending Your Data...", "Pending", 2000)
-  }
-
-
+  const submitNotification = (e) => {
+    NotificationManager.success("Sent!", "", 2000);
+  };
+  const errorNotification = (e) => {
+    NotificationManager.error("Not Sent!", "", 2000);
+  };
+  const warningNotification = (e) => {
+    NotificationManager.warning("Sending Your Data...", "Pending", 2000);
+  };
 
   const [truobleshoot, setTroubleshoot] = React.useState({
     address: "",
@@ -50,9 +52,8 @@ export default function Troubleshoot() {
     description: "",
   });
 
-  console.log(truobleshoot)
-  console.log(singleTroubleshootTask)
-  
+  console.log(truobleshoot);
+  console.log(singleTroubleshootTask);
 
   let handlerChange = (event) => {
     setTroubleshoot({
@@ -63,34 +64,37 @@ export default function Troubleshoot() {
   };
 
   const updateTrobleshoot = async (e) => {
-    e.preventDefault()
-    warningNotification()
-    const data = new FormData()
+    e.preventDefault();
+    warningNotification();
+    const data = new FormData();
 
     Object.keys(truobleshoot).map((key) => {
-        data.append(truobleshoot[key] != '' && key, truobleshoot[key] != '' && truobleshoot[key]);
-      })
+      data.append(
+        truobleshoot[key] != "" && key,
+        truobleshoot[key] != "" && truobleshoot[key]
+      );
+    });
 
     try {
-        const response = await axios({
-          method: 'PATCH',
-          url: TROUBLE_URL + `${troubleshoot_details}/`,
-          data: data,
-          headers: {
-            Authorization: "Token " + token.user.token,
-          }
-        });
-        console.log(response);
-        submitNotification()
-      } catch (err) {
-        console.log(err.message);
-        errorNotification()
-      }
-  }
+      const response = await axios({
+        method: "PATCH",
+        url: TROUBLE_URL + `${troubleshoot_details}/`,
+        data: data,
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      });
+      console.log(response);
+      submitNotification();
+    } catch (err) {
+      console.log(err.message);
+      errorNotification();
+    }
+  };
 
   function TroubleshootSubmit(e) {
     e.preventDefault();
-    warningNotification()
+    warningNotification();
     const TroubleshootForm = new FormData();
     TroubleshootForm.append("address", truobleshoot.address);
     TroubleshootForm.append("contact", truobleshoot.contact);
@@ -108,16 +112,14 @@ export default function Troubleshoot() {
         data: TroubleshootForm,
         headers: {
           Authorization: "Token " + token.user.token,
-        }
+        },
       });
       console.log(response);
-      submitNotification()
+      submitNotification();
     } catch (err) {
       console.log(err.message);
-      errorNotification()
+      errorNotification();
     }
-
-
   }
 
   return (
@@ -135,7 +137,7 @@ export default function Troubleshoot() {
           </button>
         </div>
       )}
-      
+
       <div
         class="modal fade"
         id="exampleModal"
@@ -149,12 +151,14 @@ export default function Troubleshoot() {
               <h5 class="modal-title" id="exampleModalLabel">
                 Troubleshoot Settings
               </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
+              {(groups.noc_manager || groups.noc_stuff) && (
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              )}
             </div>
             <div class="modal-body">
               <form onSubmit={TroubleshootSubmit}>
@@ -171,6 +175,9 @@ export default function Troubleshoot() {
                       name="address"
                       id="troubleshoot_address"
                       placeholder="..."
+                      disabled={
+                        groups.noc_manager || groups.noc_stuff ? false : true
+                      }
                       className="form-control"
                       onChange={handlerChange}
                     />
@@ -298,6 +305,9 @@ export default function Troubleshoot() {
                       className="form-control"
                       onChange={handlerChange}
                       defaultValue={data.title}
+                      disabled={
+                        groups.noc_manager || groups.noc_stuff ? false : true
+                      }
                     />
                   </div>
                 </div>
@@ -317,6 +327,9 @@ export default function Troubleshoot() {
                       className="form-control"
                       onChange={handlerChange}
                       defaultValue={item.address}
+                      disabled={
+                        groups.noc_manager || groups.noc_stuff ? false : true
+                      }
                     />
                   </div>
                 </div>
@@ -336,6 +349,9 @@ export default function Troubleshoot() {
                       className="form-control"
                       onChange={handlerChange}
                       defaultValue={item.contact}
+                      disabled={
+                        groups.noc_manager || groups.noc_stuff ? false : true
+                      }
                     />
                   </div>
                   <label
@@ -352,6 +368,9 @@ export default function Troubleshoot() {
                       placeholder="..."
                       className="form-control"
                       onChange={handlerChange}
+                      disabled={
+                        groups.noc_manager || groups.noc_stuff ? false : true
+                      }
                       defaultValue={item.service_charge}
                     />
                   </div>
@@ -372,6 +391,9 @@ export default function Troubleshoot() {
                       className="form-control"
                       onChange={handlerChange}
                       defaultValue={item.problem}
+                      disabled={
+                        groups.noc_manager || groups.noc_stuff ? false : true
+                      }
                     />
                   </div>
                 </div>
@@ -405,6 +427,9 @@ export default function Troubleshoot() {
                           placeholder="Leave a description here"
                           id="floatingTextarea"
                           rows="6"
+                          disabled={
+                            groups.noc_manager || groups.noc_stuff ? false : true
+                          }
                           name="description"
                           onChange={handlerChange}
                           defaultValue={item.description}
@@ -415,13 +440,12 @@ export default function Troubleshoot() {
                 </div>
               </div>
               <div className="card-footer">
-                <button type="submit" className="btn btn-success" >
+                {(groups.noc_manager || groups.noc_stuff) && <button type="submit" className="btn btn-success">
                   Submit
-                </button>
+                </button>}
               </div>
             </form>
           </div>
-          
         </>
       ))}
     </>

@@ -3,11 +3,14 @@ import axios from "axios";
 import { Context } from "../../context/Context";
 import { useContext } from "react";
 import NotificationManager from "react-notifications/lib/NotificationManager";
+import { useGroup } from "../../components/useUser";
 
 export default function Link_Details(props) {
   const [LinkDetailsData, setLinkDetailsData] = React.useState([]);
   const [count, setCount] = React.useState();
   const URL = process.env.REACT_APP_LINK;
+  const groups = useGroup()
+  
 
   const token = useContext(Context);
 
@@ -104,7 +107,7 @@ export default function Link_Details(props) {
 
   return (
     <div>
-      {LinkDetailsData == false && (
+      {LinkDetailsData == false && groups.technician && (
         <button
           type="button"
           class="btn btn-primary"
