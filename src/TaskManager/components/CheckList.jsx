@@ -8,26 +8,29 @@ import NotificationManager from "react-notifications/lib/NotificationManager";
 import { useGroup } from "../../components/useUser";
 
 export default function CheckList() {
+  const [trigger, setTrigger] = useState(0);
   const location = useLocation();
   const data = location.state?.data;
-  const groups = useGroup()
+  const groups = useGroup();
 
   const token = useContext(Context);
 
   const CHECKLIST_URL = process.env.REACT_APP_CHECKLIST_URL;
 
   useEffect(() => {
-    axios.get(CHECKLIST_URL + `?id=${data.id}`, {
-      headers: {
-        Authorization: "Token " + token.user.token,
-      },
-    }).then((res) => {
-      setCount(res.data.count);
-      setCheckListId(res.data.results.map((item) => item.id));
-      setTaskCheckList(res.data.results);
-      console.log(res.data.results);
-    });
-  }, []);
+    axios
+      .get(CHECKLIST_URL + `?id=${data.id}`, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => {
+        setCount(res.data.count);
+        setCheckListId(res.data.results.map((item) => item.id));
+        setTaskCheckList(res.data.results);
+        console.log(res.data.results);
+      });
+  }, [trigger]);
 
   const submitNotification = (e) => {
     NotificationManager.success("Sent!", "", 2000);
@@ -70,7 +73,7 @@ export default function CheckList() {
       );
     });
 
-    console.log(CHECKLIST_URL)
+    console.log(CHECKLIST_URL);
     try {
       const respone = await axios({
         method: count > 0 ? "PATCH" : "POST",
@@ -81,6 +84,7 @@ export default function CheckList() {
         },
       });
       console.log(respone);
+      setTrigger((prev) => prev + 1);
       submitNotification();
     } catch (err) {
       console.log(err);
@@ -193,7 +197,12 @@ export default function CheckList() {
                     </ul>
                   </div>
                   <div className="modal-footer">
-                    <button className="btn btn-success" type="submit">
+                    <button
+                      className="btn btn-success"
+                      data-mdb-dismiss="modal"
+                      aria-label="Close"
+                      type="submit"
+                    >
                       Submit
                     </button>
                   </div>
@@ -218,6 +227,7 @@ export default function CheckList() {
                       className="form-check-input border border-primary"
                       name="cable"
                       id=""
+                      disabled
                       onChange={checkboxHandleChange}
                       defaultChecked={item.cable}
                     />
@@ -229,6 +239,7 @@ export default function CheckList() {
                       className="form-check-input border border-primary"
                       name="stand"
                       id=""
+                      disabled
                       onChange={checkboxHandleChange}
                       defaultChecked={item.stand}
                     />
@@ -240,6 +251,7 @@ export default function CheckList() {
                       className="form-check-input border border-primary"
                       name="router"
                       id=""
+                      disabled
                       onChange={checkboxHandleChange}
                       defaultChecked={item.router}
                     />
@@ -251,6 +263,7 @@ export default function CheckList() {
                       className="form-check-input border border-primary"
                       name="antenna"
                       id=""
+                      disabled
                       onChange={checkboxHandleChange}
                       defaultChecked={item.antenna}
                     />
@@ -262,6 +275,7 @@ export default function CheckList() {
                       className="form-check-input border border-primary"
                       name="router_os"
                       id=""
+                      disabled
                       onChange={checkboxHandleChange}
                       defaultChecked={item.router_os}
                     />
@@ -273,6 +287,7 @@ export default function CheckList() {
                       className="form-check-input border border-primary"
                       name="signal"
                       id=""
+                      disabled
                       onChange={checkboxHandleChange}
                       defaultChecked={item.signal}
                     />
@@ -284,6 +299,7 @@ export default function CheckList() {
                       className="form-check-input border border-primary"
                       name="dns"
                       id=""
+                      disabled
                       onChange={checkboxHandleChange}
                       defaultChecked={item.dns}
                     />
@@ -291,11 +307,11 @@ export default function CheckList() {
                   </li>
                 </ul>
               </div>
-              <div className="modal-footer">
+              {/* <div className="modal-footer">
                 <button className="btn btn-success" type="submit">
                   Submit
                 </button>
-              </div>
+              </div> */}
             </form>
           </div>
         ))}

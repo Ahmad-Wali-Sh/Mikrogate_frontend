@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Context } from "../../context/Context";
 import { useContext } from "react";
@@ -9,28 +9,25 @@ export default function Link_Details(props) {
   const [LinkDetailsData, setLinkDetailsData] = React.useState([]);
   const [count, setCount] = React.useState();
   const URL = process.env.REACT_APP_LINK;
-  const groups = useGroup()
-  
+  const groups = useGroup();
 
   const token = useContext(Context);
 
+  const [trigger, setTrigger] = useState(0);
+
   React.useEffect(() => {
     axios
-      .get(
-        URL +
-          `?id=${props.id}`,
-          {
-            headers: {
-              Authorization: "Token " + token.user.token,
-            },
-          }
-      )
+      .get(URL + `?id=${props.id}`, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
       .then((res) => {
         setLinkDetailsData(res.data.results);
         setCount(res.data.count);
         console.log(res.data.results);
       });
-  }, []);
+  }, [trigger]);
 
   const submitNotification = (e) => {
     NotificationManager.success("Sent!", "", 2000);
@@ -89,7 +86,7 @@ export default function Link_Details(props) {
           Authorization: "Token " + token.user.token,
         },
       });
-
+      setTrigger((prev) => prev + 1);
       console.log(response);
       {
         response && submitNotification();
@@ -102,7 +99,7 @@ export default function Link_Details(props) {
       errorNotification();
     }
   };
-  
+
   console.log(linkdetails);
 
   return (
@@ -299,7 +296,7 @@ export default function Link_Details(props) {
             <div className="card bg-light mb-3 mt-3">
               <div className="card-header">Link Details</div>
               <div className="card-body">
-                <div className="row">
+                {/* <div className="row">
                   <div className="col-5">
                     <label
                       htmlFor="customer_name"
@@ -333,7 +330,7 @@ export default function Link_Details(props) {
                       defaultValue={props.data.contract_id}
                     />
                   </div>
-                </div>
+                </div> */}
                 <div className="row">
                   <div className="col-5">
                     <label
@@ -541,11 +538,16 @@ export default function Link_Details(props) {
                           name="additional_details"
                           defaultValue={item.additional_details}
                         ></textarea>
-                        <div className="modal-footer">
-                          <button className="btn btn-success" type="submit">
+                        {/* <div className="modal-footer">
+                          <button
+                            className="btn btn-success"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                            type="submit"
+                          >
                             Submit
                           </button>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
