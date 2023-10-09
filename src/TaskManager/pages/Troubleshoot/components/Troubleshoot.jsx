@@ -119,6 +119,7 @@ export default function Troubleshoot() {
       });
       console.log(response);
       submitNotification();
+      setTrigger(prev => prev + 1)
     } catch (err) {
       console.log(err.message);
       errorNotification();
