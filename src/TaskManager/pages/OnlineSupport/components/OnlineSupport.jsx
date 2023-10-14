@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
@@ -9,6 +9,7 @@ export default function OnlineSupport() {
   const location = useLocation();
   const data = location.state?.data;
   const token = useContext(Context);
+  const [trigger, setTrigger] = useState(0)
   const ONLINE_URL = process.env.REACT_APP_ONLINE;
 
   const [onlineSupport, setOnlineSupport] = React.useState([]);
@@ -45,7 +46,7 @@ export default function OnlineSupport() {
     setCount(res.data.count)
       console.log(res.data.results)
     })
-  }, [])
+  }, [trigger])
 
   function handleChange(event) {
     setOnlineSupportData({
@@ -79,6 +80,7 @@ export default function OnlineSupport() {
       });
       console.log(response)
       submitNotification()
+      setTrigger(prev => prev + 1)
     } catch (err) {
       console.log(err.message);
       errorNotification()
@@ -118,6 +120,7 @@ export default function OnlineSupport() {
       });
       console.log(response);
       submitNotification()
+      setTrigger(prev => prev + 1)
     } catch (err) {
       console.log(err.message);
       errorNotification()

@@ -9,6 +9,7 @@ const Installations_details = (props) => {
 
   const token = useContext(Context);
   const groups = useGroup()
+  const [trigger, setTrigger] = useState(0)
 
   const [settings, setSettings] = React.useState({
     pppoe_user: "",
@@ -43,7 +44,7 @@ const Installations_details = (props) => {
       setTaskID(res.data.results.map((item) => item.id));
       console.log(res.data.results);
     });
-  }, []);
+  }, [trigger]);
 
   const handleChange = (e) => {
     setSettings({
@@ -65,7 +66,6 @@ const Installations_details = (props) => {
       );
     });
 
-    console.log(count);
     try {
       const response = await axios({
         method: count > 0 ? "PATCH" : "POST",
@@ -77,6 +77,7 @@ const Installations_details = (props) => {
       });
       console.log(response)
       submitNotification()
+      setTrigger(prev => prev + 1)
     } catch (err) {
       console.log(err.message);
       const errorNotification = (e)  => {
@@ -225,7 +226,7 @@ const Installations_details = (props) => {
                     class="form-control"
                     id="pppoe_user"
                     name="pppoe_user"
-                    value={props.contract_id.contract.contract_id}
+                    defaultValue={props.contract_id.contract.contract_id}
                     onChange={handleChange}
                   />
                 </div>
@@ -260,7 +261,7 @@ const Installations_details = (props) => {
                   >
                     Close
                   </button>
-                  <button type="submit" class="btn btn-primary">
+                  <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
                     Send
                   </button>
                 </div>

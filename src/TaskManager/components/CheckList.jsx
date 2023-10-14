@@ -199,7 +199,7 @@ export default function CheckList() {
                   <div className="modal-footer">
                     <button
                       className="btn btn-success"
-                      data-mdb-dismiss="modal"
+                      data-bs-dismiss="modal"
                       aria-label="Close"
                       type="submit"
                     >

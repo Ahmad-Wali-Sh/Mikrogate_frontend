@@ -98,8 +98,8 @@ export default function Switch(props) {
   React.useEffect(() => {
 
     reset({
-      payment: payment?.payment ? payment?.payment : '',
-      installation: installtionCofirm?.confirm ? installtionCofirm.confirm : ''
+      payment: payment?.payment ? payment?.payment : false,
+      installation: installtionCofirm?.confirm ? installtionCofirm.confirm : false
     })
   }, [payment, installtionCofirm])
 
@@ -184,7 +184,7 @@ export default function Switch(props) {
             <div className="col-4">Installation confirmed</div>
            
               <label
-                className={installtionCofirm == true ? "switch " : "switch"}
+                className="switch"
               >
                 <input
                   type="checkbox"
@@ -200,7 +200,7 @@ export default function Switch(props) {
           <div className="row mt-2">
             <div className="col-4">Payment cleared</div>
             
-              <label className={payment == true ? "switch" : "switch"}>
+              <label className="switch">
                 <input
                   type="checkbox"
                   name="payment"

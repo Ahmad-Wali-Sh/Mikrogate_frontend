@@ -281,7 +281,7 @@ export default function Link_Details(props) {
                   >
                     Close
                   </button>
-                  <button type="submit" class="btn btn-primary">
+                  <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
                     Send
                   </button>
                 </div>
@@ -344,6 +344,7 @@ export default function Link_Details(props) {
                       name="installation_type"
                       id="installation_type"
                       className="form-control"
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       onChange={handleChange}
                       defaultValue={item.installation_type}
                     />
@@ -360,6 +361,7 @@ export default function Link_Details(props) {
                       type="text"
                       name="device"
                       id="device"
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       className="form-control"
                       onChange={handleChange}
                       defaultValue={item.device}
@@ -378,6 +380,7 @@ export default function Link_Details(props) {
                       type="text"
                       name="access_point"
                       id="access_point"
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       className="form-control"
                       onChange={handleChange}
                       defaultValue={item.access_point}
@@ -395,6 +398,7 @@ export default function Link_Details(props) {
                       type="text"
                       name="signal"
                       id="signal"
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       className="form-control"
                       onChange={handleChange}
                       defaultValue={item.signal}
@@ -410,6 +414,7 @@ export default function Link_Details(props) {
                       type="text"
                       name="ccq"
                       id="ccq"
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       className="form-control"
                       onChange={handleChange}
                       defaultValue={item.ccq}
@@ -427,6 +432,7 @@ export default function Link_Details(props) {
                       type="text"
                       name="cable"
                       id="cable"
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       className="form-control"
                       onChange={handleChange}
                       defaultValue={item.cable}
@@ -446,6 +452,7 @@ export default function Link_Details(props) {
                       name="connector"
                       id="connector"
                       className="form-control"
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       onChange={handleChange}
                       defaultValue={item.connector}
                     />
@@ -463,6 +470,7 @@ export default function Link_Details(props) {
                       name="payment"
                       id="payment"
                       className="form-control"
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       onChange={handleChange}
                       defaultValue={item.payment}
                     />
@@ -481,6 +489,7 @@ export default function Link_Details(props) {
                       name="bill_number"
                       id="bill_number"
                       className="form-control"
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       onChange={handleChange}
                       defaultValue={item.bill_number}
                     />
@@ -497,6 +506,7 @@ export default function Link_Details(props) {
                       type="date"
                       name="installation_date"
                       id="installation_date"
+                      disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                       className="form-control"
                       onChange={handleChange}
                       defaultValue={item.installation_date.slice(0, 10)}
@@ -534,11 +544,12 @@ export default function Link_Details(props) {
                           placeholder="Leave a description here"
                           id="floatingTextarea"
                           rows="6"
+                          disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
                           onChange={handleChange}
                           name="additional_details"
                           defaultValue={item.additional_details}
                         ></textarea>
-                        {/* <div className="modal-footer">
+                        {(groups.noc_manager || groups.noc_stuff) && <div className="modal-footer">
                           <button
                             className="btn btn-success"
                             data-bs-dismiss="modal"
@@ -547,7 +558,7 @@ export default function Link_Details(props) {
                           >
                             Submit
                           </button>
-                        </div> */}
+                        </div>}
                       </div>
                     </div>
                   </div>

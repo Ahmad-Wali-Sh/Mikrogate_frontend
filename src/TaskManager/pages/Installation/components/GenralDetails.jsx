@@ -27,7 +27,7 @@ export default function GeneralDetails (props) {
                 id="inputEmail3"
                 placeholder="..."
                 className="form-control"
-                disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
+                disabled
                 defaultValue={data.contract.contract_number}
               />
             </div>
@@ -43,7 +43,7 @@ export default function GeneralDetails (props) {
                 name="contract_poc_name"
                 id="inputEmail3"
                 placeholder="..."
-                disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
+                disabled
                 className="form-control"
                 defaultValue={data.contract.name}
               />
@@ -63,7 +63,7 @@ export default function GeneralDetails (props) {
                 id="inputEmail3"
                 placeholder="..."
                 className="form-control"
-                disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
+                disabled
                 defaultValue={data.contract.contact}
               />
               {props.contact}
@@ -79,7 +79,8 @@ export default function GeneralDetails (props) {
                 type="text"
                 name="organization"
                 id="inputEmail3"
-                disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
+                // disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
+                disabled
                 placeholder="..."
                 className="form-control"
                 defaultValue={data.contract.organization}
@@ -99,7 +100,7 @@ export default function GeneralDetails (props) {
                 type="text"
                 name="address"
                 id="inputEmail3"
-                disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
+                disabled
                 placeholder="..."
                 className="form-control"
                 defaultValue={data.contract.address}
@@ -119,7 +120,7 @@ export default function GeneralDetails (props) {
                 type="text"
                 name="packages"
                 id="inputEmail3"
-                disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
+                disabled
                 placeholder="..."
                 className="form-control"
                 defaultValue={data.contract.packages}
@@ -160,7 +161,7 @@ export default function GeneralDetails (props) {
             className="form-control border-top-0"
             placeholder="Leave a description here"
             id="floatingTextarea"
-            disabled={(groups.noc_manager || groups.noc_stuff) ? false : true}
+            disabled
             rows="6"
             defaultValue={data.description}
           ></textarea>

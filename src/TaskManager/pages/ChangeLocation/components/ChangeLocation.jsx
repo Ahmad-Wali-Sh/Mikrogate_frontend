@@ -11,6 +11,7 @@ const ChangeLocation = (props) => {
   const location = useLocation();
   const data = location.state?.data;
   const token = useContext(Context);
+  const [trigger, setTrigger] = useState(0)
 
   const groups = useGroup()
 
@@ -31,7 +32,7 @@ const ChangeLocation = (props) => {
       setChangeLocationID(res.data.results.map((item) => item.id));
       console.log(res.data.count);
     });
-  }, []);
+  }, [trigger]);
 
   const [changelocation, setChangelocation] = React.useState({
     address: "",
@@ -81,6 +82,7 @@ const ChangeLocation = (props) => {
       });
       console.log(response);
       submitNotification();
+      setTrigger(prev => prev + 1)
     } catch (err) {
       console.log(err.message);
       errorNotification();
@@ -108,6 +110,7 @@ const ChangeLocation = (props) => {
       });
       console.log(response);
       submitNotification();
+      setTrigger(prev => prev + 1)
     } catch (err) {
       console.log(err);
       const errorNotification = (e) => {
@@ -246,7 +249,7 @@ const ChangeLocation = (props) => {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button type="submit" className="btn btn-success">
+                  <button type="submit" className="btn btn-success" data-bs-dismiss='modal'>
                     Submit
                   </button>
                 </div>
@@ -381,7 +384,7 @@ const ChangeLocation = (props) => {
                   </div>
                 </div>
               </div>
-              <div className="card-footer">
+              <div className="modal-footer">
                 {(groups.noc_manager || groups.noc_stuff) && <button type="submit" className="btn btn-success">
                   Submit
                 </button>}

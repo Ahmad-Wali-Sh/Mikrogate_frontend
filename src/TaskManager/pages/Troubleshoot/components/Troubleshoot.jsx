@@ -128,7 +128,7 @@ export default function Troubleshoot() {
 
   return (
     <>
-      {singleTroubleshootTask == false && (
+      {singleTroubleshootTask == false && (groups.noc_manager || groups.noc_stuff) && (
         <div className="mb-2 mt-2">
           <button
             type="button"
@@ -277,7 +277,7 @@ export default function Troubleshoot() {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button type="submit" className="btn btn-success ">
+                  <button type="submit" className="btn btn-success " data-bs-dismiss='modal'>
                     Submit
                   </button>
                 </div>
@@ -443,7 +443,7 @@ export default function Troubleshoot() {
                   </div>
                 </div>
               </div>
-              <div className="card-footer">
+              <div className="modal-footer">
                 {(groups.noc_manager || groups.noc_stuff) && <button type="submit" className="btn btn-success">
                   Submit
                 </button>}
