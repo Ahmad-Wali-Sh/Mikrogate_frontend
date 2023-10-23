@@ -1,6 +1,6 @@
 import axios from "axios";
 import React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import { Context } from "../../context/Context";
 import Picker from "emoji-picker-react";
 import NotificationManager from "react-notifications/lib/NotificationManager";
@@ -8,12 +8,14 @@ import NotificationManager from "react-notifications/lib/NotificationManager";
 export default function LogMessage(props) {
   const token = useContext(Context);
   const TASK_LOG_URL = process.env.REACT_APP_TASK_LOG;
-  const ME_URL = process.env.REACT_APP_USER
+  const ME_URL = process.env.REACT_APP_USER;
   const [logmessage, setLogMessage] = React.useState({
     body: "",
     task: props.id,
   });
   const [note, setNote] = React.useState([]);
+  const [trigger, setTrigger] = React.useState(0);
+  const textAreaRef = useRef(null);
 
   const submitNotification = (e) => {
     NotificationManager.success("Sent!", "", 2000);
@@ -28,7 +30,6 @@ export default function LogMessage(props) {
     setInputStr((prevInput) => prevInput + event.emoji);
   };
 
-  console.log(inputStr);
 
   const LogMessageSubmit = async (e) => {
     e.preventDefault();
@@ -36,24 +37,27 @@ export default function LogMessage(props) {
     const LogMessageForm = new FormData();
     LogMessageForm.append("body", inputStr);
     LogMessageForm.append("task", logmessage.task);
-
-    try {
-      const response = await axios({
-        method: "POST",
-        url: TASK_LOG_URL,
-        data: LogMessageForm,
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      });
-      console.log(response);
-      submitNotification();
-    } catch (err) {
-      console.log(err);
-      const errorNotification = (e) => {
-        NotificationManager.error(err.message, "Error!", 2000);
-      };
-      errorNotification();
+    if (inputStr) {
+      try {
+        const response = await axios({
+          method: "POST",
+          url: TASK_LOG_URL,
+          data: LogMessageForm,
+          headers: {
+            Authorization: "Token " + token.user.token,
+          },
+        });
+        console.log(response);
+        submitNotification();
+        setTrigger((prev) => prev + 1);
+        setInputStr('')
+      } catch (err) {
+        console.log(err);
+        const errorNotification = (e) => {
+          NotificationManager.error(err.message, "Error!", 2000);
+        };
+        errorNotification();
+      }
     }
   };
   console.log(props.id);
@@ -67,7 +71,7 @@ export default function LogMessage(props) {
       })
       .then((res) => setNote(res.data.results));
     console.log(note);
-  }, []);
+  }, [trigger]);
 
   const [user, setUser] = React.useState({});
   React.useEffect(() => {
@@ -95,7 +99,7 @@ export default function LogMessage(props) {
     <>
       <nav>
         <div class="nav nav-tabs mt-4" id="nav-tab" role="tablist">
-          <button
+          {/* <button
             class="nav-link"
             id="nav-message-tab"
             data-bs-toggle="tab"
@@ -106,7 +110,7 @@ export default function LogMessage(props) {
             aria-selected="false"
           >
             Send message
-          </button>
+          </button> */}
           <button
             class="nav-link"
             id="nav-log-tab"
@@ -155,6 +159,7 @@ export default function LogMessage(props) {
                       placeholder="Send a message to followers..."
                       className="form-control"
                       rows="4"
+                      ref={textAreaRef}
                       name="body"
                     ></textarea>
                   </div>
