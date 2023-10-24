@@ -41,15 +41,15 @@ export default function TechniciansDashboard() {
   const [tasks, setTasks] = React.useState([]);
 
   React.useEffect(() => {
-    axios
-      .get(TASK_URL, {
-        header: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => {
-        setTasks(res.data.results);
-      });
+    // axios
+    //   .get(TASK_URL, {
+    //     header: {
+    //       Authorization: "Token " + token.user.token,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     setTasks(res.data.results);
+    //   });
 
     axios
       .get(USERS_URL, {
@@ -86,7 +86,7 @@ export default function TechniciansDashboard() {
     axios
       .get(
         TASK_URL +
-          `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${data.project}&stage=${data.stage}&tag=${data.tag}&assigned__id=${user.id}&contract__contract_id=${data.contract__contract_id}`,
+          `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${data.project}&stage=${data.stage}&tag=${data.tag}&assigned__id=${user.id}&contract__contract_id=${data.contract__contract_id}&stage_net=${data.stage != 6 ? 6 : ''}`,
         {
           headers: {
             Authorization: "Token " + token.user.token,

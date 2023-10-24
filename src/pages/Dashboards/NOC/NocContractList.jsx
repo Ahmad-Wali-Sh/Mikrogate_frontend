@@ -38,15 +38,15 @@ export default function NocContractList() {
     formState: { errors },
   } = useForm();
 
-  useEffect(() => {
-    axios
-      .get(contractUrl, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => setContracts(res.data.results));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(contractUrl, {
+  //       headers: {
+  //         Authorization: "Token " + token.user.token,
+  //       },
+  //     })
+  //     .then((res) => setContracts(res.data.results));
+  // }, []);
 
   const [users, setUsers] = React.useState([]);
   const [packages, setPackages] = React.useState([]);
@@ -1116,7 +1116,7 @@ export default function NocContractList() {
                             className="project-actions text-right"
                             style={{ minWidth: "7rem" }}
                           >
-                            <Link
+                            {/* <Link
                               className="btn btn-primary btn-sm mr-1"
                               to={{
                                 pathname: "/contract-details",
@@ -1124,7 +1124,7 @@ export default function NocContractList() {
                               state={{ contract: contract }}
                             >
                               <i className="fa-solid fa-folder-open"></i>
-                            </Link>
+                            </Link> */}
                             <button
                               type="button"
                               name="addTask"

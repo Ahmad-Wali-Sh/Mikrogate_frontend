@@ -43,15 +43,15 @@ export default function NocTask() {
   const [tasks, setTasks] = React.useState([]);
 
   React.useEffect(() => {
-    axios
-      .get(TASK_URL, {
-        header: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => {
-        setTasks(res.data.results);
-      });
+    // axios
+    //   .get(TASK_URL, {
+    //     header: {
+    //       Authorization: "Token " + token.user.token,
+    //     },
+    //   })
+    //   .then((res) => {
+    //     setTasks(res.data.results);
+    //   });
 
     axios
       .get(USERS_URL, {
@@ -88,7 +88,7 @@ export default function NocTask() {
     axios
       .get(
         TASK_URL +
-          `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${data.project}&stage=${data.stage}&tag=${data.tag}&user=${data.user}&assigned__id=${data.assigned}&contract__contract_id=${data.contract__contract_id}`,
+          `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${data.project}&stage=${data.stage}&tag=${data.tag}&user=${data.user}&assigned__id=${data.assigned}&contract__contract_id=${data.contract__contract_id}&stage_net=${data.stage != 6 ? 6 : ''}`,
         {
           headers: {
             Authorization: "Token " + token.user.token,
@@ -231,17 +231,17 @@ export default function NocTask() {
   console.log(find);
   console.log(installtionCofirm);
 
-  React.useEffect(() => {
-    axios
-      .get(TASK_URL, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => {
-        setContenter(res.data.results);
-      });
-  }, []);
+  // React.useEffect(() => {
+  //   axios
+  //     .get(TASK_URL, {
+  //       headers: {
+  //         Authorization: "Token " + token.user.token,
+  //       },
+  //     })
+  //     .then((res) => {
+  //       setContenter(res.data.results);
+  //     });
+  // }, []);
 
   const [stage, setStage] = useState([]);
 
