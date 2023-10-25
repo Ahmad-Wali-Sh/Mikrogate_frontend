@@ -9,10 +9,12 @@ import { Context } from "../../../context/Context";
 import { Link } from "react-router-dom";
 import cx from "classnames";
 import { useForm } from "react-hook-form";
+import { useGroup } from "../../../components/useUser";
 
 export default function NocTask() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
   const token = useContext(Context);
+  const groups = useGroup()
 
   const {
     register,
@@ -88,7 +90,7 @@ export default function NocTask() {
     axios
       .get(
         TASK_URL +
-          `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${data.project}&stage=${data.stage}&tag=${data.tag}&user=${data.user}&assigned__id=${data.assigned}&contract__contract_id=${data.contract__contract_id}&stage_net=${data.stage != 6 ? 6 : ''}`,
+          `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${groups.l1 ? 3 : data.project}&stage=${data.stage}&tag=${data.tag}&user=${data.user}&assigned__id=${data.assigned}&contract__contract_id=${data.contract__contract_id}&stage_net=${data.stage != 6 ? 6 : ''}`,
         {
           headers: {
             Authorization: "Token " + token.user.token,
@@ -523,8 +525,11 @@ export default function NocTask() {
                                 style={{ width: "100%" }}
                                 {...register("project")}
                               >
-                                <option value="">Any</option>
+                                {groups.l1 ? "" : <option value="">Any</option>}
                                 {projecter.map((project) => (
+                                  groups.l1 ? (
+                                    project.name == 'Online Support' && <option value={project.id}>{project.name}</option>
+                                  ) :
                                   <option value={project.id}>
                                     {project.name}
                                   </option>

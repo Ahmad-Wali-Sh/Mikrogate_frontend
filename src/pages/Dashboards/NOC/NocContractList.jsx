@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import cx from "classnames";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useGroup } from "../../../components/useUser";
 
 export default function NocContractList() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
@@ -29,6 +30,7 @@ export default function NocContractList() {
   const STATUS_URL = process.env.REACT_APP_CONTRACT_STATUS;
 
   const [contracts, setContracts] = useState([]);
+  const groups = useGroup()
   const [contractNumber, setContractNumber] = useState([]);
 
   const {
@@ -610,7 +612,7 @@ export default function NocContractList() {
                               Details
                             </button>
                           </li>
-                          <li className="nav-item" role="presentation">
+                          {groups.l1 != true && <li className="nav-item" role="presentation">
                             <button
                               className="nav-link"
                               id="profile-tab"
@@ -623,7 +625,7 @@ export default function NocContractList() {
                             >
                               Members
                             </button>
-                          </li>
+                          </li>}
                         </ul>
                         <div className="tab-content">
                           <div
@@ -686,6 +688,9 @@ export default function NocContractList() {
                                     >
                                       <option selected>Select</option>
                                       {projecter.map((item) => (
+                                        groups.l1 ? (
+                                          item.name == 'Online Support' && <option value={item.id}>{item.name}</option>
+                                        ) :
                                         <option value={item.id}>
                                           {item.name}
                                         </option>
@@ -825,7 +830,16 @@ export default function NocContractList() {
                                   </div>
                                 </div>
                               </div>
-                              
+                              {groups.l1 && <div className="modal-footer">
+                                <button
+                                  className="btn btn-primary"
+                                  type="submit"
+                                  data-bs-dismiss="modal"
+                                  aria-label="Close"
+                                >
+                                  Create Task
+                                </button>
+                              </div>}
                             </form>
 
                             {project.selectedProject == "troubleshoot" && (
@@ -887,7 +901,7 @@ export default function NocContractList() {
                                 <ul>
                                   {member.map(
                                     (item) =>
-                                      item.groups.includes(3) ? (
+                                      item.groups.includes('NOC Stuff') ? (
                                         <div key={item.id}>
                                           <li className="d-flex justify-content-between padd">
                                             <div className="list-item">
@@ -902,6 +916,7 @@ export default function NocContractList() {
                                             </div>
                                             <input
                                               type="checkbox"
+                                              disabled={groups.l1 ? true : false}
                                               className="mt-3 mr-3"
                                               name="assigned"
                                               value={item.id}
@@ -919,7 +934,7 @@ export default function NocContractList() {
                                 <ul>
                                   {member.map(
                                     (item) =>
-                                      item.groups.includes(5) ? (
+                                      item.groups.includes('Technicians') ? (
                                         <div key={item.id}>
                                           <li className="d-flex justify-content-between padd">
                                             <div className="list-item">
@@ -936,6 +951,7 @@ export default function NocContractList() {
                                               type="checkbox"
                                               className="mt-3 mr-3"
                                               name="assigned"
+                                              disabled={groups.l1 ? true : false}
                                               value={item.id}
                                               onChange={handlerChange}
                                             />

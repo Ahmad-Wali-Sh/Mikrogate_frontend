@@ -2,6 +2,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import { Context } from "../context/Context";
+import { useGroup } from "./useUser";
 
 export default function Sidebar() {
   const url = process.env.REACT_APP_USER;
@@ -19,61 +20,7 @@ export default function Sidebar() {
     fetchUser();
   }, []);
 
-  const [groups, setGroups] = useState({
-    noc_manager: "",
-    sales_manager: "",
-    noc_stuff: "",
-    sales_stuff: "",
-    technician: "",
-    admin: "",
-    manager: "",
-  });
-
-  const checkForGroup = () => {
-    if (user?.groups?.includes(3)) {
-      setGroups((prev) => ({
-        ...prev,
-        noc_stuff: true,
-      }));
-    }
-    if (user?.groups?.includes(1)) {
-      setGroups((prev) => ({
-        ...prev,
-        sales_manager: true,
-      }));
-    }
-    if (user?.groups?.includes(1)) {
-      setGroups((prev) => ({
-        ...prev,
-        sales_manager: true,
-      }));
-    }
-    if (user?.groups?.includes(2)) {
-      setGroups((prev) => ({
-        ...prev,
-        noc_manager: true,
-      }));
-    }
-    if (user?.groups?.includes(4)) {
-      setGroups((prev) => ({
-        ...prev,
-        sales_stuff: true,
-      }));
-    }
-    if (user?.groups?.includes(5)) {
-      setGroups((prev) => ({
-        ...prev,
-        technician: true,
-      }));
-    }
-  };
-
-  useEffect(() => {
-    checkForGroup();
-  }, [user]);
-
-  console.log(groups);
-  console.log(user.groups);
+  const groups = useGroup()
   return (
     <div>
       {/* <!-- Main Sidebar Container --> */}
@@ -146,13 +93,15 @@ export default function Sidebar() {
                 </ul>
               </li>
               )}
-              {(groups.noc_stuff || groups.noc_manager) && (
+              {(groups.noc_stuff || groups.noc_manager || groups.l1) && (
                 <li
                   className={`nav-item ${
                     groups.noc_stuff == true
                       ? "menu-open"
                       : groups.noc_manager == true
                       ? "menu-open"
+                      : groups.l1 == true
+                      ? 'menu-open'
                       : ""
                   }`}
                 >
