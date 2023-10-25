@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { Context } from "../../context/Context";
 import { useForm } from "react-hook-form";
 import { NotificationManager } from "react-notifications";
+import { useGroup } from "../../components/useUser";
 
 export default function Switch(props) {
   const token = useContext(Context);
@@ -21,58 +22,7 @@ export default function Switch(props) {
       .then((res) => setUser(res.data));
   }, []);
 
-  const [groups, setGroups] = useState({
-    noc_manager: "",
-    sales_manager: "",
-    noc_stuff: "",
-    sales_stuff: "",
-    technician: "",
-    admin: "",
-    manager: "",
-  });
-
-  const checkForGroup = () => {
-    if (user?.groups?.includes(3)) {
-      setGroups((prev) => ({
-        ...prev,
-        noc_stuff: true,
-      }));
-    }
-    if (user?.groups?.includes(1)) {
-      setGroups((prev) => ({
-        ...prev,
-        sales_manager: true,
-      }));
-    }
-    if (user?.groups?.includes(1)) {
-      setGroups((prev) => ({
-        ...prev,
-        sales_manager: true,
-      }));
-    }
-    if (user?.groups?.includes(2)) {
-      setGroups((prev) => ({
-        ...prev,
-        noc_manager: true,
-      }));
-    }
-    if (user?.groups?.includes(4)) {
-      setGroups((prev) => ({
-        ...prev,
-        sales_stuff: true,
-      }));
-    }
-    if (user?.groups?.includes(5)) {
-      setGroups((prev) => ({
-        ...prev,
-        technician: true,
-      }));
-    }
-  };
-
-  useEffect(() => {
-    checkForGroup();
-  }, [user]);
+  const groups = useGroup()
 
   const { register, handleSubmit, reset } = useForm()
 
