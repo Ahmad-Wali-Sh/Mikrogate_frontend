@@ -32,6 +32,7 @@ import NocDashboard from "./pages/Dashboards/NOC/NocDashboard";
 import NocTask from "./pages/Dashboards/NOC/NocTask";
 import TechniciansDashboard from "./pages/Dashboards/Technicians/TechniciansDashboard";
 import Welcome from "./pages/Welcome";
+import ContractTaskHistory from "./pages/ContractTaskHistory";
 
 export default function App() {
   const { user } = useContext(Context);
@@ -52,6 +53,7 @@ export default function App() {
           <Route path="/antenna" element={<Antenna />} />
           <Route path="/new-contract" element={<NewContract />} />
           <Route path="/contract-details" element={<SingleContract />} />
+          <Route path="/contract-details-tasks" element={<ContractTaskHistory />} />
           <Route path="/search" element={<Search />} />
           <Route path="test_print" element={<TestPrint />} />
           <Route path="amendment-print" element={<AmedmentPrint />} />

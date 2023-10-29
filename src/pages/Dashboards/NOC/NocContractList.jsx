@@ -1132,15 +1132,15 @@ export default function NocContractList() {
                             className="project-actions text-right"
                             style={{ minWidth: "7rem" }}
                           >
-                            {/* <Link
+                            <Link
                               className="btn btn-primary btn-sm mr-1"
                               to={{
-                                pathname: "/contract-details",
+                                pathname: "/contract-details-tasks",
                               }}
                               state={{ contract: contract }}
                             >
                               <i className="fa-solid fa-folder-open"></i>
-                            </Link> */}
+                            </Link>
                             <button
                               type="button"
                               name="addTask"
