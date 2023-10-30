@@ -49,7 +49,7 @@ function ContractTaskHistory() {
                       <div className="grid-container-h">
                         <div className="history-update col-2">Update Date</div>
                         <div className="history-change col-2">Project</div>
-                        <div className="history-new-old col-4">Data</div>
+                        <div className="history-new-old col-4">Title</div>
                         <div className="history-new-old col-2">Tag</div>
                         <div className="history-user col-2">User</div>
                       </div>
@@ -93,7 +93,7 @@ function ContractTaskHistory() {
                                 {task.project.name}
                               </div>
                               <div className="history-new-old col-4">
-                                <small>{task.description}</small>
+                                <small>{task.title}</small>
                               </div>
                               <div className="history-new-old col-2">
                                 {task.tag.name}
