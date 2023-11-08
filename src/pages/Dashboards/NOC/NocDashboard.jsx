@@ -130,6 +130,11 @@ export default function NocDashboard() {
               </div>
               
               <div className="col-lg-4 col-6">
+              <Link
+                  to={{
+                    pathname: "/task-manager/noc-assigned",
+                  }}
+                >
                 <div className="small-box bg-warning">
                   <div className="inner">
                     <h3>
@@ -145,6 +150,7 @@ export default function NocDashboard() {
                     More info <i className="fas fa-arrow-circle-right"></i>
                   </a>
                 </div>
+                </Link>
               </div>
             </div>
             <br />

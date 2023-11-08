@@ -68,7 +68,9 @@ function ContractTaskHistory() {
                               ? "/task-manager/change_location"
                               : task.project.name == "Amendment"
                               ? "/task-manager/amendment"
-                              : ""
+                              : task.project.name == 'NOC Staff' 
+                              ? '/task-manager/noc_assigned_details'
+                              : ''
                           }
                           state={{ data: task }}
                         >

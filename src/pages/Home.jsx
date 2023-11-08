@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import cx from "classnames";
 import { useContext } from "react";
 import { Context } from "../context/Context";
 import { Link } from "react-router-dom";
@@ -14,9 +13,8 @@ export default function Home() {
   const [newCon, setNewCon] = useState();
   const token = useContext(Context);
 
-
   useEffect(() => {
-    document.title = 'Mikrogate | HOME';
+    document.title = "Mikrogate | HOME";
     const fetchContracts = async () => {
       const res = await axios.get(url + `?contract-status=1`, {
         headers: {
@@ -25,8 +23,8 @@ export default function Home() {
       });
       // console.log(res.data)
       setContracts(res.data.results);
-      setNextUrl(res.data.next)
-      setPreviousUrl(res.data.previous)
+      setNextUrl(res.data.next);
+      setPreviousUrl(res.data.previous);
       setNewCon(res.data.count);
     };
     fetchContracts();
@@ -54,21 +52,22 @@ export default function Home() {
   });
 
   const paginationHandler = (url) => {
-    try{
-      axios.get(url, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        }
-      }).then( res => {
-        setNextUrl(res.data.next)
-        setPreviousUrl(res.data.previous)
-        setContracts(res.data.results)
-
-    })
-    }catch(err){
-      console.log(err)
+    try {
+      axios
+        .get(url, {
+          headers: {
+            Authorization: "Token " + token.user.token,
+          },
+        })
+        .then((res) => {
+          setNextUrl(res.data.next);
+          setPreviousUrl(res.data.previous);
+          setContracts(res.data.results);
+        });
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
 
   return (
     <div>

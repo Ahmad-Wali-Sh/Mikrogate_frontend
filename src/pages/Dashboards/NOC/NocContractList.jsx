@@ -317,6 +317,11 @@ export default function NocContractList() {
                 state: { data: res.data },
               });
             }
+            if (res.data.project.name == "NOC Staff") {
+              navigate("/task-manager/noc_assigned_details", {
+                state: { data: res.data },
+              });
+            }
           });
       });
       submitNotification();
@@ -689,7 +694,7 @@ export default function NocContractList() {
                                       <option selected>Select</option>
                                       {projecter.map((item) => (
                                         groups.l1 ? (
-                                          item.name == 'Online Support' && <option value={item.id}>{item.name}</option>
+                                          (item.name == 'NOC Staff') | (item.name == 'Online Support') && <option value={item.id}>{item.name}</option>
                                         ) :
                                         <option value={item.id}>
                                           {item.name}
