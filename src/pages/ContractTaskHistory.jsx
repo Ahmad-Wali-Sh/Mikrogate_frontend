@@ -41,7 +41,7 @@ function ContractTaskHistory() {
                   <div className="card-header">
                     <h3 className="card-title">
                       <i className="fa-solid fa-clock-rotate-left"></i>
-                      &nbsp;{`History For ${contract.name}`}
+                      &nbsp;{`History For ${contract.name} id: ${contract.contract_id}`}
                     </h3>
                   </div>
                   <div className="history-card">

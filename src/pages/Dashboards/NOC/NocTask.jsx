@@ -986,7 +986,13 @@ export default function NocTask() {
                         .replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3")}
                     </small>
                   </td>
-                  <td>{task.title}</td>
+                  <td>
+                    <small>{task.title}</small>
+                    <br></br>
+                    <small>name: {task.contract.name}</small>
+                    <br></br>
+                    <small>id: {task.contract.contract_id}</small>
+                  </td>
                   <td>{task.project.name}</td>
                   <td>
                     <select className="form-control">
