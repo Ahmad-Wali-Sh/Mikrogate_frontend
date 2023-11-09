@@ -383,6 +383,7 @@ const ChangeLocation = (props) => {
                     </div>
                   </div>
                 </div>
+              <small>by: {ChangeLocationData?.[0].user.name}</small>
               </div>
               <div className="modal-footer">
                 {(groups.noc_manager || groups.noc_stuff) && <button type="submit" className="btn btn-success">

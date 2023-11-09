@@ -549,16 +549,18 @@ export default function Link_Details(props) {
                           name="additional_details"
                           defaultValue={item.additional_details}
                         ></textarea>
+                        
                         {(groups.noc_manager || groups.noc_stuff) && <div className="modal-footer">
                           <button
                             className="btn btn-success"
                             data-bs-dismiss="modal"
                             aria-label="Close"
                             type="submit"
-                          >
+                            >
                             Submit
                           </button>
                         </div>}
+                            <small>by: {LinkDetailsData[0].user.name}</small>
                       </div>
                     </div>
                   </div>

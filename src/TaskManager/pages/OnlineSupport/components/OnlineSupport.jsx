@@ -377,6 +377,7 @@ export default function OnlineSupport() {
                 </div>
               </div>
             </div>
+            <small>by: {onlineSupport?.[0].user.name}</small>
             <div className="modal-footer">
               <button className="btn btn-success">Submit</button>
             </div>

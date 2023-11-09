@@ -14,7 +14,7 @@ import { useGroup } from "../../../components/useUser";
 export default function NocAssigned() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
   const token = useContext(Context);
-  const groups = useGroup()
+  const groups = useGroup();
 
   const {
     register,
@@ -86,13 +86,29 @@ export default function NocAssigned() {
       });
   }, []);
 
-  const [archivedShow, setArchivedShow] = React.useState(false)
+  const [archivedShow, setArchivedShow] = React.useState(false);
+  const [contractName, setContractName] = React.useState("");
+  const [contractId, setContractId] = React.useState("");
+  const [contractNumbere, setContractNumbere] = React.useState("");
+  const [trigger, setTrigger] = React.useState(0);
 
   const TaskSearchHandle = (data) => {
     axios
       .get(
         TASK_URL +
-          `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${groups.l1 ? 3 : data.project}&stage=${data.stage}&tag=${data.tag}&user=${data.user}&assigned__id=${data.assigned}&contract__contract_id=${data.contract__contract_id}&stage_net=${data.stage != 6 ? 6 : ''}`,
+          `?contract__contract_number=${data.contract}&created_after=${
+            data.created_after
+          }&created_before=${data.created_before}&deadline_after=${
+            data.deadline
+          }&deadline_before=${data.deadline}&ordering=${data.sort_order}${
+            data.order_by
+          }&project=${groups.l1 ? 3 : data.project}&stage=${data.stage}&tag=${
+            data.tag
+          }&user=${data.user}&assigned__id=${
+            data.assigned
+          }&contract__contract_id=${data.contract__contract_id}&stage_net=${
+            data.stage != 6 ? 6 : ""
+          }`,
         {
           headers: {
             Authorization: "Token " + token.user.token,
@@ -107,21 +123,22 @@ export default function NocAssigned() {
 
   useEffect(() => {
     axios
-    .get(
-      TASK_URL + `?user=&contract__contract_number=&project=6&deadline_after=&deadline_before=&tag=&stage=&stage_net=${archivedShow ? '' : 6}&assigned__id=&created_after=&created_before=&contract__contract_id=`,
-      {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      }
-    )
-    .then((res) => {
-      console.log(res);
-      setTasks(res.data.results);
-    });
-  }, [archivedShow])
-
-
+      .get(
+        TASK_URL +
+          `?user=&contract__contract_number=${contractNumbere}&project=6&deadline_after=&deadline_before=&tag=&stage=&stage_net=${
+            archivedShow ? "" : 6
+          }&assigned__id=&created_after=&created_before=&contract__contract_id=${contractId}`,
+        {
+          headers: {
+            Authorization: "Token " + token.user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        setTasks(res.data.results);
+      });
+  }, [archivedShow, trigger, contractName, contractId, contractNumbere]);
 
   console.log(tasks);
 
@@ -176,10 +193,7 @@ export default function NocAssigned() {
   function handleSwitch(e) {
     let isChecked = e.target.checked;
     console.log(isChecked);
-
-
   }
-
 
   React.useEffect(() => {
     axios
@@ -415,8 +429,6 @@ export default function NocAssigned() {
       });
   };
 
-
-
   return (
     <div className="content-wrapper">
       <div className="content-header">
@@ -428,13 +440,29 @@ export default function NocAssigned() {
                   <h3 className="card-title">NOC Staff Tasks</h3>
                 </div>
               </div>
-                <label>Archieved Tasks :</label>
-                <input
-                  type="checkbox"
-                  style={{ marginLeft: '1rem'}}
-                  value={archivedShow}
-                  onChange={() => setArchivedShow(prev => !prev)}
-                  />
+              <label>Archieved Tasks :</label>
+              <input
+                type="checkbox"
+                style={{ marginLeft: "1rem" }}
+                value={archivedShow}
+                onChange={() => setArchivedShow((prev) => !prev)}
+              />
+              <br></br>
+              <label>Contract id: </label>
+              <input
+                type="text"
+                style={{ marginLeft: "3.2rem" }}
+                value={contractId}
+                onChange={(e) => setContractId(e.target.value)}
+              />
+              <br></br>
+              <label>Contract Number: </label>
+              <input
+                type="text"
+                style={{ marginLeft: "0.5rem" }}
+                value={contractNumbere}
+                onChange={(e) => setContractNumbere(e.target.value)}
+              />
             </div>
           </div>
         </div>
@@ -445,9 +473,9 @@ export default function NocAssigned() {
             <tr>
               <th style={{ width: "1%" }}>#</th>
               <th style={{ width: "14%" }}>Contract_Number</th>
+              <th style={{ width: "14%" }}>Credintials</th>
               <th style={{ width: "13%" }}>Title</th>
               <th style={{ width: "13%" }}>Project</th>
-              <th style={{ width: "14%" }}>Assigned</th>
               <th style={{ width: "14%" }}>Stage</th>
               <th style={{ width: "14%" }}>User</th>
               <th style={{ width: "14%" }}>Info</th>
@@ -461,9 +489,8 @@ export default function NocAssigned() {
                   <td>
                     <a>{task.contract.contract_number}</a>
                     <br />
-                    <small style={{display: 'block'}}>
-                      {new Date(task.created)
-                        .toString().slice(0,16)}
+                    <small style={{ display: "block" }}>
+                      {new Date(task.created).toString().slice(0, 16)}
                     </small>
                     <small>
                       {new Date(task.created)
@@ -471,16 +498,13 @@ export default function NocAssigned() {
                         .replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3")}
                     </small>
                   </td>
+                  <td>
+                    {task.contract.name}
+                    <br></br>
+                    {task.contract.contract_id}
+                  </td>
                   <td>{task.title}</td>
                   <td>{task.project.name}</td>
-                  <td>
-                    <select className="form-control">
-                      <option hidden>Click To See</option>
-                      {task.assigned.map((assigne) => (
-                        <option disabled>{assigne.name}</option>
-                      ))}
-                    </select>
-                  </td>
                   <td>
                     <select
                       className={cx({
@@ -508,8 +532,8 @@ export default function NocAssigned() {
                             },
                           })
                           .then((res) => {
-                            console.log(res.data);
                             handleSubmit(TaskSearchHandle);
+                            setTrigger((prev) => prev + 1);
                           })
                           .catch((err) => console.log(err));
                       }}
@@ -549,9 +573,9 @@ export default function NocAssigned() {
                           ? "/task-manager/change_location"
                           : task.project.name == "Amendment"
                           ? "/task-manager/amendment"
-                          : task.project.name == 'NOC Staff'
-                          ? '/task-manager/noc_assigned_details'
-                          : ''
+                          : task.project.name == "NOC Staff"
+                          ? "/task-manager/noc_assigned_details"
+                          : ""
                       }
                       state={{ data: task }}
                     >

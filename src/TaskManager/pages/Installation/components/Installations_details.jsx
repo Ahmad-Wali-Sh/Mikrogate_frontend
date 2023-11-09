@@ -187,6 +187,7 @@ const Installations_details = (props) => {
               onChange={handleChange}
               defaultValue={item.description}
             ></textarea>
+            <small>by: {installation[0].user.name}</small>
             <div className="modal-footer mt-3">
               {(groups.noc_manager || groups.noc_stuff) && <button className="btn btn-success" type="submit">
                 Submit

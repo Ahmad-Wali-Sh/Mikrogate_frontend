@@ -6,6 +6,7 @@ export default function GeneralDetails (props) {
     const location = useLocation();
     const data = location.state?.data;
 
+    console.log(data);
     const groups = useGroup()
 
     console.log(groups);
@@ -165,6 +166,7 @@ export default function GeneralDetails (props) {
             rows="6"
             defaultValue={data.description}
           ></textarea>
+          <small>by: {data.user.name}</small>
         </>
     )
 }

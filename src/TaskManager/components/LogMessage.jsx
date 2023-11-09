@@ -229,7 +229,7 @@ export default function LogMessage(props) {
                       <i className="fa-regular fa-face-smile p-1 icon text-muted"></i>
                     </button>
                     <ul className="dropdown-menu" aria-labelledby="dropdown1">
-                      <li>
+                      {/* <li>
                         <Picker
                           pickerStyle={{ width: "100%" }}
                           onEmojiClick={onEmojiClick}
@@ -239,7 +239,7 @@ export default function LogMessage(props) {
                             showPreview: false,
                           }}
                         />
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
                 </div>

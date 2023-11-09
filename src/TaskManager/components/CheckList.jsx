@@ -8,10 +8,23 @@ import NotificationManager from "react-notifications/lib/NotificationManager";
 import { useGroup } from "../../components/useUser";
 
 export default function CheckList() {
+  const url = process.env.REACT_APP_USER;
   const [trigger, setTrigger] = useState(0);
   const location = useLocation();
   const data = location.state?.data;
   const groups = useGroup();
+  const [user, setUser] = useState([]);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = await axios.get(url, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      });
+      setUser(res.data);
+    };
+    fetchUser();
+  }, []);
 
   const token = useContext(Context);
 
@@ -65,13 +78,12 @@ export default function CheckList() {
     event.preventDefault();
     warningNotification();
     const checklistForm = new FormData();
-
     Object.keys(checklist).map((key) => {
       checklistForm.append(
         checklist[key] != "" && key,
         checklist[key] != "" && checklist[key]
-      );
-    });
+        );
+      });
 
     console.log(CHECKLIST_URL);
     try {
@@ -94,7 +106,8 @@ export default function CheckList() {
       errorNotification();
     }
   };
-
+  
+  console.log(taskCheckList[0]?.user.name)
   return (
     <>
       {taskCheckList == false && groups.technician && (
@@ -312,6 +325,7 @@ export default function CheckList() {
                   Submit
                 </button>
               </div> */}
+              <small>by: {taskCheckList[0]?.user.name}</small>
             </form>
           </div>
         ))}

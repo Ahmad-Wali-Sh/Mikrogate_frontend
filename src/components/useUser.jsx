@@ -4,8 +4,8 @@ import { Context } from "../context/Context";
 
 export const useGroup = () => {
   const url = process.env.REACT_APP_USER;
-  const [user, setUser] = useState([]);
   const token = useContext(Context);
+  const [user, setUser] = useState([]);
   useEffect(() => {
     const fetchUser = async () => {
       const res = await axios.get(url, {

@@ -345,7 +345,7 @@ export default function Header() {
 
               <div className="col-1 col-sm-2">
                 <label htmlFor="project" className="col-form-label text-muted">
-                  Customer
+                  Contract Number
                 </label>
               </div>
               <div className="col-5 col-sm-4">
@@ -361,6 +361,48 @@ export default function Header() {
                     disabled
                     aria-describedby="basic-addon1"
                     defaultValue={data.contract.contract_number}
+                  />
+                </div>
+              </div>
+              <div className="col-1 col-sm-2">
+                <label htmlFor="project" className="col-form-label text-muted">
+                  Customer Name
+                </label>
+              </div>
+              <div className="col-5 col-sm-4">
+                <div className="input-group mb-3">
+                  <span className="input-group-text" id="basic-addon1">
+                    <i className="fa-solid fa-user"></i>
+                  </span>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Nothing to Show"
+                    aria-label="Username"
+                    disabled
+                    aria-describedby="basic-addon1"
+                    value={data.contract.name}
+                  />
+                </div>
+              </div>
+              <div className="col-1 col-sm-2">
+                <label htmlFor="project" className="col-form-label text-muted">
+                  Customer ID
+                </label>
+              </div>
+              <div className="col-5 col-sm-4">
+                <div className="input-group mb-3">
+                  <span className="input-group-text" id="basic-addon1">
+                    <i className="fa-solid fa-user"></i>
+                  </span>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Nothing To show"
+                    aria-label="Username"
+                    disabled
+                    aria-describedby="basic-addon1"
+                    value={data.contract.contract_id}
                   />
                 </div>
               </div>

@@ -443,6 +443,7 @@ export default function Troubleshoot() {
                   </div>
                 </div>
               </div>
+              <div className="col-4"><small>by: {singleTroubleshootTask?.[0].user.name}</small></div>
               <div className="modal-footer">
                 {(groups.noc_manager || groups.noc_stuff) && <button type="submit" className="btn btn-success">
                   Submit

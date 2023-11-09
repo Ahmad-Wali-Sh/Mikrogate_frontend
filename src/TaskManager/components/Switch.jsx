@@ -131,21 +131,21 @@ export default function Switch(props) {
       <div className="card bg-light mb-2 mt-2">
         <div className="card-body">
           <div className="row mt-2">
+            
             <div className="col-4">Installation confirmed</div>
-           
               <label
                 className="switch"
-              >
+                >
                 <input
                   type="checkbox"
                   name="installation"
                   {...register('installation')}
                   id="switch"
                   disabled={(groups?.noc_manager || groups.noc_stuff) ? false : true}
-                />
+                  />
                 <span className="slider round"></span>
               </label>
-
+            <div className="col-6"><small>{`${installtionCofirm && 'by: ' + installtionCofirm?.user.name}`}</small></div>
           </div>
           <div className="row mt-2">
             <div className="col-4">Payment cleared</div>
@@ -160,7 +160,7 @@ export default function Switch(props) {
                 />
                 <span className="slider round"></span>
               </label>
-
+              <div className="col-6"><small>{`${payment && 'by: ' + payment?.user.name}`}</small></div>
             {(groups?.noc_manager || groups.noc_stuff) && (
               <div className="modal-footer">
               <button className="btn btn-success" type="submit" onClick={handleSubmit(SwitchSubmit)}>
