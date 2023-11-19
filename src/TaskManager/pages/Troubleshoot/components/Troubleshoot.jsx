@@ -18,6 +18,7 @@ export default function Troubleshoot() {
   const [singleTroubleshootTask, setSingleTroubleshootTask] = React.useState(
     []
   );
+  console.log(singleTroubleshootTask);
   const troubleshoot_details = singleTroubleshootTask.map((item) => item.id);
   const TROUBLE_URL = process.env.REACT_APP_TROUBLE;
 
@@ -25,14 +26,14 @@ export default function Troubleshoot() {
 
   useEffect(() => {
     axios
-      .get(TROUBLE_URL + `?id=${data.id}`, {
+      .get(TROUBLE_URL + `?id=${data?.id}`, {
         headers: {
           Authorization: "Token " + token.user.token,
         },
       })
       .then((res) => {
         setSingleTroubleshootTask(res.data.results);
-        console.log(res.data.count);
+        console.log(res.data);
       });
   }, [trigger]);
 
@@ -92,9 +93,10 @@ export default function Troubleshoot() {
     } catch (err) {
       console.log(err.message);
       errorNotification();
+      setTrigger(prev => prev + 1)
     }
   };
-
+  
   function TroubleshootSubmit(e) {
     e.preventDefault();
     warningNotification();
@@ -119,16 +121,19 @@ export default function Troubleshoot() {
       });
       console.log(response);
       submitNotification();
+      setTimeout(() => setTrigger(prev => prev + 1), 200)
       setTrigger(prev => prev + 1)
     } catch (err) {
       console.log(err.message);
+      setTrigger(prev => prev + 1)
       errorNotification();
     }
+    setTrigger(prev => prev + 1)
   }
 
   return (
     <>
-      {singleTroubleshootTask == false && (groups.noc_manager || groups.noc_stuff) && (
+      {singleTroubleshootTask == false && (groups.noc_manager || groups.noc_stuff || groups.l1) && (
         <div className="mb-2 mt-2">
           <button
             type="button"
@@ -155,7 +160,7 @@ export default function Troubleshoot() {
               <h5 class="modal-title" id="exampleModalLabel">
                 Troubleshoot Settings
               </h5>
-              {(groups.noc_manager || groups.noc_stuff) && (
+              {(groups.noc_manager || groups.noc_stuff || groups.l1) && (
                 <button
                   type="button"
                   class="btn-close"
@@ -180,7 +185,7 @@ export default function Troubleshoot() {
                       id="troubleshoot_address"
                       placeholder="..."
                       disabled={
-                        groups.noc_manager || groups.noc_stuff ? false : true
+                        (groups.noc_manager || groups.noc_stuff || groups.l1) ? false : true
                       }
                       className="form-control"
                       onChange={handlerChange}
@@ -310,7 +315,7 @@ export default function Troubleshoot() {
                       onChange={handlerChange}
                       defaultValue={data.title}
                       disabled={
-                        groups.noc_manager || groups.noc_stuff ? false : true
+                        groups.noc_manager || groups.noc_stuff || groups.l1 ? false : true
                       }
                     />
                   </div>
@@ -332,7 +337,7 @@ export default function Troubleshoot() {
                       onChange={handlerChange}
                       defaultValue={item.address}
                       disabled={
-                        groups.noc_manager || groups.noc_stuff ? false : true
+                        (groups.noc_manager || groups.noc_stuff || groups.l1) ? false : true
                       }
                     />
                   </div>
@@ -354,7 +359,7 @@ export default function Troubleshoot() {
                       onChange={handlerChange}
                       defaultValue={item.contact}
                       disabled={
-                        groups.noc_manager || groups.noc_stuff ? false : true
+                        (groups.noc_manager || groups.noc_stuff || groups.l1) ? false : true
                       }
                     />
                   </div>
@@ -373,7 +378,7 @@ export default function Troubleshoot() {
                       className="form-control"
                       onChange={handlerChange}
                       disabled={
-                        groups.noc_manager || groups.noc_stuff ? false : true
+                        (groups.noc_manager || groups.noc_stuff || groups.l1)? false : true
                       }
                       defaultValue={item.service_charge}
                     />
@@ -396,7 +401,7 @@ export default function Troubleshoot() {
                       onChange={handlerChange}
                       defaultValue={item.problem}
                       disabled={
-                        groups.noc_manager || groups.noc_stuff ? false : true
+                        (groups.noc_manager || groups.noc_stuff || groups.l1) ? false : true
                       }
                     />
                   </div>
@@ -432,7 +437,7 @@ export default function Troubleshoot() {
                           id="floatingTextarea"
                           rows="6"
                           disabled={
-                            groups.noc_manager || groups.noc_stuff ? false : true
+                            (groups.noc_manager || groups.noc_stuff || groups.l1) ? false : true
                           }
                           name="description"
                           onChange={handlerChange}
@@ -445,7 +450,7 @@ export default function Troubleshoot() {
               </div>
               <div className="col-4"><small>by: {singleTroubleshootTask?.[0].user.name}</small></div>
               <div className="modal-footer">
-                {(groups.noc_manager || groups.noc_stuff) && <button type="submit" className="btn btn-success">
+                {(groups.noc_manager || groups.noc_stuff || groups.l1) && <button type="submit" className="btn btn-success">
                   Submit
                 </button>}
               </div>

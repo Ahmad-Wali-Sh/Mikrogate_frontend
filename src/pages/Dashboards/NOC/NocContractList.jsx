@@ -694,7 +694,7 @@ export default function NocContractList() {
                                       <option selected>Select</option>
                                       {projecter.map((item) => (
                                         groups.l1 ? (
-                                          (item.name == 'NOC Staff') | (item.name == 'Online Support') && <option value={item.id}>{item.name}</option>
+                                          (item.name == 'Troubleshoot') | (item.name == 'Online Support') && <option value={item.id}>{item.name}</option>
                                         ) :
                                         <option value={item.id}>
                                           {item.name}

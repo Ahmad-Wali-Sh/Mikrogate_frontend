@@ -125,7 +125,7 @@ export default function NocAssigned() {
     axios
       .get(
         TASK_URL +
-          `?user=&contract__contract_number=${contractNumbere}&project=6&deadline_after=&deadline_before=&tag=&stage=&stage_net=${
+          `?user=&contract__contract_number=${contractNumbere}&project=2&deadline_after=&deadline_before=&tag=&stage=&stage_net=${
             archivedShow ? "" : 6
           }&assigned__id=&created_after=&created_before=&contract__contract_id=${contractId}`,
         {

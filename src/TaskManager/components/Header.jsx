@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { Context } from "../../context/Context";
@@ -6,6 +6,7 @@ import { useContext } from "react";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { useGroup } from "../../components/useUser";
+import { useForm } from "react-hook-form";
 
 export default function Header() {
   const location = useLocation();
@@ -14,9 +15,10 @@ export default function Header() {
   const member = data.assigned;
   const MEMBERS_URL = process.env.REACT_APP_MEMBERS;
   const TASK_URL = process.env.REACT_APP_TASK;
-  const ME_URL = process.env.REACT_APP_USER
-  const SOCKET_URL = process.env.REACT_APP_SOCKET
+  const ME_URL = process.env.REACT_APP_USER;
+  const SOCKET_URL = process.env.REACT_APP_SOCKET;
 
+  const { register, handleSubmit, reset, watch } = useForm();
 
   const [user, setUser] = React.useState({});
   React.useEffect(() => {
@@ -34,48 +36,49 @@ export default function Header() {
     NotificationManager.info("New Data Recieved", "New Task Updated!", 5000);
   };
 
-  const ServerURL = SOCKET_URL
+  const ServerURL = SOCKET_URL;
 
-  const { sendJsonMessage } = useWebSocket(ServerURL, {  
+  const { sendJsonMessage } = useWebSocket(ServerURL, {
     onOpen: (e) => {
-      console.log(e)
+      console.log(e);
     },
 
     onClose: (e) => {
-      console.log(e)
+      console.log(e);
     },
-    
+
     onMessage: (e) => {
-      const data = JSON.parse(e.data)
-      data.data.value.message.includes(user.id) && receiveNotification() 
-    }
-  })
+      const data = JSON.parse(e.data);
+      data.data.value.message.includes(user.id) && receiveNotification();
+    },
+  });
 
-
-
-
-
+  const [filter, setFilter] = React.useState('')
+  console.log(filter);
   const [Members, setMembers] = React.useState([]);
   React.useEffect(() => {
-    axios.get(MEMBERS_URL, {
-      headers: {
-        Authorization: "Token " + token.user.token,
-      },
-    }).then((res) => {
-      setMembers(res.data.results);
-    });
-  }, []);
-  console.log(Members);
+    axios
+      .get(MEMBERS_URL + `?name=${filter}`, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => {
+        setMembers(res.data.results);
+      }).catch((e) => console.log(e))
+  }, [filter]);
 
   const [details, setDetails] = React.useState([]);
   React.useEffect(() => {
-    axios.get(TASK_URL + `${data.id}/`, {
-      headers: {
-        Authorization: "Token " + token.user.token,
-      },
-    }).then((res) => {
-      setDetails(res.data.assigned);
-    });
+    axios
+      .get(TASK_URL + `${data.id}/`, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => {
+        setDetails(res.data.assigned);
+      });
   }, []);
 
   const submitNotification = (e) => {
@@ -97,7 +100,6 @@ export default function Header() {
   const handleChange = (event) => {
     if (event.target.checked) {
       setMemberList((prevState) => ({
-        
         assigned: [...prevState.assigned, event.target.value],
       }));
     }
@@ -110,16 +112,26 @@ export default function Header() {
       }));
     }
   };
+  
+    const values = [
+      ...document.querySelectorAll('.inputing:checked')
+    ].map(el => el.value);
+  
+    console.log(values);
 
-  console.log(memberList);
+  const assign = details.map((item) => item.id);
 
   const MembersSubmit = async (e) => {
     e.preventDefault();
     warningNotification();
     const MemberForm = new FormData();
-    memberList.assigned.map((item) => MemberForm.append("assigned", item));
-    
-    
+    if (values[0]){
+      values.map((item) => MemberForm.append("assigned", item));
+    }
+    else {
+      MemberForm.append("assigned", data.user.id)
+    }
+
     try {
       const response = await axios({
         method: "PATCH",
@@ -131,20 +143,21 @@ export default function Header() {
       });
       console.log(response);
       sendJsonMessage({
-        "message": response.data.assigned.filter(function(item){
-          return item !== user.id
-        })  
-      })
-      submitNotification();
-      axios.get(TASK_URL + `${data.id}/`, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      }).then((res) => {
-        setDetails(res.data.assigned);
-        setMemberList({ assigned: res.data.assigned });
+        message: response.data.assigned.filter(function (item) {
+          return item !== user.id;
+        }),
       });
-
+      submitNotification();
+      axios
+        .get(TASK_URL + `${data.id}/`, {
+          headers: {
+            Authorization: "Token " + token.user.token,
+          },
+        })
+        .then((res) => {
+          setDetails(res.data.assigned);
+          setMemberList({ assigned: res.data.assigned });
+        });
     } catch (err) {
       console.log(err);
       const errorNotification = (e) => {
@@ -153,9 +166,10 @@ export default function Header() {
       errorNotification();
     }
   };
-  const assign = details.map((item) => item.id);
-  console.log(assign)
-  const groups = useGroup()
+  
+
+
+  const groups = useGroup();
   return (
     <>
       <h1>{data.title}</h1>
@@ -173,15 +187,17 @@ export default function Header() {
               />
             </li>
           ))}
-          {(groups.noc_manager || groups.noc_stuff) && <button
-            type="button"
-            name="addTask"
-            className="btn btn-secondary rounded-circle circle-width mx-3"
-            data-bs-toggle="modal"
-            data-bs-target="#membersModal"
-          >
-            <i className="fa-solid fa-plus "></i>
-          </button>}
+          {(groups.noc_manager || groups.noc_stuff) && (
+            <button
+              type="button"
+              name="addTask"
+              className="btn btn-secondary rounded-circle circle-width mx-3"
+              data-bs-toggle="modal"
+              data-bs-target="#membersModal"
+            >
+              <i className="fa-solid fa-plus "></i>
+            </button>
+          )}
         </ul>
 
         <div
@@ -214,13 +230,16 @@ export default function Header() {
                           placeholder="Filter members"
                           aria-label="Username"
                           aria-describedby="addon-wrapping"
+                          onChange={(e) => {
+                            setFilter(e.target.value)
+                          }}
                         />
                       </div>
                     </div>
                     <form onSubmit={MembersSubmit}>
                       <div className="membersbox">
                         <ul className="row">
-                          {Members.map((item) => (
+                          {Members.map((item, num) => (
                             <li className="d-flex justify-content-between padd">
                               <div className="list-item">
                                 <img
@@ -232,8 +251,9 @@ export default function Header() {
                               </div>
                               <input
                                 type="checkbox"
-                                className="mt-3 mr-3"
+                                className="mt-3 mr-3 inputing"
                                 name="assigned"
+                                {...register(`assigned.${num}`)}
                                 value={item.id}
                                 defaultChecked={
                                   assign.includes(item.id) ? true : false
