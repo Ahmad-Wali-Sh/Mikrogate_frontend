@@ -58,13 +58,13 @@ export default function Header() {
   const [Members, setMembers] = React.useState([]);
   React.useEffect(() => {
     axios
-      .get(MEMBERS_URL + `?name=${filter}`, {
+      .get(MEMBERS_URL, {
         headers: {
           Authorization: "Token " + token.user.token,
         },
       })
       .then((res) => {
-        setMembers(res.data.results);
+        setMembers(res.data.results.sort());
       }).catch((e) => console.log(e))
   }, [filter]);
 

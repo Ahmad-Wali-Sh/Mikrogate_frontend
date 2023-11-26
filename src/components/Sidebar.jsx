@@ -225,12 +225,12 @@ export default function Sidebar() {
                     </p>
                   </div>
                   <ul className="nav nav-treeview">
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                       <Link to="/task-manager" className="nav-link">
                         <i className="fa-solid fa-clipboard-user nav-icon"></i>
                         <p>Task Manager</p>
                       </Link>
-                    </li>
+                    </li> */}
                     <li className="nav-item ">
                       <Link to="/task-manager/technicians" className="nav-link">
                         <i className="fa-solid fa-clipboard-user nav-icon"></i>
