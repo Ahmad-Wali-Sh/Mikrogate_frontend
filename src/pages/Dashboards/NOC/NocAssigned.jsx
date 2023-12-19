@@ -28,15 +28,15 @@ export default function NocAssigned() {
     formState: { errors },
   } = useForm();
 
-  const { assignedFilter, setAssignedFilter } = useAssignedFilter();
+  // const { assignedFilter, setAssignedFilter } = useAssignedFilter();
 
-  useEffect(() => {
-    setAssignedFilter({
-      archivedShow: archivedShow,
-      contractId: contractId,
-      contractNumbere: contractNumbere,
-    });
-  }, [archivedShow, contractId, contractNumbere]);
+  // useEffect(() => {
+  //   setAssignedFilter({
+  //     archivedShow: archivedShow,
+  //     contractId: contractId,
+  //     contractNumbere: contractNumbere,
+  //   });
+  // }, [archivedShow, contractId, contractNumbere]);
 
   // useEffect(() => {
   //   assignedFilter &&
@@ -107,11 +107,11 @@ export default function NocAssigned() {
       .then((res) => {
         setTag(res.data.results);
       });
-    setTimeout(() => {
-      assignedFilter && setArchivedShow(assignedFilter.archivedShow);
-      assignedFilter && setContractId(assignedFilter.contractId);
-      assignedFilter && setContractNumbere(assignedFilter.contractNumbere);
-    }, 1000);
+    // setTimeout(() => {
+    //   assignedFilter && setArchivedShow(assignedFilter.archivedShow);
+    //   assignedFilter && setContractId(assignedFilter.contractId);
+    //   assignedFilter && setContractNumbere(assignedFilter.contractNumbere);
+    // }, 1000);
   }, []);
 
   const TaskSearchHandle = (data) => {
