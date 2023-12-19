@@ -10,18 +10,74 @@ import { Link } from "react-router-dom";
 import cx from "classnames";
 import { useForm } from "react-hook-form";
 import { useGroup } from "../../../components/useUser";
+import { usePreviousTasks, useTaskListFilter } from "../../../components/State";
 
 export default function NocTask() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
   const token = useContext(Context);
-  const groups = useGroup()
+  const groups = useGroup();
+
+  const { taskFilter, setTaskFilter } = useTaskListFilter();
+  const { previousTasks, setPreviousTasks } = usePreviousTasks();
 
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    setTasks(previousTasks)
+  }, [])
+
+  useEffect(() => {
+    setTaskFilter({
+      user: watch("user"),
+      sort_order: watch("sort_order"),
+      order_by: watch("order_by"),
+      created_after: watch("created_after"),
+      created_before: watch("created_before"),
+      stage: watch("stage"),
+      contract__contract_id: watch("contract__contract_id"),
+      project: watch("project"),
+      tag: watch("tag"),
+      deadline: watch("deadline"),
+      assigned: watch("assigned"),
+      contract: watch("contract"),
+    });
+    
+  }, [
+    watch("contract"),
+    watch("assigned"),
+    watch("project"),
+    watch("contract__contract_id"),
+    watch("sort_order"),
+    watch("stage"),
+    watch("user"),
+    watch("created_before")
+  ]);
+  console.log(taskFilter);
+
+  useEffect(() => {
+    taskFilter && setTimeout(() => {
+      reset({
+        user: taskFilter.user ? taskFilter.user : '',
+        sort_order: taskFilter.sort_order ? taskFilter.sort_order : '',
+        order_by: taskFilter.order_by ? taskFilter.order_by : '',
+        created_after: taskFilter.created_after ? taskFilter.created_after : '',
+        created_before: taskFilter.created_before ? taskFilter.created_before : '',
+        stage: taskFilter.stage ? taskFilter.stage : '',
+        contract__contract_id: taskFilter.contract__contract_id ? taskFilter.contract__contract_id : '',
+        project: taskFilter.project ? taskFilter.project : '',
+        tag: taskFilter.tag ? taskFilter.tag : '',
+        deadline: taskFilter.deadline ? taskFilter.deadline : '',
+        assigned:taskFilter.assigned ? taskFilter.assigned : '',
+        contract: taskFilter.contract ? taskFilter.contract : '',
+      })
+    }, 1000);
+  }, [])
 
   const [contracts, setContracts] = useState([]);
   const [contractNumber, setContractNumber] = useState([]);
@@ -90,7 +146,19 @@ export default function NocTask() {
     axios
       .get(
         TASK_URL +
-          `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${groups.l1 ? 3 : data.project}&stage=${data.stage}&tag=${data.tag}&user=${data.user}&assigned__id=${data.assigned}&contract__contract_id=${data.contract__contract_id}&stage_net=${data.stage != 6 ? 6 : ''}`,
+          `?contract__contract_number=${data.contract}&created_after=${
+            data.created_after
+          }&created_before=${data.created_before}&deadline_after=${
+            data.deadline
+          }&deadline_before=${data.deadline}&ordering=${data.sort_order}${
+            data.order_by
+          }&project=${groups.l1 ? 3 : data.project}&stage=${data.stage}&tag=${
+            data.tag
+          }&user=${data.user}&assigned__id=${
+            data.assigned
+          }&contract__contract_id=${data.contract__contract_id}&stage_net=${
+            data.stage != 6 ? 6 : ""
+          }`,
         {
           headers: {
             Authorization: "Token " + token.user.token,
@@ -100,6 +168,7 @@ export default function NocTask() {
       .then((res) => {
         console.log(res);
         setTasks(res.data.results);
+        setPreviousTasks(res.data.results)
       });
   };
 
@@ -364,33 +433,12 @@ export default function NocTask() {
     }
   };
 
-  const [content, setContent] = useState([]);
 
   const [search, setSearch] = React.useState({
     search: "",
   });
 
-  function SearchHandle(e) {
-    setSearch({ [e.target.name]: e.target.value });
-  }
 
-  const SearchSubmit = async (e) => {
-    e.preventDefault();
-    warningNotification();
-    const SearchForm = new FormData();
-    SearchForm.append("search", search.search);
-
-    axios
-      .get(TASK_URL + `?contracts=${search.search}`, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => {
-        setContenter(res.data.results);
-        searchSuccessNotification();
-      });
-  };
 
   return (
     <div className="content-wrapper">
@@ -526,14 +574,19 @@ export default function NocTask() {
                                 {...register("project")}
                               >
                                 {groups.l1 ? "" : <option value="">Any</option>}
-                                {projecter.map((project) => (
+                                {projecter.map((project) =>
                                   groups.l1 ? (
-                                    project.name == 'Online Support' && <option value={project.id}>{project.name}</option>
-                                  ) :
-                                  <option value={project.id}>
-                                    {project.name}
-                                  </option>
-                                ))}
+                                    project.name == "Online Support" && (
+                                      <option value={project.id}>
+                                        {project.name}
+                                      </option>
+                                    )
+                                  ) : (
+                                    <option value={project.id}>
+                                      {project.name}
+                                    </option>
+                                  )
+                                )}
                               </select>
                             </div>
                           </div>
@@ -969,16 +1022,15 @@ export default function NocTask() {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task) => (
+            {tasks?.map((task) => (
               <>
                 <tr key={task.id}>
                   <td>{++i}.</td>
                   <td>
                     <a>{task.contract.contract_number}</a>
                     <br />
-                    <small style={{display: 'block'}}>
-                      {new Date(task.created)
-                        .toString().slice(0,16)}
+                    <small style={{ display: "block" }}>
+                      {new Date(task.created).toString().slice(0, 16)}
                     </small>
                     <small>
                       {new Date(task.created)

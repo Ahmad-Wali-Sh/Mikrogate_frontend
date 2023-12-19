@@ -3,6 +3,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { Context } from '../../../context/Context';
 import { Link } from "react-router-dom";
+import { usePreviousTasks, useTaskListFilter } from "../../../components/State";
 
 export default function NocDashboard() {
   let i = 0;
@@ -65,6 +66,9 @@ export default function NocDashboard() {
     }
   }
 
+  const { taskFilter, setTaskFilter } = useTaskListFilter();
+  const { previousTasks, setPreviousTasks } = usePreviousTasks();
+
   return (
     <div>
       <div className="content-wrapper">
@@ -94,7 +98,7 @@ export default function NocDashboard() {
                     pathname: "/task-manager/noc-contracts",
                   }}
                 >
-                  <div className="small-box bg-success">
+                  <div className="small-box bg-success" >
                     <div className="inner">
                       <h3>5</h3>
                       <p>Contract List</p>
@@ -114,7 +118,10 @@ export default function NocDashboard() {
                     pathname: "/task-manager/noc-tasks",
                   }}
                 >
-                  <div className="small-box bg-info">
+                  <div className="small-box bg-info" onClick={() => {
+                    setTaskFilter()
+                    setPreviousTasks()
+                  }}>
                   <div className="inner">
                       <h3>5</h3>
                       <p>Tasks List</p>

@@ -2,26 +2,49 @@ import axios from "axios";
 import React from "react";
 import { useState, useEffect, useRef, useContext } from "react";
 import NotificationManager from "react-notifications/lib/NotificationManager";
-import Troubleshoot from "../../../TaskManager/components/Troubleshoot";
-import ChangeLocation from "../../../TaskManager/pages/ChangeLocation/components/ChangeLocation";
-import Amendment from "../../../TaskManager/pages/Amendment/components/Amendment";
 import { Context } from "../../../context/Context";
 import { Link } from "react-router-dom";
 import cx from "classnames";
 import { useForm } from "react-hook-form";
 import { useGroup } from "../../../components/useUser";
+import { useAssignedFilter } from "../../../components/State";
 
 export default function NocAssigned() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
   const token = useContext(Context);
   const groups = useGroup();
 
+  const [archivedShow, setArchivedShow] = React.useState(false);
+  const [contractName, setContractName] = React.useState("");
+  const [contractId, setContractId] = React.useState("");
+  const [contractNumbere, setContractNumbere] = React.useState("");
+  const [trigger, setTrigger] = React.useState(0);
+
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
+
+  const { assignedFilter, setAssignedFilter } = useAssignedFilter();
+
+  useEffect(() => {
+    setAssignedFilter({
+      archivedShow: archivedShow,
+      contractId: contractId,
+      contractNumbere: contractNumbere,
+    });
+  }, [archivedShow, contractId, contractNumbere]);
+
+  // useEffect(() => {
+  //   assignedFilter &&
+  //     setArchivedShow(assignedFilter.archivedShow)
+  //     setContractId(assignedFilter.contractId)
+  //     setContractNumbere(assignedFilter.contractNumbere)
+
+  // }, [])
 
   const [contracts, setContracts] = useState([]);
   const [contractNumber, setContractNumber] = useState([]);
@@ -84,13 +107,12 @@ export default function NocAssigned() {
       .then((res) => {
         setTag(res.data.results);
       });
+    setTimeout(() => {
+      assignedFilter && setArchivedShow(assignedFilter.archivedShow);
+      assignedFilter && setContractId(assignedFilter.contractId);
+      assignedFilter && setContractNumbere(assignedFilter.contractNumbere);
+    }, 1000);
   }, []);
-
-  const [archivedShow, setArchivedShow] = React.useState(false);
-  const [contractName, setContractName] = React.useState("");
-  const [contractId, setContractId] = React.useState("");
-  const [contractNumbere, setContractNumbere] = React.useState("");
-  const [trigger, setTrigger] = React.useState(0);
 
   const TaskSearchHandle = (data) => {
     axios

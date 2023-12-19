@@ -11,6 +11,7 @@ import cx from "classnames";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useGroup } from "../../../components/useUser";
+import { useContractFilter, usePreviousContracts } from "../../../components/State";
 
 export default function NocContractList() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
@@ -37,22 +38,69 @@ export default function NocContractList() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
 
-  // useEffect(() => {
-  //   axios
-  //     .get(contractUrl, {
-  //       headers: {
-  //         Authorization: "Token " + token.user.token,
-  //       },
-  //     })
-  //     .then((res) => setContracts(res.data.results));
-  // }, []);
 
   const [users, setUsers] = React.useState([]);
   const [packages, setPackages] = React.useState([]);
   const [status, setStatus] = React.useState([]);
+  const { contractFilter, setContractFilter} = useContractFilter()
+  const { previousContracts, setPreviousContracts} = usePreviousContracts()
+
+  useEffect(() => {
+    setContractFilter({
+      user: watch("user"),
+      sort_order: watch("sort_order"),
+      order_by: watch("order_by"),
+      date_after: watch("date_after"),
+      date_before: watch("date_before"),
+      contract__status: watch("contract__status"),
+      contract_id: watch("contract_id"),
+      project: watch("project"),
+      tag: watch("tag"),
+      deadline: watch("deadline"),
+      assigned: watch("assigned"),
+      contract_number: watch("contract_number"),
+    });
+    
+  }, [
+    watch("contract_number"),
+    watch("assigned"),
+    watch("project"),
+    watch("contract_id"),
+    watch("sort_order"),
+    watch("order_by"),
+    watch("contract__status"),
+    watch("user"),
+    watch("date_before"),
+    watch("date_after")
+  ]);
+  console.log(contractFilter);
+
+  useEffect(() => {
+    contractFilter && setTimeout(() => {
+      reset({
+        user: contractFilter.user ? contractFilter.user : '',
+        sort_order: contractFilter.sort_order ? contractFilter.sort_order : '',
+        order_by: contractFilter.order_by ? contractFilter.order_by : '',
+        date_after: contractFilter.date_after ? contractFilter.date_after : '',
+        date_before: contractFilter.date_before ? contractFilter.date_before : '',
+        contract__status: contractFilter.contract__status ? contractFilter.contract__status : '',
+        contract_id: contractFilter.contract_id ? contractFilter.contract_id : '',
+        project: contractFilter.project ? contractFilter.project : '',
+        tag: contractFilter.tag ? contractFilter.tag : '',
+        deadline: contractFilter.deadline ? contractFilter.deadline : '',
+        assigned:contractFilter.assigned ? contractFilter.assigned : '',
+        contract_number: contractFilter.contract_number ? contractFilter.contract_number : '',
+      })
+    }, 1000);
+  }, [])
+
+  useEffect(() => {
+    setContracts(previousContracts)
+  }, [])
 
   React.useEffect(() => {
     axios
@@ -108,6 +156,7 @@ export default function NocContractList() {
       )
       .then((res) => {
         setContracts(res.data.results);
+        setPreviousContracts(res.data.results)
       });
   };
 

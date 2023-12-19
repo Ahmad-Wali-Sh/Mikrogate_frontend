@@ -33,10 +33,11 @@
     "react-use-websocket": "^4.2.0",
     "rsuite": "^5.15.2",
     "web-vitals": "^2.1.4",
-    "websocket": "^1.0.34"
+    "websocket": "^1.0.34",
+    "zustand": "^4.4.7"
   },
   "scripts": {
-    "start": "PORT=3001 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
