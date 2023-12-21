@@ -596,6 +596,11 @@ input, select {
   color: rgb(255, 174, 0)
 }
 
+.direction-rtl {
+  direction: ltr;
+  text-align: right;
+}
+
 .grid-items-deadline{
   width: 9rem;
   text-align: left;

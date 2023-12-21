@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Context } from "../../context/Context";
 import { useContext } from "react";
@@ -7,6 +7,7 @@ import NotificationManager from "react-notifications/lib/NotificationManager";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { useGroup } from "../../components/useUser";
 import { useForm } from "react-hook-form";
+import { usePreviousTasks } from "../../components/State";
 
 export default function Header() {
   const location = useLocation();
@@ -17,6 +18,7 @@ export default function Header() {
   const TASK_URL = process.env.REACT_APP_TASK;
   const ME_URL = process.env.REACT_APP_USER;
   const SOCKET_URL = process.env.REACT_APP_SOCKET;
+  const navigate = useNavigate()
 
   const { register, handleSubmit, reset, watch } = useForm();
 
@@ -166,6 +168,21 @@ export default function Header() {
       errorNotification();
     }
   };
+
+  const {previousTasks, setPreviousTasks} = usePreviousTasks()
+
+  const DeleteTask = () => {
+    axios.delete(TASK_URL + data.id + '/', {
+      headers: {
+        Authorization: "Token " + token.user.token,
+      }
+    }).then(() => {
+      submitNotification();
+      navigate('/task-manager/noc-tasks')
+      // window.location.reload()
+      setPreviousTasks()
+    })
+  }
   
 
 
@@ -188,15 +205,26 @@ export default function Header() {
             </li>
           ))}
           {(groups.noc_manager || groups.noc_stuff) && (
+            <>
             <button
               type="button"
               name="addTask"
               className="btn btn-secondary rounded-circle circle-width mx-3"
               data-bs-toggle="modal"
               data-bs-target="#membersModal"
-            >
+              >
               <i className="fa-solid fa-plus "></i>
             </button>
+            <button
+              type="button"
+              name="addTask"
+              className="btn btn-secondary rounded-circle circle-width mx-3"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteModal"
+              >
+              <i className="fa-solid fa-trash"></i>
+            </button>
+              </>
           )}
         </ul>
 
@@ -272,6 +300,29 @@ export default function Header() {
                     </form>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="deleteModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-ml">
+            <div class="modal-content">
+              <div class="modal-header">Are You Sure Want To Delete This Task?</div>
+              <div className="col-12 p-2 direction-rtl">
+              <button className="btn btn-primary col-2"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              onClick={() => {
+                DeleteTask()
+              }}
+              >Yes</button>
+              {" "}
               </div>
             </div>
           </div>

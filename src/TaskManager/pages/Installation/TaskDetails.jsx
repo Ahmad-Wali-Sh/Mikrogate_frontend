@@ -16,7 +16,7 @@ const TaskDetails = () => {
       <div className="content">
       <div className="col-10 mt-5 m-auto">
         <section>
-          <Header />
+          <Header task={data}/>
           <GeneralDetails />
           <Installations_details id={data.id} contract_id={data}/>
           <Link_Details data={[data]} id={data.id} />
