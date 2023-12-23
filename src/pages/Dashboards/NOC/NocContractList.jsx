@@ -840,7 +840,7 @@ export default function NocContractList() {
                                   id="pills-tab"
                                   role="tablist"
                                 >
-                                  <div className="col-12">
+                                  {/* <div className="col-12">
                                     <nav>
                                       <div
                                         className="nav nav-tabs"
@@ -881,7 +881,7 @@ export default function NocContractList() {
                                         ></textarea>
                                       </div>
                                     </div>
-                                  </div>
+                                  </div> */}
                                 </div>
                               </div>
                               {groups.l1 && <div className="modal-footer">

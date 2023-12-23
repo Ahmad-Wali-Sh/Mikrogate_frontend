@@ -23,7 +23,6 @@ export default function Header() {
                 <a className="nav-link" onClick={()=>logout()} style={{cursor: 'pointer'}}>Logout</a>
             </li>
             </ul>
-
             {/* <!-- Right navbar links --> */}
             <ul className="navbar-nav ml-auto">
             {/* <!-- Navbar Search --> */}

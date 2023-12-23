@@ -12,6 +12,8 @@ export default function OnlineSupport() {
   const [trigger, setTrigger] = useState(0);
   const ONLINE_URL = process.env.REACT_APP_ONLINE;
 
+  console.log(data);
+
   const [onlineSupport, setOnlineSupport] = React.useState([]);
   const [onlineSupportId, setOnlineSupportId] = React.useState();
   const [count, setCount] = React.useState([]);
@@ -260,7 +262,7 @@ export default function OnlineSupport() {
         </form>
       </div>
       <div className="mb-2 mt-2">
-        {onlineSupport == false && (
+        {(onlineSupport == false && data.project.name == 'Online Support') && (
           <button
             type="button"
             class="btn btn-primary"
