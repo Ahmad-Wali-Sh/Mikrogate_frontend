@@ -9,6 +9,8 @@ export default function LogMessage(props) {
   const token = useContext(Context);
   const TASK_LOG_URL = process.env.REACT_APP_TASK_LOG;
   const ME_URL = process.env.REACT_APP_USER;
+  const USERS_URL = process.env.REACT_APP_USERS;
+  const INSTALL_URL = process.env.REACT_APP_INSTALLATION_CONFIRM;
   const [logmessage, setLogMessage] = React.useState({
     body: "",
     task: props.id,
@@ -25,11 +27,11 @@ export default function LogMessage(props) {
   };
 
   const [inputStr, setInputStr] = useState("");
+  const [users, setUsers] = useState([]);
 
   const onEmojiClick = (event) => {
     setInputStr((prevInput) => prevInput + event.emoji);
   };
-
 
   const LogMessageSubmit = async (e) => {
     e.preventDefault();
@@ -50,7 +52,7 @@ export default function LogMessage(props) {
         console.log(response);
         submitNotification();
         setTrigger((prev) => prev + 1);
-        setInputStr('')
+        setInputStr("");
       } catch (err) {
         console.log(err);
         const errorNotification = (e) => {
@@ -73,6 +75,18 @@ export default function LogMessage(props) {
     console.log(note);
   }, [trigger]);
 
+  const changes = props.data[0].changes.map((change) => {
+    try {
+      change.changes = [JSON.parse(change.changes)];
+    } catch (e) {
+      console.log(e);
+    }
+    return change;
+  });
+
+  console.log(changes);
+  const [installationConfirm, setInstallationConfirm] = useState([])
+
   const [user, setUser] = React.useState({});
   React.useEffect(() => {
     axios
@@ -83,6 +97,25 @@ export default function LogMessage(props) {
       })
       .then((res) => setUser(res.data));
     console.log(user);
+
+    axios
+    .get(INSTALL_URL + '?task=' + props.id, {
+      headers: {
+        Authorization: "Token " + token.user.token,
+      },
+    }).then((res) => {
+      setInstallationConfirm(res.data.results)
+    })
+
+    axios
+      .get(USERS_URL, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => {
+        setUsers(res.data.results);
+      });
   }, []);
 
   function created(date) {
@@ -95,11 +128,19 @@ export default function LogMessage(props) {
     );
   }
 
+  const ReturnUser = (change) => {
+    const user = users.filter((user) => {
+      return change.actor_id == user.id ? user : "";
+    });
+    console.log(user);
+    return user[0];
+  };
+
   return (
     <>
       <nav>
         <div class="nav nav-tabs mt-4" id="nav-tab" role="tablist">
-          {/* <button
+          <button
             class="nav-link"
             id="nav-message-tab"
             data-bs-toggle="tab"
@@ -109,8 +150,8 @@ export default function LogMessage(props) {
             aria-controls="nav-message"
             aria-selected="false"
           >
-            Send message
-          </button> */}
+            Changes
+          </button>
           <button
             class="nav-link"
             id="nav-log-tab"
@@ -135,7 +176,7 @@ export default function LogMessage(props) {
         >
           <div className="card text-dark bg-light mb-3">
             {/* <div className="card-header">Log note</div> */}
-            <form>
+            {/* <form>
               <div className="card-body">
                 <div className="row">
                   <div className="col-1 col-md-1 col-sm-2"></div>
@@ -182,7 +223,98 @@ export default function LogMessage(props) {
                   </div>
                 </div>
               </div>
-            </form>
+            </form> */}
+            <div className="content">
+              {installationConfirm && installationConfirm.map((install) => (
+                <div className="card-body shadow p-3 mb-2 bg-body rounded col-12">
+                <div className="row align-items-center ">
+                  <div className="col-1 col-md-1 col-sm-2 ">
+                    <label
+                      htmlFor="log_note"
+                      className="col-form-label"
+                    >
+                      <img
+                        src={install.user.avatar}
+                        alt=""
+                        className="avatar"
+                      />
+                    </label>
+                  </div>
+                  <div className="col-5 mx-3 mb-1">
+                    {install.user.name}
+                  </div>
+                  <div
+                    className="col-3 offset-2 deadline text-muted mb-1"
+                    style={{ fontSize: "12px" }}
+                  >
+                    {new Date(install.created).getDate() ==
+                    new Date().getDate()
+                      ? "Today" + " " + created(install.created)
+                      : new Date(install.created)
+                          .toDateString()
+                          .slice(0, 10)}
+                  </div>
+                  <div className="col">
+                    <div className="row"></div>
+                  </div>
+                  <div className="col-11 col-md-11 col-sm-11 offset-1">
+                   {install.confirm ? <span className='history-highlight-text-new'>Installation Confirmed</span> : <span className='history-highlight-text-old'>Installation Declined</span>}
+                  </div>
+                </div>
+              </div>
+              ))}
+              {changes &&
+                changes.map(
+                  (change) =>
+                    change.action != 0 && (
+                      <div className="card-body shadow p-3 mb-2 bg-body rounded col-12">
+                        <div className="row align-items-center ">
+                          <div className="col-1 col-md-1 col-sm-2 ">
+                            <label
+                              htmlFor="log_note"
+                              className="col-form-label"
+                            >
+                              <img
+                                src={ReturnUser(change)?.avatar}
+                                alt=""
+                                className="avatar"
+                              />
+                            </label>
+                          </div>
+                          <div className="col-5 mx-3 mb-1">
+                            {ReturnUser(change)?.name}
+                          </div>
+                          <div
+                            className="col-3 offset-2 deadline text-muted mb-1"
+                            style={{ fontSize: "12px" }}
+                          >
+                            {new Date(change.timestamp).getDate() ==
+                            new Date().getDate()
+                              ? "Today" + " " + created(change.timestamp)
+                              : new Date(change.timestamp)
+                                  .toDateString()
+                                  .slice(0, 10)}
+                          </div>
+                          <div className="col">
+                            <div className="row"></div>
+                          </div>
+                          <div className="col-11 col-md-11 col-sm-11 offset-1">
+                            {change.action != 0 &&
+                              change.changes.map((changeData) =>
+                                Object.entries(changeData).map((name) => (
+                                  <div>
+                                    <span className="history-highlight-text">{name[0].toUpperCase()}</span> changed
+                                    from <span className="history-highlight-text-old">{name[1][0]}</span> to{" "}
+                                    <span className="history-highlight-text-new">{name[1][1]}</span>{" "}
+                                  </div>
+                                ))
+                              )}
+                          </div>
+                        </div>
+                      </div>
+                    )
+                )}
+            </div>
           </div>
         </div>
 
@@ -281,57 +413,57 @@ export default function LogMessage(props) {
               </div>
             </div>
           </div>
-        </div>
-        {note.map((item) => (
-          <div className="card-body shadow p-3 mb-2 bg-body rounded col-12">
-            <div className="row align-items-center ">
-              <div className="col-1 col-md-1 col-sm-2 ">
-                <label htmlFor="log_note" className="col-form-label">
-                  <img src={item.user.avatar} alt="" className="avatar" />
-                </label>
-              </div>
-              <div className="col-5 mx-3 mb-1">{item.user.name}</div>
-              <div
-                className="col-3 offset-1 deadline text-muted mb-1"
-                style={{ fontSize: "12px" }}
-              >
-                {new Date(item.created).getDate() == new Date().getDate()
-                  ? "Today" + " " + created(item.created)
-                  : new Date(item.created).toDateString().slice(0, 10)}
-              </div>
-              <div className="col">
-                <div className="row">
-                  <div className="dropdown">
-                    <button
-                      className="btn text-muted"
-                      type="button"
-                      id="dropdown1"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <i className="fa-solid fa-ellipsis-vertical"></i>
-                    </button>
-                    <ul className="dropdown-menu" aria-labelledby="dropdown1">
-                      <li>
-                        <a className="dropdown-item text-primary" href="#">
-                          Edit
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item text-danger" href="#">
-                          Archive
-                        </a>
-                      </li>
-                    </ul>
+          {note.map((item) => (
+            <div className="card-body shadow p-3 mb-2 bg-body rounded col-12">
+              <div className="row align-items-center ">
+                <div className="col-1 col-md-1 col-sm-2 ">
+                  <label htmlFor="log_note" className="col-form-label">
+                    <img src={item.user.avatar} alt="" className="avatar" />
+                  </label>
+                </div>
+                <div className="col-5 mx-3 mb-1">{item.user.name}</div>
+                <div
+                  className="col-3 offset-1 deadline text-muted mb-1"
+                  style={{ fontSize: "12px" }}
+                >
+                  {new Date(item.created).getDate() == new Date().getDate()
+                    ? "Today" + " " + created(item.created)
+                    : new Date(item.created).toDateString().slice(0, 10)}
+                </div>
+                <div className="col">
+                  <div className="row">
+                    <div className="dropdown">
+                      <button
+                        className="btn text-muted"
+                        type="button"
+                        id="dropdown1"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <i className="fa-solid fa-ellipsis-vertical"></i>
+                      </button>
+                      <ul className="dropdown-menu" aria-labelledby="dropdown1">
+                        <li>
+                          <a className="dropdown-item text-primary" href="#">
+                            Edit
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item text-danger" href="#">
+                            Archive
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-11 col-md-11 col-sm-11 offset-1">
-                {item.body}
+                <div className="col-11 col-md-11 col-sm-11 offset-1">
+                  {item.body}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </>
   );

@@ -28,23 +28,24 @@ export default function NocAssigned() {
     formState: { errors },
   } = useForm();
 
-  // const { assignedFilter, setAssignedFilter } = useAssignedFilter();
+  const { assignedFilter, setAssignedFilter } = useAssignedFilter();
 
-  // useEffect(() => {
-  //   setAssignedFilter({
-  //     archivedShow: archivedShow,
-  //     contractId: contractId,
-  //     contractNumbere: contractNumbere,
-  //   });
-  // }, [archivedShow, contractId, contractNumbere]);
+  useEffect(() => {
+    setAssignedFilter({
+      archivedShow: archivedShow ? archivedShow : false,
+      contractId: contractId ? contractId : '',
+      contractNumbere: contractNumbere ? contractNumbere : '',
+    });
+  }, [archivedShow, contractId, contractNumbere]);
 
-  // useEffect(() => {
-  //   assignedFilter &&
-  //     setArchivedShow(assignedFilter.archivedShow)
-  //     setContractId(assignedFilter.contractId)
-  //     setContractNumbere(assignedFilter.contractNumbere)
-
-  // }, [])
+  useEffect(() => {
+    setTimeout(() => {
+      assignedFilter &&
+      setArchivedShow(assignedFilter.archivedShow)
+      setContractId(assignedFilter.contractId)
+      setContractNumbere(assignedFilter.contractNumbere)
+    }, 200);
+  }, [])
 
   const [contracts, setContracts] = useState([]);
   const [contractNumber, setContractNumber] = useState([]);
@@ -466,7 +467,7 @@ export default function NocAssigned() {
               <input
                 type="checkbox"
                 style={{ marginLeft: "1rem" }}
-                value={archivedShow}
+                checked={archivedShow}
                 onChange={() => setArchivedShow((prev) => !prev)}
               />
               <br></br>

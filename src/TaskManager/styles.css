@@ -592,6 +592,21 @@ input, select {
   color: blue
 }
 
+.history-highlight-text {
+  font-weight: bold;
+  color: rgb(35, 26, 105);
+}
+.history-highlight-text-old {
+  font-weight: bold;
+  color: rgb(93, 93, 118);
+}
+.history-highlight-text-new {
+  font-weight: bold;
+  color: rgb(49, 100, 51);
+}
+
+
+
 .yellow {
   color: rgb(255, 174, 0)
 }
