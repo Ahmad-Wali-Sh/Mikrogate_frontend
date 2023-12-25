@@ -537,11 +537,8 @@ export default function NocContractList() {
     `Other (please specify in task description)`,
     `Signal and CCQ`,
     `Changing access point`,
-    `Speed`
-  ]
-
-
-
+    `Speed`,
+  ];
 
   return (
     <div className="content-wrapper">
@@ -836,18 +833,31 @@ export default function NocContractList() {
                                       aria-describedby="basic-addon1"
                                       onChange={handlerChange}
                                     /> */}
-                                    <select
+                                    {/* <input list='titles' name='titles' >
+                                    <datalist
                                       name="title"
+                                      id='title'
                                       className="form-control"
-                                      autoComplete="off"
                                       aria-label="Username"
                                       aria-describedby="basic-addon1"
                                       onChange={handlerChange}
                                     >
                                       {titles.map((title) => (
-                                      <option value={title}>{title}</option>
+                                      <option value={title}></option>
                                       ))}
-                                    </select>
+                                    </datalist> */}
+                                    <input list="browsers" type="text"
+                                      name="title"
+                                      className="form-control"
+                                      onChange={handlerChange}
+                                      autoComplete="off"
+                                      aria-label="Username"
+                                      aria-describedby="basic-addon1" />
+                                    <datalist id="browsers">
+                                      {titles.map((title) => (
+                                        <option value={title}></option>
+                                      ))}
+                                    </datalist>
                                   </div>
                                 </div>
                               </div>
