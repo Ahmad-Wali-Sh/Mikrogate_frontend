@@ -11,7 +11,10 @@ import cx from "classnames";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useGroup } from "../../../components/useUser";
-import { useContractFilter, usePreviousContracts } from "../../../components/State";
+import {
+  useContractFilter,
+  usePreviousContracts,
+} from "../../../components/State";
 
 export default function NocContractList() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
@@ -31,7 +34,7 @@ export default function NocContractList() {
   const STATUS_URL = process.env.REACT_APP_CONTRACT_STATUS;
 
   const [contracts, setContracts] = useState([]);
-  const groups = useGroup()
+  const groups = useGroup();
   const [contractNumber, setContractNumber] = useState([]);
 
   const {
@@ -42,12 +45,11 @@ export default function NocContractList() {
     formState: { errors },
   } = useForm();
 
-
   const [users, setUsers] = React.useState([]);
   const [packages, setPackages] = React.useState([]);
   const [status, setStatus] = React.useState([]);
-  const { contractFilter, setContractFilter} = useContractFilter()
-  const { previousContracts, setPreviousContracts} = usePreviousContracts()
+  const { contractFilter, setContractFilter } = useContractFilter();
+  const { previousContracts, setPreviousContracts } = usePreviousContracts();
 
   useEffect(() => {
     setContractFilter({
@@ -64,7 +66,6 @@ export default function NocContractList() {
       assigned: watch("assigned"),
       contract_number: watch("contract_number"),
     });
-    
   }, [
     watch("contract_number"),
     watch("assigned"),
@@ -75,32 +76,45 @@ export default function NocContractList() {
     watch("contract__status"),
     watch("user"),
     watch("date_before"),
-    watch("date_after")
+    watch("date_after"),
   ]);
   console.log(contractFilter);
 
   useEffect(() => {
-    contractFilter && setTimeout(() => {
-      reset({
-        user: contractFilter.user ? contractFilter.user : '',
-        sort_order: contractFilter.sort_order ? contractFilter.sort_order : '',
-        order_by: contractFilter.order_by ? contractFilter.order_by : '',
-        date_after: contractFilter.date_after ? contractFilter.date_after : '',
-        date_before: contractFilter.date_before ? contractFilter.date_before : '',
-        contract__status: contractFilter.contract__status ? contractFilter.contract__status : '',
-        contract_id: contractFilter.contract_id ? contractFilter.contract_id : '',
-        project: contractFilter.project ? contractFilter.project : '',
-        tag: contractFilter.tag ? contractFilter.tag : '',
-        deadline: contractFilter.deadline ? contractFilter.deadline : '',
-        assigned:contractFilter.assigned ? contractFilter.assigned : '',
-        contract_number: contractFilter.contract_number ? contractFilter.contract_number : '',
-      })
-    }, 1000);
-  }, [])
+    contractFilter &&
+      setTimeout(() => {
+        reset({
+          user: contractFilter.user ? contractFilter.user : "",
+          sort_order: contractFilter.sort_order
+            ? contractFilter.sort_order
+            : "",
+          order_by: contractFilter.order_by ? contractFilter.order_by : "",
+          date_after: contractFilter.date_after
+            ? contractFilter.date_after
+            : "",
+          date_before: contractFilter.date_before
+            ? contractFilter.date_before
+            : "",
+          contract__status: contractFilter.contract__status
+            ? contractFilter.contract__status
+            : "",
+          contract_id: contractFilter.contract_id
+            ? contractFilter.contract_id
+            : "",
+          project: contractFilter.project ? contractFilter.project : "",
+          tag: contractFilter.tag ? contractFilter.tag : "",
+          deadline: contractFilter.deadline ? contractFilter.deadline : "",
+          assigned: contractFilter.assigned ? contractFilter.assigned : "",
+          contract_number: contractFilter.contract_number
+            ? contractFilter.contract_number
+            : "",
+        });
+      }, 1000);
+  }, []);
 
   useEffect(() => {
-    setContracts(previousContracts)
-  }, [])
+    setContracts(previousContracts);
+  }, []);
 
   React.useEffect(() => {
     axios
@@ -156,7 +170,7 @@ export default function NocContractList() {
       )
       .then((res) => {
         setContracts(res.data.results);
-        setPreviousContracts(res.data.results)
+        setPreviousContracts(res.data.results);
       });
   };
 
@@ -248,7 +262,6 @@ export default function NocContractList() {
         setMember(res.data.results);
       });
   }, []);
-
 
   React.useEffect(() => {
     axios
@@ -383,7 +396,7 @@ export default function NocContractList() {
     }
   };
 
-  console.log(form.assigned)
+  console.log(form.assigned);
 
   const [search, setSearch] = React.useState({
     search: "",
@@ -417,15 +430,118 @@ export default function NocContractList() {
 
   const FilterMember = (e) => {
     axios
-    .get(MEMBER_URL + '?name=' + e.target.value, {
-      headers: {
-        Authorization: "Token " + token.user.token,
-      },
-    })
-    .then((res) => {
-      setMember(res.data.results);
-    });
-  }
+      .get(MEMBER_URL + "?name=" + e.target.value, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => {
+        setMember(res.data.results);
+      });
+  };
+
+  const titles = [
+    `Installation`,
+    `Troubleshoot`,
+    `Online Support`,
+    `Change location`,
+    `Connection`,
+    `Connection (checking adapters, PoE and cable by customer)`,
+    `Connection (rebooting antenna)`,
+    `Connection (rebooting antenna and MikroTik router)`,
+    `Connection (rebooting antenna and router)`,
+    `Connection (rebooting antenna manually)`,
+    `Connection (rebooting antenna using MAC Telnet)`,
+    `Connection (rebooting MikroTik router)`,
+    `Connection (rebooting router)`,
+    `Connection (connecting cable to configured port)`,
+    `Checking connection`,
+    `Checking connection (internal network problem)`,
+    `Connection (changing WiFi frequency)`,
+    `Connection (changing WiFi setting)`,
+    `Connection (changing WiFi settings and frequency)`,
+    `Connection (specified device is not connected)`,
+    `Changing WiFi password`,
+    `Sharing WiFi password`,
+    `Enabling SSID broadcast`,
+    `Disabling SSID broadcast`,
+    `Sharing Telegram bot with login details and video`,
+    `Explaining how to login to Telegram bot`,
+    `Limiting 1 device`,
+    `Limiting # devices`,
+    `Unlimiting 1 device`,
+    `Unlimiting # devices`,
+    `Limiting all network except 1 device`,
+    `Limiting all network except # devices`,
+    `Limiting all network`,
+    `Unlimiting all network`,
+    `Adding PCQ in antenna`,
+    `Adding PCQ in router`,
+    `Blocking 1 device`,
+    `Blocking # devices`,
+    `Unblocking 1 device`,
+    `Unblocking # devices`,
+    `Blocking all network except 1 device`,
+    `Blocking all network except # devices`,
+    `Speed`,
+    `Speed (full usage)`,
+    `Speed (all bandwidth can be received)`,
+    `Speed (all daily traffic is used)`,
+    `Speed (changing WiFi frequency)`,
+    `Speed (changing WiFi setting)`,
+    `Speed (changing WiFi settings and frequency)`,
+    `Speed (the connected device was limited)`,
+    `Speed (rebooting MikroTik router)`,
+    `Speed (rebooting router)`,
+    `Speed (upgrading antenna)`,
+    `Speed (upgrading MikroTik router)`,
+    `Speed (Internal WiFi Device Problem)`,
+    `Enabling MAC filtering (Access List)`,
+    `Enabling MAC filtering (static-only)`,
+    `Disabling MAC filtering (Access List)`,
+    `Disabling MAC filtering (static-only)`,
+    `Adding 1 device to Access List`,
+    `Adding # devices to Access List`,
+    `Adding 1 device to Leases`,
+    `Adding # devices to Leases`,
+    `Signal (cooperating with customer to find better signal)`,
+    `Checking signal`,
+    `Configuration`,
+    `Configuration (antenna)`,
+    `Configuration (MikroTik router)`,
+    `Configuration (router)`,
+    `Online game (PUBG)`,
+    `Online game (other)`,
+    `Checking and explaining customer usage`,
+    `Sharing information`,
+    `Sharing information (expiration and remaining traffic)`,
+    `Sharing information (list of connected devices)`,
+    `Sharing information (list of connected devices utilizing bandwidth)`,
+    `Sharing information (MikroTik router configuration details)`,
+    `Sharing information (MikroTik router login details)`,
+    `Sharing information (router login details)`,
+    `Training (how to login and configure router)`,
+    `Training (how to login and change WiFi password)`,
+    `Training (how to connect to WiFi)`,
+    `Training (how to connect to hidden WiFi)`,
+    `Checking equipment (cable)`,
+    `Checking equipment (router)`,
+    `Checking equipment (router and adapter)`,
+    `Checking equipment (PoE)`,
+    `Checking equipment (PoE and adapter)`,
+    `Checking equipment (antenna)`,
+    `Checking equipment (router, PoE and adapters)`,
+    `Checking equipment (router, PoE, adapters and cable)`,
+    `Setting unfiltered DNS`,
+    `Setting filtered DNS`,
+    `Other (please specify in task description)`,
+    `Signal and CCQ`,
+    `Changing access point`,
+    `Speed`
+  ]
+
+
+
 
   return (
     <div className="content-wrapper">
@@ -666,20 +782,22 @@ export default function NocContractList() {
                               Details
                             </button>
                           </li>
-                          {groups.l1 != true && <li className="nav-item" role="presentation">
-                            <button
-                              className="nav-link"
-                              id="profile-tab"
-                              data-bs-toggle="tab"
-                              data-bs-target="#profile-tab-pane"
-                              type="button"
-                              role="tab"
-                              aria-controls="profile-tab-pane"
-                              aria-selected="false"
-                            >
-                              Members
-                            </button>
-                          </li>}
+                          {groups.l1 != true && (
+                            <li className="nav-item" role="presentation">
+                              <button
+                                className="nav-link"
+                                id="profile-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#profile-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="profile-tab-pane"
+                                aria-selected="false"
+                              >
+                                Members
+                              </button>
+                            </li>
+                          )}
                         </ul>
                         <div className="tab-content">
                           <div
@@ -709,14 +827,27 @@ export default function NocContractList() {
                                     >
                                       <i className="fa-solid fa-pen"></i>
                                     </span>
-                                    <input
+                                    {/* <input
                                       type="text"
                                       name="title"
                                       className="form-control"
+                                      autoComplete="off"
                                       aria-label="Username"
                                       aria-describedby="basic-addon1"
                                       onChange={handlerChange}
-                                    />
+                                    /> */}
+                                    <select
+                                      name="title"
+                                      className="form-control"
+                                      autoComplete="off"
+                                      aria-label="Username"
+                                      aria-describedby="basic-addon1"
+                                      onChange={handlerChange}
+                                    >
+                                      {titles.map((title) => (
+                                      <option value={title}>{title}</option>
+                                      ))}
+                                    </select>
                                   </div>
                                 </div>
                               </div>
@@ -741,14 +872,20 @@ export default function NocContractList() {
                                       onChange={handlerChange}
                                     >
                                       <option selected>Select</option>
-                                      {projecter.map((item) => (
+                                      {projecter.map((item) =>
                                         groups.l1 ? (
-                                          (item.name == 'Troubleshoot') | (item.name == 'Online Support') && <option value={item.id}>{item.name}</option>
-                                        ) :
-                                        <option value={item.id}>
-                                          {item.name}
-                                        </option>
-                                      ))}
+                                          (item.name == "Troubleshoot") |
+                                            (item.name == "Online Support") && (
+                                            <option value={item.id}>
+                                              {item.name}
+                                            </option>
+                                          )
+                                        ) : (
+                                          <option value={item.id}>
+                                            {item.name}
+                                          </option>
+                                        )
+                                      )}
                                     </select>
                                   </div>
 
@@ -884,16 +1021,18 @@ export default function NocContractList() {
                                   </div> */}
                                 </div>
                               </div>
-                              {groups.l1 && <div className="modal-footer">
-                                <button
-                                  className="btn btn-primary"
-                                  type="submit"
-                                  data-bs-dismiss="modal"
-                                  aria-label="Close"
-                                >
-                                  Create Task
-                                </button>
-                              </div>}
+                              {groups.l1 && (
+                                <div className="modal-footer">
+                                  <button
+                                    className="btn btn-primary"
+                                    type="submit"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                  >
+                                    Create Task
+                                  </button>
+                                </div>
+                              )}
                             </form>
 
                             {project.selectedProject == "troubleshoot" && (
@@ -934,28 +1073,25 @@ export default function NocContractList() {
                               </div>
                             </div>
                             <div className="">
-                             <h5>Selected:</h5>
-                             <div>
-                             {
-                               member.map((member) => (
-                                 form.assigned.map((assignedIndex) => (
-                                   member.id == assignedIndex && (<span>{member.name}, </span>)
-                                 ))
-                               ))
-                             }
-                             </div>
+                              <h5>Selected:</h5>
+                              <div>
+                                {member.map((member) =>
+                                  form.assigned.map(
+                                    (assignedIndex) =>
+                                      member.id == assignedIndex && (
+                                        <span>{member.name}, </span>
+                                      )
+                                  )
+                                )}
+                              </div>
                             </div>
-                            <form
-                              onSubmit={createTask}
-                              
-                            >
+                            <form onSubmit={createTask}>
                               <div className="members-columns">
-                              <div className="col-5 membersbox ">
-                                <h4 className="members-text">NOC Stuff</h4>
-                                <ul>
-                                  {member.map(
-                                    (item) =>
-                                      item.groups.includes('NOC Stuff') ? (
+                                <div className="col-5 membersbox ">
+                                  <h4 className="members-text">NOC Stuff</h4>
+                                  <ul>
+                                    {member.map((item) =>
+                                      item.groups.includes("NOC Stuff") ? (
                                         <div key={item.id}>
                                           <li className="d-flex justify-content-between padd">
                                             <div className="list-item">
@@ -970,7 +1106,9 @@ export default function NocContractList() {
                                             </div>
                                             <input
                                               type="checkbox"
-                                              disabled={groups.l1 ? true : false}
+                                              disabled={
+                                                groups.l1 ? true : false
+                                              }
                                               className="mt-3 mr-3"
                                               name="assigned"
                                               value={item.id}
@@ -978,17 +1116,18 @@ export default function NocContractList() {
                                             />
                                           </li>
                                         </div>
-                                      ) : <div></div>
-                                  )}
-                                </ul>
-                              </div>
-                              
-                              <div className="col-5 membersbox ">
-                                <h4 className="members-text">Technicians</h4>
-                                <ul>
-                                  {member.map(
-                                    (item) =>
-                                      item.groups.includes('Technicians') ? (
+                                      ) : (
+                                        <div></div>
+                                      )
+                                    )}
+                                  </ul>
+                                </div>
+
+                                <div className="col-5 membersbox ">
+                                  <h4 className="members-text">Technicians</h4>
+                                  <ul>
+                                    {member.map((item) =>
+                                      item.groups.includes("Technicians") ? (
                                         <div key={item.id}>
                                           <li className="d-flex justify-content-between padd">
                                             <div className="list-item">
@@ -1005,16 +1144,20 @@ export default function NocContractList() {
                                               type="checkbox"
                                               className="mt-3 mr-3"
                                               name="assigned"
-                                              disabled={groups.l1 ? true : false}
+                                              disabled={
+                                                groups.l1 ? true : false
+                                              }
                                               value={item.id}
                                               onChange={handlerChange}
                                             />
                                           </li>
                                         </div>
-                                      ) : <div></div>
-                                  )}
-                                </ul>  
-                              </div>
+                                      ) : (
+                                        <div></div>
+                                      )
+                                    )}
+                                  </ul>
+                                </div>
                               </div>
                               <div className="modal-footer">
                                 <button
