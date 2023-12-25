@@ -525,6 +525,7 @@ export default function NocContractList() {
     `Online game (other)`,
     `Checking and explaining customer usage`,
     `Sharing information`,
+    `Change Wifi SSID`,
     `Sharing information (expiration and remaining traffic)`,
     `Sharing information (list of connected devices)`,
     `Sharing information (list of connected devices utilizing bandwidth)`,
