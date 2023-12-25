@@ -458,7 +458,7 @@ export default function NocAssigned() {
                 checked={assignedFilter.archivedShow}
                 onChange={(e) =>
                   setAssignedFilter({
-                    archivedShow: e.target.value,
+                    archivedShow: e.target.checked,
                     contractId: assignedFilter.contractId,
                     contractNumbere: assignedFilter.contractNumbere,
                   })
