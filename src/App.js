@@ -60,7 +60,7 @@ export default function App() {
           <Route path="test_print" element={<TestPrint />} />
           <Route path="amendment-print" element={<AmedmentPrint />} />
           <Route path="history" element={<History />} />
-          <Route path="/task-manager" element={<TaskManager />} />
+          {/* <Route path="/task-manager" element={<TaskManager />} /> */}
           <Route path="/task-manager/details" element={<TaskDetails />} />
           <Route path="/task-manager/troubleshoot" element={<TroubleshootDetails />} />
           <Route path="/task-manager/online_support" element={<OnlineSupportDetails />} />

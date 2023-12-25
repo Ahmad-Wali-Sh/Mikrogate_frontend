@@ -268,27 +268,27 @@ export default function Header() {
                       <div className="membersbox">
                         <ul className="row">
                           {Members.map((item, num) => (
-                            <li className="d-flex justify-content-between padd">
-                              <div className="list-item">
-                                <img
-                                  src={item.avatar}
-                                  alt="avatar"
-                                  className="avatar pad"
-                                />
-                                <span className="ml-4">{item.name}</span>
-                              </div>
-                              <input
-                                type="checkbox"
-                                className="mt-3 mr-3 inputing"
-                                name="assigned"
-                                {...register(`assigned.${num}`)}
-                                value={item.id}
-                                defaultChecked={
-                                  assign.includes(item.id) ? true : false
-                                }
-                                onChange={handleChange}
+                            (item.groups.includes('L1') || item.groups.includes('Technicians') || item.groups.includes('NOC Stuff')) && <li className="d-flex justify-content-between padd">
+                            <div className="list-item">
+                              <img
+                                src={item.avatar}
+                                alt="avatar"
+                                className="avatar pad"
                               />
-                            </li>
+                              <span className="ml-4">{item.name}</span>
+                            </div>
+                            <input
+                              type="checkbox"
+                              className="mt-3 mr-3 inputing"
+                              name="assigned"
+                              {...register(`assigned.${num}`)}
+                              value={item.id}
+                              defaultChecked={
+                                assign.includes(item.id) ? true : false
+                              }
+                              onChange={handleChange}
+                            />
+                          </li> 
                           ))}
                         </ul>
                         <div className="modal-footer">

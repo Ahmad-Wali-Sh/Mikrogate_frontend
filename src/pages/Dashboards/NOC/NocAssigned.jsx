@@ -39,12 +39,9 @@ export default function NocAssigned() {
   }, [archivedShow, contractId, contractNumbere]);
 
   useEffect(() => {
-    setTimeout(() => {
-      assignedFilter &&
       setArchivedShow(assignedFilter.archivedShow)
       setContractId(assignedFilter.contractId)
       setContractNumbere(assignedFilter.contractNumbere)
-    }, 200);
   }, [])
 
   const [contracts, setContracts] = useState([]);
@@ -108,11 +105,7 @@ export default function NocAssigned() {
       .then((res) => {
         setTag(res.data.results);
       });
-    // setTimeout(() => {
-    //   assignedFilter && setArchivedShow(assignedFilter.archivedShow);
-    //   assignedFilter && setContractId(assignedFilter.contractId);
-    //   assignedFilter && setContractNumbere(assignedFilter.contractNumbere);
-    // }, 1000);
+
   }, []);
 
   const TaskSearchHandle = (data) => {
@@ -148,9 +141,9 @@ export default function NocAssigned() {
     axios
       .get(
         TASK_URL +
-          `?user=&contract__contract_number=${contractNumbere}&project=2&deadline_after=&deadline_before=&tag=&stage=&stage_net=${
-            archivedShow ? "" : 6
-          }&assigned__id=&created_after=&created_before=&contract__contract_id=${contractId}`,
+          `?user=&contract__contract_number=${assignedFilter.contractNumbere}&project=2&deadline_after=&deadline_before=&tag=&stage=&stage_net=${
+            assignedFilter.archivedShow ? "" : 6
+          }&assigned__id=&created_after=&created_before=&contract__contract_id=${assignedFilter.contractId}`,
         {
           headers: {
             Authorization: "Token " + token.user.token,
@@ -159,11 +152,12 @@ export default function NocAssigned() {
       )
       .then((res) => {
         console.log(res);
-        setTasks(res.data.results);
+        setTimeout(() => {
+          setTasks(res.data.results);
+        }, 1000);
       });
-  }, [archivedShow, trigger, contractName, contractId, contractNumbere]);
+  }, [assignedFilter.archivedShow, trigger, assignedFilter.contractName, assignedFilter.contractId, assignedFilter.contractNumbere]);
 
-  console.log(tasks);
 
   useEffect(() => {
     axios
@@ -467,7 +461,7 @@ export default function NocAssigned() {
               <input
                 type="checkbox"
                 style={{ marginLeft: "1rem" }}
-                checked={archivedShow}
+                checked={assignedFilter.archivedShow}
                 onChange={() => setArchivedShow((prev) => !prev)}
               />
               <br></br>
@@ -475,7 +469,7 @@ export default function NocAssigned() {
               <input
                 type="text"
                 style={{ marginLeft: "3.2rem" }}
-                value={contractId}
+                value={assignedFilter.contractId}
                 onChange={(e) => setContractId(e.target.value)}
               />
               <br></br>
@@ -483,7 +477,7 @@ export default function NocAssigned() {
               <input
                 type="text"
                 style={{ marginLeft: "0.5rem" }}
-                value={contractNumbere}
+                value={assignedFilter.contractNumbere}
                 onChange={(e) => setContractNumbere(e.target.value)}
               />
             </div>
