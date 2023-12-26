@@ -18,11 +18,15 @@ export default function Header() {
   const TASK_URL = process.env.REACT_APP_TASK;
   const ME_URL = process.env.REACT_APP_USER;
   const SOCKET_URL = process.env.REACT_APP_SOCKET;
-  const navigate = useNavigate()
+  const STAGE_URL = process.env.REACT_APP_STAGE;
+  const navigate = useNavigate();
+
+  const [trigger, setTrigger] = useState('')
 
   const { register, handleSubmit, reset, watch } = useForm();
 
   const [user, setUser] = React.useState({});
+  const [stages, setStages] = useState([])
   React.useEffect(() => {
     axios
       .get(ME_URL, {
@@ -32,6 +36,16 @@ export default function Header() {
       })
       .then((res) => setUser(res.data));
     console.log(user);
+
+    axios
+    .get(STAGE_URL, {
+      headers: {
+        Authorization: "Token " + token.user.token,
+      },
+    })
+    .then((res) => {
+      setStages(res.data.results);
+    });
   }, []);
 
   const receiveNotification = (e) => {
@@ -55,7 +69,7 @@ export default function Header() {
     },
   });
 
-  const [filter, setFilter] = React.useState('')
+  const [filter, setFilter] = React.useState("");
   console.log(filter);
   const [Members, setMembers] = React.useState([]);
   React.useEffect(() => {
@@ -67,10 +81,12 @@ export default function Header() {
       })
       .then((res) => {
         setMembers(res.data.results.sort());
-      }).catch((e) => console.log(e))
+      })
+      .catch((e) => console.log(e));
   }, [filter]);
 
   const [details, setDetails] = React.useState([]);
+  const [tasker, setTasker] = React.useState([]);
   React.useEffect(() => {
     axios
       .get(TASK_URL + `${data.id}/`, {
@@ -80,8 +96,10 @@ export default function Header() {
       })
       .then((res) => {
         setDetails(res.data.assigned);
+        setTasker(res.data)
+        console.error(res.data);
       });
-  }, []);
+  }, [trigger]);
 
   const submitNotification = (e) => {
     NotificationManager.success("Sent!", "", 2000);
@@ -114,12 +132,12 @@ export default function Header() {
       }));
     }
   };
-  
-    const values = [
-      ...document.querySelectorAll('.inputing:checked')
-    ].map(el => el.value);
-  
-    console.log(values);
+
+  const values = [...document.querySelectorAll(".inputing:checked")].map(
+    (el) => el.value
+  );
+
+  console.log(values);
 
   const assign = details.map((item) => item.id);
 
@@ -127,11 +145,10 @@ export default function Header() {
     e.preventDefault();
     warningNotification();
     const MemberForm = new FormData();
-    if (values[0]){
+    if (values[0]) {
       values.map((item) => MemberForm.append("assigned", item));
-    }
-    else {
-      MemberForm.append("assigned", data.user.id)
+    } else {
+      MemberForm.append("assigned", data.user.id);
     }
 
     try {
@@ -169,21 +186,22 @@ export default function Header() {
     }
   };
 
-  const {previousTasks, setPreviousTasks} = usePreviousTasks()
+  const { previousTasks, setPreviousTasks } = usePreviousTasks();
 
   const DeleteTask = () => {
-    axios.delete(TASK_URL + data.id + '/', {
-      headers: {
-        Authorization: "Token " + token.user.token,
-      }
-    }).then(() => {
-      submitNotification();
-      navigate('/task-manager/noc-tasks')
-      // window.location.reload()
-      setPreviousTasks()
-    })
-  }
-  
+    axios
+      .delete(TASK_URL + data.id + "/", {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then(() => {
+        submitNotification();
+        navigate("/task-manager/noc-tasks");
+        // window.location.reload()
+        setPreviousTasks();
+      });
+  };
 
 
   const groups = useGroup();
@@ -206,25 +224,25 @@ export default function Header() {
           ))}
           {(groups.noc_manager || groups.noc_stuff) && (
             <>
-            <button
-              type="button"
-              name="addTask"
-              className="btn btn-secondary rounded-circle circle-width mx-3"
-              data-bs-toggle="modal"
-              data-bs-target="#membersModal"
+              <button
+                type="button"
+                name="addTask"
+                className="btn btn-secondary rounded-circle circle-width mx-3"
+                data-bs-toggle="modal"
+                data-bs-target="#membersModal"
               >
-              <i className="fa-solid fa-plus "></i>
-            </button>
-            <button
-              type="button"
-              name="addTask"
-              className="btn btn-secondary rounded-circle circle-width mx-3"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteModal"
+                <i className="fa-solid fa-plus "></i>
+              </button>
+              <button
+                type="button"
+                name="addTask"
+                className="btn btn-secondary rounded-circle circle-width mx-3"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteModal"
               >
-              <i className="fa-solid fa-trash"></i>
-            </button>
-              </>
+                <i className="fa-solid fa-trash"></i>
+              </button>
+            </>
           )}
         </ul>
 
@@ -259,7 +277,7 @@ export default function Header() {
                           aria-label="Username"
                           aria-describedby="addon-wrapping"
                           onChange={(e) => {
-                            setFilter(e.target.value)
+                            setFilter(e.target.value);
                           }}
                         />
                       </div>
@@ -267,29 +285,34 @@ export default function Header() {
                     <form onSubmit={MembersSubmit}>
                       <div className="membersbox">
                         <ul className="row">
-                          {Members.map((item, num) => (
-                            (item.groups.includes('L1') || item.groups.includes('Technicians') || item.groups.includes('NOC Stuff')) && <li className="d-flex justify-content-between padd">
-                            <div className="list-item">
-                              <img
-                                src={item.avatar}
-                                alt="avatar"
-                                className="avatar pad"
-                              />
-                              <span className="ml-4">{item.name}</span>
-                            </div>
-                            <input
-                              type="checkbox"
-                              className="mt-3 mr-3 inputing"
-                              name="assigned"
-                              {...register(`assigned.${num}`)}
-                              value={item.id}
-                              defaultChecked={
-                                assign.includes(item.id) ? true : false
-                              }
-                              onChange={handleChange}
-                            />
-                          </li> 
-                          ))}
+                          {Members.map(
+                            (item, num) =>
+                              (item.groups.includes("L1") ||
+                                item.groups.includes("Technicians") ||
+                                item.groups.includes("NOC Stuff")) && (
+                                <li className="d-flex justify-content-between padd">
+                                  <div className="list-item">
+                                    <img
+                                      src={item.avatar}
+                                      alt="avatar"
+                                      className="avatar pad"
+                                    />
+                                    <span className="ml-4">{item.name}</span>
+                                  </div>
+                                  <input
+                                    type="checkbox"
+                                    className="mt-3 mr-3 inputing"
+                                    name="assigned"
+                                    {...register(`assigned.${num}`)}
+                                    value={item.id}
+                                    defaultChecked={
+                                      assign.includes(item.id) ? true : false
+                                    }
+                                    onChange={handleChange}
+                                  />
+                                </li>
+                              )
+                          )}
                         </ul>
                         <div className="modal-footer">
                           <button type="submit" className="btn btn-success">
@@ -313,16 +336,20 @@ export default function Header() {
         >
           <div class="modal-dialog modal-ml">
             <div class="modal-content">
-              <div class="modal-header">Are You Sure Want To Delete This Task?</div>
+              <div class="modal-header">
+                Are You Sure Want To Delete This Task?
+              </div>
               <div className="col-12 p-2 direction-rtl">
-              <button className="btn btn-primary col-2"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-              onClick={() => {
-                DeleteTask()
-              }}
-              >Yes</button>
-              {" "}
+                <button
+                  className="btn btn-primary col-2"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                  onClick={() => {
+                    DeleteTask();
+                  }}
+                >
+                  Yes
+                </button>{" "}
               </div>
             </div>
           </div>
@@ -333,59 +360,35 @@ export default function Header() {
           class="progress-bar bg-success"
           role="progressbar"
           aria-label="Success example"
-          style={{ width: "25%" }}
+          style={{ width: (tasker?.stage?.name == 'Archieved' || tasker?.stage?.name == 'Completed')  ? '100%' : (tasker?.stage?.name == 'Pending' || tasker?.stage?.name == 'In-Progress') ? '50%' : (tasker?.stage?.name == 'New' || tasker?.stage?.name == 'Canceled') ? '0%' : '20%' }}
           aria-defaultValuenow="25"
           aria-defaultValuemin="0"
           aria-defaultValuemax="100"
         ></div>
       </div>
       <ul
-        className="nav nav-pills nav-justified mt-5 mb-5"
+        style={{ display: 'flex', margin: '2rem'}}
         id="mytab"
         role="tablist"
       >
-        <li className="nav-item" role="presentation">
-          {/* <button
-            className="nav-link active"
-            id="task-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#task-tab-pane"
-            type="button"
-            role="tab"
-            aria-controls="task-tab-pane"
-            aria-selected="true"
-          >
-            Task
-          </button> */}
-        </li>
-        <li className="nav-item" role="presentation">
-          {/* <button
-            className="nav-link"
-            id="files-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#files-tab-pane"
-            type="button"
-            role="tab"
-            aria-controls="files-tab-pane"
-            aria-selected="false"
-          >
-            Files
-          </button> */}
-        </li>
-        <li className="nav-item" role="presentation">
-          {/* <button
-            className="nav-link"
-            id="activity-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#activity-tab-pane"
-            type="button"
-            role="tab"
-            aria-controls="activity-tab-pane"
-            aria-selected="false"
-          >
-            Activity
-          </button> */}
-        </li>
+        {stages?.map((stage) => (
+          <div
+          className={`btn ${
+            stage.name == tasker?.stage?.name ? "btn-success" : "btn-secondary"
+          }  m-1`}
+          onClick={() => {
+            const Form = new FormData()
+            Form.append('stage', stage.id)
+            axios.patch(
+              TASK_URL + `${data.id}/`, Form, {headers: {
+                Authorization: "Token " + token.user.token,
+              }}
+            ).then((e)=> {
+              setTrigger(new Date())
+            })
+          }}
+        >{stage.name}</div>
+        ))}
       </ul>
       <div className="tab-content">
         <div
