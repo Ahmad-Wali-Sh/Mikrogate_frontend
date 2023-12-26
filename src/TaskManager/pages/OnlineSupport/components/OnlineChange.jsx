@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
@@ -11,16 +11,18 @@ export default function OnlineChange() {
   const token = useContext(Context);
   const ONLINE_URL = process.env.REACT_APP_ONLINE;
   const TASK_URL = process.env.REACT_APP_TASK;
+  const PROJECT_URL = process.env.REACT_APP_PROJECT;
 
   console.log(data);
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
+  const [projectInput, setProjectInput] = useState();
 
   const ChangeToTroubleshoot = () => {
     const Form = new FormData();
     Form.append("title", title);
-    Form.append("project", 2);
+    Form.append("project", projectInput);
     axios
       .patch(TASK_URL + data.id + "/", Form, {
         headers: {
@@ -29,17 +31,42 @@ export default function OnlineChange() {
       })
       .then((res) => {
         console.log(res.data);
-        axios.get(
-            TASK_URL + res.data.id + '/', { headers: {
-                Authorization: "Token " + token.user.token,
-            }}
-        ).then((res) => {
-            navigate("/task-manager/troubleshoot", {
-              state: { data: res.data },
-            });
-        })
+        axios
+          .get(TASK_URL + res.data.id + "/", {
+            headers: {
+              Authorization: "Token " + token.user.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.project.name == "Troubleshoot")
+              navigate("/task-manager/troubleshoot", {
+                state: { data: res.data },
+              });
+            if (res.data.project.name == "Online Support")
+              navigate("/task-manager/online_support", {
+                state: { data: res.data },
+              });
+            if (res.data.project.name == "CPE")
+              navigate("/task-manager/cpe", {
+                state: { data: res.data },
+              });
+          });
       });
   };
+
+  const [project, setProject] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(PROJECT_URL, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => {
+        setProject(res.data.results);
+      });
+  }, []);
 
   return (
     <>
@@ -55,7 +82,7 @@ export default function OnlineChange() {
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                  Change Task To Troubleshoot
+                  Change Task
                 </h5>
                 <button
                   type="button"
@@ -68,11 +95,11 @@ export default function OnlineChange() {
                 <div className="row mt-2">
                   <label
                     htmlFor="troubleshoot_address"
-                    className="col-sm-2 col-form-label text-muted"
+                    className="col-sm-3 col-form-label text-muted"
                   >
-                    New_Title
+                    New Title
                   </label>
-                  <div className="col-sm-10">
+                  <div className="col-sm-9">
                     <input
                       type="text"
                       name="title"
@@ -83,6 +110,30 @@ export default function OnlineChange() {
                       }}
                       className="form-control"
                     />
+                  </div>
+                  <label
+                    htmlFor="troubleshoot_address"
+                    className="col-sm-3 col-form-label text-muted"
+                  >
+                    New Project
+                  </label>
+                  <div className="col-sm-9">
+                    <select
+                      className="form-control"
+                      onChange={(e) => {
+                        setProjectInput(e.target.value);
+                      }}
+                    >
+                      <option></option>
+                      {project.map(
+                        (pro) =>
+                          pro.name != "Amendment" &&
+                          pro.name != "Installation" &&
+                          pro.name != data.project.name && (
+                            <option value={pro.id}>{pro.name}</option>
+                          )
+                      )}
+                    </select>
                   </div>
                 </div>
                 <div className="modal-footer">
@@ -108,7 +159,7 @@ export default function OnlineChange() {
           data-bs-target="#exampleModal2"
           data-bs-whatever="@mdo"
         >
-          Change To Troubleshoot
+          Change Task
         </button>
       </div>
     </>

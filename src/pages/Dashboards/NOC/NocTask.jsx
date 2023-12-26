@@ -1118,6 +1118,8 @@ export default function NocTask() {
                           ? "/task-manager/troubleshoot"
                           : task.project.name == "Online Support"
                           ? "/task-manager/online_support"
+                          : task.project.name == "CPE"
+                          ? "/task-manager/cpe"
                           : task.project.name == "Change Location"
                           ? "/task-manager/change_location"
                           : task.project.name == "Amendment"

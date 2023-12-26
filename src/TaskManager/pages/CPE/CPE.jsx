@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
-import { Context } from "../../../../context/Context";
+import { Context } from "../../../context/Context";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 
-export default function OnlineSupport() {
+export default function CPE() {
   const location = useLocation();
   const data = location.state?.data;
   const token = useContext(Context);
@@ -140,7 +140,7 @@ export default function OnlineSupport() {
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                  Online Support
+                  CPE
                 </h5>
                 <button
                   type="button"
@@ -262,7 +262,7 @@ export default function OnlineSupport() {
         </form>
       </div>
       <div className="mb-2 mt-2">
-        {(onlineSupport == false && data.project.name == 'Online Support') && (
+        {(onlineSupport == false && data.project.name == 'CPE') && (
           <button
             type="button"
             class="btn btn-primary"
@@ -270,14 +270,14 @@ export default function OnlineSupport() {
             data-bs-target="#exampleModal"
             data-bs-whatever="@mdo"
           >
-            Online Support Data
+            CPE Data
           </button>
         )}
       </div>
       {onlineSupport.map((item) => (
         <>
           <form onSubmit={OnlineSupportUpdate}>
-            <h4>Support Information</h4>
+            <h3>CPE</h3>
             <div className="card text-dark bg-light mb-3">
               <div className="card-header">Task details</div>
               <div className="card-body">

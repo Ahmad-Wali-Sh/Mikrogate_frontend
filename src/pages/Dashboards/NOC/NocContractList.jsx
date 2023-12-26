@@ -384,6 +384,11 @@ export default function NocContractList() {
                 state: { data: res.data },
               });
             }
+            if (res.data.project.name == "CPE") {
+              navigate("/task-manager/cpe", {
+                state: { data: res.data },
+              });
+            }
           });
       });
       submitNotification();
@@ -897,7 +902,7 @@ export default function NocContractList() {
                                       {projecter.map((item) =>
                                         groups.l1 ? (
                                           (item.name == "Troubleshoot") |
-                                            (item.name == "Online Support") && (
+                                            (item.name == "Online Support") | (item.name == 'CPE')&& (
                                             <option value={item.id}>
                                               {item.name}
                                             </option>

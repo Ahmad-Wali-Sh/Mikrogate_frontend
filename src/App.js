@@ -35,6 +35,9 @@ import Welcome from "./pages/Welcome";
 import ContractTaskHistory from "./pages/ContractTaskHistory";
 import NocAssigned from "./pages/Dashboards/NOC/NocAssigned";
 import NocAssignedDetails from "./TaskManager/pages/NOCassigned/NOCassignedDetails";
+import CPEDetails from "./TaskManager/pages/CPE/CPEDetails";
+import CPETasks from "./pages/Dashboards/NOC/CPETasks";
+import OnlineSupportTasks from "./pages/Dashboards/NOC/OnlineSupportTasks";
 
 export default function App() {
   const { user } = useContext(Context);
@@ -67,10 +70,13 @@ export default function App() {
           <Route path="/task-manager/noc_assigned_details" element={<NocAssignedDetails />} />
           <Route path="/task-manager/change_location" element={<ChangeLocationDetails />} />
           <Route path="/task-manager/amendment" element={<AmendmentDetails />} />
+          <Route path="/task-manager/cpe" element={<CPEDetails />} />
           <Route path="/task-manager/noc" element={<NocDashboard />} />
           <Route path="/task-manager/noc-contracts" element={<NocContractList />} />
           <Route path="/task-manager/noc-tasks" element={<NocTask />} />
           <Route path="/task-manager/noc-assigned" element={<NocAssigned />} />
+          <Route path="/task-manager/cpe-tasks" element={<CPETasks />} />
+          <Route path="/task-manager/online-support-tasks" element={<OnlineSupportTasks />} />
           <Route path="/task-manager/technicians" element={<TechniciansDashboard />} />
         </Routes>
         {user ? <Footer /> : ""}

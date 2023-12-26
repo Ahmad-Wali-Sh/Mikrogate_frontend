@@ -7,6 +7,7 @@ import Switch from "../../components/Switch";
 import CheckList from "../../components/CheckList";
 import Link_Details from "../../components/Link_Details";
 import OnlineSupport from "../OnlineSupport/components/OnlineSupport";
+import OnlineChange from "../OnlineSupport/components/OnlineChange";
 
 
 const TroubleshootDetails = (props) => {
@@ -18,6 +19,7 @@ const TroubleshootDetails = (props) => {
       <div className="content">
       <div className="col-10 mt-5 m-auto">
         <Header />
+        <OnlineChange />
         <OnlineSupport />
         <Troubleshoot />
         <Link_Details data={[data]} id={data.id} />

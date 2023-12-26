@@ -133,7 +133,7 @@ export default function Troubleshoot() {
 
   return (
     <>
-      {singleTroubleshootTask == false && (groups.noc_manager || groups.noc_stuff || groups.l1) && (
+      {singleTroubleshootTask == false && data.project.name == 'Troubleshoot' && (groups.noc_manager || groups.noc_stuff || groups.l1) && (
         <div className="mb-2 mt-2">
           <button
             type="button"

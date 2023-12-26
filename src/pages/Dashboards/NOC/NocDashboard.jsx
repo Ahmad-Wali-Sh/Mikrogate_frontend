@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useContext } from "react";
-import { Context } from '../../../context/Context';
+import { Context } from "../../../context/Context";
 import { Link } from "react-router-dom";
 import { usePreviousTasks, useTaskListFilter } from "../../../components/State";
 
@@ -16,9 +16,8 @@ export default function NocDashboard() {
 
   // FOR NEW Rendering
 
-
   useEffect(() => {
-    document.title = 'NOC Dashboard';
+    document.title = "NOC Dashboard";
     const fetchContracts = async () => {
       const res = await axios.get(url + `?contract-status=1`, {
         headers: {
@@ -27,8 +26,8 @@ export default function NocDashboard() {
       });
       // console.log(res.data)
       setContracts(res.data.results);
-      setNextUrl(res.data.next)
-      setPreviousUrl(res.data.previous)
+      setNextUrl(res.data.next);
+      setPreviousUrl(res.data.previous);
       setNewCon(res.data.count);
     };
     fetchContracts();
@@ -50,21 +49,22 @@ export default function NocDashboard() {
   });
 
   const paginationHandler = (url) => {
-    try{
-      axios.get(url, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        }
-      }).then( res => {
-        setNextUrl(res.data.next)
-        setPreviousUrl(res.data.previous)
-        setContracts(res.data.results)
-
-    })
-    }catch(err){
-      console.log(err)
+    try {
+      axios
+        .get(url, {
+          headers: {
+            Authorization: "Token " + token.user.token,
+          },
+        })
+        .then((res) => {
+          setNextUrl(res.data.next);
+          setPreviousUrl(res.data.previous);
+          setContracts(res.data.results);
+        });
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
 
   const { taskFilter, setTaskFilter } = useTaskListFilter();
   const { previousTasks, setPreviousTasks } = usePreviousTasks();
@@ -92,13 +92,13 @@ export default function NocDashboard() {
         <section className="content">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-lg-4 col-6">
+              <div className="col-lg-6 col-6">
                 <Link
                   to={{
                     pathname: "/task-manager/noc-contracts",
                   }}
                 >
-                  <div className="small-box bg-success" >
+                  <div className="small-box bg-success">
                     <div className="inner">
                       <h3>5</h3>
                       <p>Contract List</p>
@@ -112,17 +112,20 @@ export default function NocDashboard() {
                   </div>
                 </Link>
               </div>
-              <div className="col-lg-4 col-6">
+              <div className="col-lg-6 col-6">
                 <Link
                   to={{
                     pathname: "/task-manager/noc-tasks",
                   }}
                 >
-                  <div className="small-box bg-info" onClick={() => {
-                    setTaskFilter()
-                    setPreviousTasks()
-                  }}>
-                  <div className="inner">
+                  <div
+                    className="small-box bg-primary"
+                    onClick={() => {
+                      setTaskFilter();
+                      setPreviousTasks();
+                    }}
+                  >
+                    <div className="inner">
                       <h3>5</h3>
                       <p>Tasks List</p>
                     </div>
@@ -135,20 +138,21 @@ export default function NocDashboard() {
                   </div>
                 </Link>
               </div>
-              
-              <div className="col-lg-4 col-6">
+            </div>
+            <div className="row">
+            <div className="col-lg-4 col-6">
               <Link
-                  to={{
-                    pathname: "/task-manager/noc-assigned",
-                  }}
-                >
+                to={{
+                  pathname: "/task-manager/noc-assigned",
+                }}
+              >
                 <div className="small-box bg-warning">
                   <div className="inner">
                     <h3>
                       {expired}
                       <sup style={{ fontSize: "14px" }}>expired</sup>
                     </h3>
-                    <p>Reporting</p>
+                    <p>Troubleshoot Tasks</p>
                   </div>
                   <div className="icon">
                     <i className="fa-light fa-business-time"></i>
@@ -157,9 +161,56 @@ export default function NocDashboard() {
                     More info <i className="fas fa-arrow-circle-right"></i>
                   </a>
                 </div>
-                </Link>
-              </div>
+              </Link>
             </div>
+            <div className="col-lg-4 col-6">
+              <Link
+                to={{
+                  pathname: "/task-manager/online-support-tasks",
+                }}
+              >
+                <div className="small-box bg-secondary">
+                  <div className="inner">
+                    <h3>
+                      {expired}
+                      <sup style={{ fontSize: "14px" }}>expired</sup>
+                    </h3>
+                    <p>Online Support Tasks</p>
+                  </div>
+                  <div className="icon">
+                    <i className="fa-light fa-business-time"></i>
+                  </div>
+                  <a className="small-box-footer">
+                    More info <i className="fas fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+              </Link>
+            </div>
+            <div className="col-lg-4 col-6">
+              <Link
+                to={{
+                  pathname: "/task-manager/cpe-tasks",
+                }}
+              >
+                <div className="small-box bg-info">
+                  <div className="inner">
+                    <h3>
+                      {expired}
+                      <sup style={{ fontSize: "14px" }}>expired</sup>
+                    </h3>
+                    <p>CPE Tasks</p>
+                  </div>
+                  <div className="icon">
+                    <i className="fa-light fa-business-time"></i>
+                  </div>
+                  <a className="small-box-footer">
+                    More info <i className="fas fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+              </Link>
+            </div>
+            </div>
+            
             <br />
             <br />
             <div className="row">
@@ -195,7 +246,6 @@ export default function NocDashboard() {
                               {contract.contact}
                             </td>
                             <td>{contract.address}</td>
-
                           </tr>
                         ))}
                       </tbody>
@@ -206,8 +256,7 @@ export default function NocDashboard() {
             </div>
           </div>
           <div>
-            <div className="float-left mt-5 ml-2">
-            </div>
+            <div className="float-left mt-5 ml-2"></div>
             <nav className="Page navigation example mt-5">
               <ul className="pagination justify-content-center">
                 {previousUrl && (

@@ -1,12 +1,12 @@
 import React from "react";
 import LogMessage from "../../components/LogMessage";
 import Header from "../../components/Header";
-import OnlineSupport from "./components/OnlineSupport";
 import { useLocation } from "react-router-dom";
-import OnlineChange from "./components/OnlineChange";
+import CPE from "./CPE";
 import Troubleshoot from "../Troubleshoot/components/Troubleshoot";
+import OnlineChange from "../OnlineSupport/components/OnlineChange";
 
-export default function OnlineSupportDetails() {
+export default function CPEDetails() {
   const location = useLocation();
   const data = location.state?.data;
 
@@ -18,7 +18,7 @@ export default function OnlineSupportDetails() {
           <Header />
           <OnlineChange />
           <Troubleshoot />
-          <OnlineSupport />
+          <CPE />
           <LogMessage data={[data]} id={data.id} />
         </div>
         </div>
