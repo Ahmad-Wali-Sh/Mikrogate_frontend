@@ -138,7 +138,7 @@ useEffect(() => {
    ProjectReturn('Online Support')?.[0]?.id && axios
     .get(
       TASK_URL +
-        `?user=&contract__contract_number=&project=${ProjectReturn('CPE')?.[0]?.id}&deadline_after=&deadline_before=&tag=&stage=&stage_net=6
+        `?user=&contract__contract_number=&project=${ProjectReturn('Online Support')?.[0]?.id}&deadline_after=&deadline_before=&tag=&stage=&stage_net=6
         &assigned__id=&created_after=&created_before=&contract__contract_id=
         `,
       {
