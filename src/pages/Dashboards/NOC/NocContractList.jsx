@@ -551,6 +551,8 @@ export default function NocContractList() {
     `Checking equipment (router, PoE, adapters and cable)`,
     `Setting unfiltered DNS`,
     `Setting filtered DNS`,
+    `Reinstallation`,
+    `Active Package`,
     `Other (please specify in task description)`,
     `Signal and CCQ`,
     `Changing access point`,
