@@ -38,6 +38,7 @@ import NocAssignedDetails from "./TaskManager/pages/NOCassigned/NOCassignedDetai
 import CPEDetails from "./TaskManager/pages/CPE/CPEDetails";
 import CPETasks from "./pages/Dashboards/NOC/CPETasks";
 import OnlineSupportTasks from "./pages/Dashboards/NOC/OnlineSupportTasks";
+import AmendmentTasks from "./pages/Dashboards/NOC/AmendmentTasks";
 
 export default function App() {
   const { user } = useContext(Context);
@@ -77,6 +78,7 @@ export default function App() {
           <Route path="/task-manager/noc-assigned" element={<NocAssigned />} />
           <Route path="/task-manager/cpe-tasks" element={<CPETasks />} />
           <Route path="/task-manager/online-support-tasks" element={<OnlineSupportTasks />} />
+          <Route path="/task-manager/amendment-tasks" element={<AmendmentTasks />} />
           <Route path="/task-manager/technicians" element={<TechniciansDashboard />} />
         </Routes>
         {user ? <Footer /> : ""}

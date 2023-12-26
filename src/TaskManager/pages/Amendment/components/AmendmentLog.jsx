@@ -8,9 +8,9 @@ import NotificationManager from "react-notifications/lib/NotificationManager";
 
 function AmendmentLog(props) {
   const AMENDMENT_URL = process.env.REACT_APP_AMENDMENT;
-  const ME_URL = process.env.REACT_APP_USER
   const token = useContext(Context);
   const [user, setUser] = React.useState({});
+  const ME_URL = process.env.REACT_APP_USER
   React.useEffect(() => {
     axios
       .get(ME_URL, {

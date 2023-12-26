@@ -69,6 +69,111 @@ export default function NocDashboard() {
   const { taskFilter, setTaskFilter } = useTaskListFilter();
   const { previousTasks, setPreviousTasks } = usePreviousTasks();
 
+
+  const PROJECT_URL = process.env.REACT_APP_PROJECT;
+  const TASK_URL = process.env.REACT_APP_TASK;
+  const [projecter, setProjecter] = useState([]);
+  const [amendmentCount, setAmendmentCount] = useState(0)
+  const [cpeCount, setCpeCount] = useState(0)
+  const [onlineSupportCount, setOnlineSupportCount] = useState(0)
+  const [troubleshootCount, setTroubleshootCount] = useState(0)
+
+  const ProjectReturn = (name) => {
+    const value = projecter.filter((project) => {
+        return project.name == name ? project.id : ''
+    })
+    return value
+}
+
+ useEffect(() => {
+  axios
+  .get(PROJECT_URL, {
+    headers: {
+      Authorization: "Token " + token.user.token,
+    },
+  })
+  .then((res) => {
+    setProjecter(res.data.results);
+  });
+ }, [])
+
+
+useEffect(() => {
+   ProjectReturn('Amendment')?.[0]?.id && axios
+    .get(
+      TASK_URL +
+        `?user=&contract__contract_number=&project=${ProjectReturn('Amendment')?.[0]?.id}&deadline_after=&deadline_before=&tag=&stage=&stage_net=6
+        &assigned__id=&created_after=&created_before=&contract__contract_id=
+        `,
+      {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      }
+    )
+    .then((res) => {
+      console.log(res);
+      setAmendmentCount(res.data.count);
+    })
+    .catch((e) => console.log(e));
+
+   ProjectReturn('CPE')?.[0]?.id && axios
+    .get(
+      TASK_URL +
+        `?user=&contract__contract_number=&project=${ProjectReturn('CPE')?.[0]?.id}&deadline_after=&deadline_before=&tag=&stage=&stage_net=6
+        &assigned__id=&created_after=&created_before=&contract__contract_id=
+        `,
+      {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      }
+    )
+    .then((res) => {
+      console.log(res);
+      setCpeCount(res.data.count);
+    })
+    .catch((e) => console.log(e));
+
+   ProjectReturn('Online Support')?.[0]?.id && axios
+    .get(
+      TASK_URL +
+        `?user=&contract__contract_number=&project=${ProjectReturn('CPE')?.[0]?.id}&deadline_after=&deadline_before=&tag=&stage=&stage_net=6
+        &assigned__id=&created_after=&created_before=&contract__contract_id=
+        `,
+      {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      }
+    )
+    .then((res) => {
+      console.log(res);
+      setOnlineSupportCount(res.data.count);
+    })
+    .catch((e) => console.log(e));
+
+   ProjectReturn('Troubleshoot')?.[0]?.id && axios
+    .get(
+      TASK_URL +
+        `?user=&contract__contract_number=&project=${ProjectReturn('Troubleshoot')?.[0]?.id}&deadline_after=&deadline_before=&tag=&stage=&stage_net=6
+        &assigned__id=&created_after=&created_before=&contract__contract_id=
+        `,
+      {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      }
+    )
+    .then((res) => {
+      console.log(res);
+      setTroubleshootCount(res.data.count);
+    })
+    .catch((e) => console.log(e));
+
+
+}, [projecter]);
+
   return (
     <div>
       <div className="content-wrapper">
@@ -100,7 +205,7 @@ export default function NocDashboard() {
                 >
                   <div className="small-box bg-success">
                     <div className="inner">
-                      <h3>5</h3>
+                      <h3>+100</h3>
                       <p>Contract List</p>
                     </div>
                     <div className="icon">
@@ -126,7 +231,7 @@ export default function NocDashboard() {
                     }}
                   >
                     <div className="inner">
-                      <h3>5</h3>
+                      <h3>+100</h3>
                       <p>Tasks List</p>
                     </div>
                     <div className="icon">
@@ -140,7 +245,7 @@ export default function NocDashboard() {
               </div>
             </div>
             <div className="row">
-            <div className="col-lg-4 col-6">
+            <div className="col-lg-3 col-6">
               <Link
                 to={{
                   pathname: "/task-manager/noc-assigned",
@@ -149,8 +254,8 @@ export default function NocDashboard() {
                 <div className="small-box bg-warning">
                   <div className="inner">
                     <h3>
-                      {expired}
-                      <sup style={{ fontSize: "14px" }}>expired</sup>
+                      {troubleshootCount}
+                      <sup style={{ fontSize: "14px" }}></sup>
                     </h3>
                     <p>Troubleshoot Tasks</p>
                   </div>
@@ -163,7 +268,7 @@ export default function NocDashboard() {
                 </div>
               </Link>
             </div>
-            <div className="col-lg-4 col-6">
+            <div className="col-lg-3 col-6">
               <Link
                 to={{
                   pathname: "/task-manager/online-support-tasks",
@@ -172,8 +277,8 @@ export default function NocDashboard() {
                 <div className="small-box bg-secondary">
                   <div className="inner">
                     <h3>
-                      {expired}
-                      <sup style={{ fontSize: "14px" }}>expired</sup>
+                      {onlineSupportCount}
+                      <sup style={{ fontSize: "14px" }}></sup>
                     </h3>
                     <p>Online Support Tasks</p>
                   </div>
@@ -186,7 +291,7 @@ export default function NocDashboard() {
                 </div>
               </Link>
             </div>
-            <div className="col-lg-4 col-6">
+            <div className="col-lg-3 col-6">
               <Link
                 to={{
                   pathname: "/task-manager/cpe-tasks",
@@ -195,10 +300,33 @@ export default function NocDashboard() {
                 <div className="small-box bg-info">
                   <div className="inner">
                     <h3>
-                      {expired}
-                      <sup style={{ fontSize: "14px" }}>expired</sup>
+                      {cpeCount}
+                      <sup style={{ fontSize: "14px" }}></sup>
                     </h3>
                     <p>CPE Tasks</p>
+                  </div>
+                  <div className="icon">
+                    <i className="fa-light fa-business-time"></i>
+                  </div>
+                  <a className="small-box-footer">
+                    More info <i className="fas fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+              </Link>
+            </div>
+            <div className="col-lg-3 col-6">
+              <Link
+                to={{
+                  pathname: "/task-manager/amendment-tasks",
+                }}
+              >
+                <div className="small-box bg-light">
+                  <div className="inner">
+                    <h3>
+                      {amendmentCount}
+                      <sup style={{ fontSize: "14px" }}></sup>
+                    </h3>
+                    <p>Amendment Tasks</p>
                   </div>
                   <div className="icon">
                     <i className="fa-light fa-business-time"></i>

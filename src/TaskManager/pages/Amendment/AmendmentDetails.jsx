@@ -4,6 +4,7 @@ import Amendment from "./components/Amendment";
 import AmendmentLog from "./components/AmendmentLog";
 import AmendmentNotes from "./components/AmendmentNotes";
 import { useLocation } from "react-router-dom";
+import LogMessage from "../../components/LogMessage";
 
 const AmendmentDetails = () => {
   const location = useLocation();
@@ -16,7 +17,7 @@ const AmendmentDetails = () => {
           <div className="col-10 m-auto">
             <Header />
             <Amendment />
-            <div
+            {/* <div
               className="card overflow-auto myScroll"
               style={{ maxHeight: "90vh" }}
             >
@@ -24,7 +25,8 @@ const AmendmentDetails = () => {
             </div>
             <div className="card-footer">
               <AmendmentLog id={data.id} />
-            </div>
+            </div> */}
+            <LogMessage data={[data]} id={data.id} />
           </div>
         </div>
       </div>
