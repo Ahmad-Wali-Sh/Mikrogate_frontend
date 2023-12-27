@@ -504,6 +504,37 @@ export default function Header() {
                 </div>
               </div>
               <div className="col-1 col-sm-2">
+                <label htmlFor="tag" className="col-form-label text-muted">
+                Organization
+                </label>
+              </div>
+              <div className="col-5 col-sm-4">
+                <div className="input-group">
+                  {/* <select
+                    className="form-select"
+                    id="tag"
+                    disabled
+                    aria-label="Default select example"
+                  >
+                    <option defaultValue={data.tag.id}>{data.tag.name}</option>
+                    <option>Normal</option>
+                    <option defaultValue="1">Urgent</option>
+                  </select> */}
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Nothing To show"
+                    aria-label="Username"
+                    disabled
+                    aria-describedby="basic-addon1"
+                    value={data.contract.organization}
+                  />
+                </div>
+              </div>
+            </div>
+            
+            <div className="row">
+            <div className="col-1 col-sm-2">
                 <label htmlFor="project" className="col-form-label text-muted">
                   Customer ID
                 </label>
@@ -524,8 +555,6 @@ export default function Header() {
                   />
                 </div>
               </div>
-            </div>
-            <div className="row">
               <div className="col-1 col-sm-2">
                 <label htmlFor="deadline" className="col-form-label text-muted">
                   Deadline
@@ -542,28 +571,7 @@ export default function Header() {
                   />
                 </div>
               </div>
-              <div className="col-1 col-sm-2">
-                <label htmlFor="tag" className="col-form-label text-muted">
-                  Tag
-                </label>
-              </div>
-              <div className="col-5 col-sm-4">
-                <div className="input-group">
-                  <label className="input-group-text" htmlFor="tag">
-                    <i className="fa-solid fa-tag"></i>
-                  </label>
-                  <select
-                    className="form-select"
-                    id="tag"
-                    disabled
-                    aria-label="Default select example"
-                  >
-                    <option defaultValue={data.tag.id}>{data.tag.name}</option>
-                    <option>Normal</option>
-                    <option defaultValue="1">Urgent</option>
-                  </select>
-                </div>
-              </div>
+              
             </div>
             <div className="row">
               <div className="col-1 col-sm-2">
@@ -594,7 +602,7 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.package?.price ? data.contract.package?.price : 'Nothing to Show'}
+                    value={data.contract.package?.price ? data.contract.package?.price + ' AF' : 'Nothing to Show'}
                   />
                 </div>
               </div>
@@ -618,7 +626,7 @@ export default function Header() {
               </div>
               <div className="col-1 col-sm-2">
                 <label htmlFor="tag" className="col-form-label text-muted">
-                  Router
+                  Condition
                 </label>
               </div>
               <div className="col-5 col-sm-4">
@@ -628,7 +636,75 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.router?.router__name ? data.contract.router?.router__name : 'Nothing to Show'}
+                    value={data.contract.antenna?.condition ? data.contract.antenna?.condition : 'Nothing to Show'}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-1 col-sm-2">
+                <label htmlFor="deadline" className="col-form-label text-muted">
+                  Router
+                </label>
+              </div>
+              <div className="col-3 col-sm-4">
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    name="deadline"
+                    disabled
+                    className="form-control"
+                    value={data.contract.router?.router__name ? data.contract.router?.router__name : 'Nothing To Show'}
+                  />
+                </div>
+              </div>
+              <div className="col-1 col-sm-2">
+                <label htmlFor="tag" className="col-form-label text-muted">
+                  Condition
+                </label>
+              </div>
+              <div className="col-5 col-sm-4">
+                <div className="input-group">
+                  <input
+                    type="text"
+                    name="deadline"
+                    disabled
+                    className="form-control"
+                    value={data.contract.router?.condition ? data.contract.router?.condition : 'Nothing to Show'}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-1 col-sm-2">
+                <label htmlFor="deadline" className="col-form-label text-muted">
+                  Contact
+                </label>
+              </div>
+              <div className="col-3 col-sm-4">
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    name="deadline"
+                    disabled
+                    className="form-control"
+                    value={data.contract.contact ? data.contract.contact : 'Nothing To Show'}
+                  />
+                </div>
+              </div>
+              <div className="col-1 col-sm-2">
+                <label htmlFor="tag" className="col-form-label text-muted">
+                  Address
+                </label>
+              </div>
+              <div className="col-5 col-sm-4">
+                <div className="input-group">
+                  <input
+                    type="text"
+                    name="deadline"
+                    disabled
+                    className="form-control"
+                    value={data.contract.address ? data.contract.address : 'Nothing to Show'}
                   />
                 </div>
               </div>
