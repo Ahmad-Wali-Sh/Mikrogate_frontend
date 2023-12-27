@@ -495,7 +495,7 @@ export default function Header() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Nothing to Show"
+                    placeholder=""
                     aria-label="Username"
                     disabled
                     aria-describedby="basic-addon1"
@@ -523,7 +523,7 @@ export default function Header() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Nothing To show"
+                    placeholder=""
                     aria-label="Username"
                     disabled
                     aria-describedby="basic-addon1"
@@ -547,7 +547,7 @@ export default function Header() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Nothing To show"
+                    placeholder=""
                     aria-label="Username"
                     disabled
                     aria-describedby="basic-addon1"
@@ -602,7 +602,7 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.package?.price ? data.contract.package?.price + ' AF' : 'Nothing to Show'}
+                    value={data.contract.package?.price ? data.contract.package?.price + ' AF' : ''}
                   />
                 </div>
               </div>
@@ -620,7 +620,7 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.antenna?.antenna__name ? data.contract.antenna?.antenna__name : 'Nothing To Show'}
+                    value={data.contract.antenna?.antenna__name ? data.contract.antenna?.antenna__name : ''}
                   />
                 </div>
               </div>
@@ -636,7 +636,7 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.antenna?.condition ? data.contract.antenna?.condition : 'Nothing to Show'}
+                    value={data.contract.antenna?.condition ? data.contract.antenna?.condition : ''}
                   />
                 </div>
               </div>
@@ -654,7 +654,7 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.router?.router__name ? data.contract.router?.router__name : 'Nothing To Show'}
+                    value={data.contract.router?.router__name ? data.contract.router?.router__name : ''}
                   />
                 </div>
               </div>
@@ -670,7 +670,7 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.router?.condition ? data.contract.router?.condition : 'Nothing to Show'}
+                    value={data.contract.router?.condition ? data.contract.router?.condition : ''}
                   />
                 </div>
               </div>
@@ -688,7 +688,7 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.contact ? data.contract.contact : 'Nothing To Show'}
+                    value={data.contract.contact ? data.contract.contact : ''}
                   />
                 </div>
               </div>
@@ -704,7 +704,7 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.address ? data.contract.address : 'Nothing to Show'}
+                    value={data.contract.address ? data.contract.address : ''}
                   />
                 </div>
               </div>
