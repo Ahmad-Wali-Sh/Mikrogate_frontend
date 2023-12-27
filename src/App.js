@@ -39,6 +39,7 @@ import CPEDetails from "./TaskManager/pages/CPE/CPEDetails";
 import CPETasks from "./pages/Dashboards/NOC/CPETasks";
 import OnlineSupportTasks from "./pages/Dashboards/NOC/OnlineSupportTasks";
 import AmendmentTasks from "./pages/Dashboards/NOC/AmendmentTasks";
+import SingleContractNoc from "./pages/SingleContractNoc";
 
 export default function App() {
   const { user } = useContext(Context);
@@ -59,6 +60,7 @@ export default function App() {
           <Route path="/antenna" element={<Antenna />} />
           <Route path="/new-contract" element={<NewContract />} />
           <Route path="/contract-details" element={<SingleContract />} />
+          <Route path="/contract-details-noc" element={<SingleContractNoc />} />
           <Route path="/contract-details-tasks" element={<ContractTaskHistory />} />
           <Route path="/search" element={<Search />} />
           <Route path="test_print" element={<TestPrint />} />

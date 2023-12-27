@@ -865,13 +865,16 @@ export default function NocContractList() {
                                       <option value={title}></option>
                                       ))}
                                     </datalist> */}
-                                    <input list="browsers" type="text"
+                                    <input
+                                      list="browsers"
+                                      type="text"
                                       name="title"
                                       className="form-control"
                                       onChange={handlerChange}
                                       autoComplete="off"
                                       aria-label="Username"
-                                      aria-describedby="basic-addon1" />
+                                      aria-describedby="basic-addon1"
+                                    />
                                     <datalist id="browsers">
                                       {titles.map((title) => (
                                         <option value={title}></option>
@@ -902,21 +905,27 @@ export default function NocContractList() {
                                     >
                                       <option selected>Select</option>
                                       {projecter.map((item) =>
-                                        (groups.sales_stuff && groups.l1)? (
-                                          (item.name == "Troubleshoot") | (item.name == 'Amendment') && (
-                                            <option value={item.id}>
-                                              {item.name}
-                                            </option>
-                                          )
-                                        ) : groups.l1  ? (item.name == "Troubleshoot") | (item.name == 'CPE') | (item.name == 'Online Support')&& (
-                                          <option value={item.id}>
-                                            {item.name}
-                                          </option>
-                                        ) : item.name != 'Amendment' && (
-                                          <option value={item.id}>
-                                            {item.name}
-                                          </option>
-                                        )
+                                        groups.sales_stuff && groups.l1
+                                          ? (item.name == "Troubleshoot") |
+                                              (item.name == "Amendment") && (
+                                              <option value={item.id}>
+                                                {item.name}
+                                              </option>
+                                            )
+                                          : groups.l1
+                                          ? (item.name == "Troubleshoot") |
+                                              (item.name == "CPE") |
+                                              (item.name ==
+                                                "Online Support") && (
+                                              <option value={item.id}>
+                                                {item.name}
+                                              </option>
+                                            )
+                                          : item.name != "Amendment" && (
+                                              <option value={item.id}>
+                                                {item.name}
+                                              </option>
+                                            )
                                       )}
                                     </select>
                                   </div>
@@ -1368,8 +1377,17 @@ export default function NocContractList() {
                               }}
                               state={{ contract: contract }}
                             >
-                              <i className="fa-solid fa-folder-open"></i>
+                              <i className="fa-solid fa-history"></i>
                             </Link>
+                            {(groups.noc_stuff || groups.noc_manager) && <Link
+                              className="btn btn-info btn-sm mr-1"
+                              to={{
+                                pathname: "/contract-details-noc",
+                              }}
+                              state={{ contract: contract }}
+                            >
+                              <i className="fa-solid fa-folder-open"></i>
+                            </Link>}
                             <button
                               type="button"
                               name="addTask"
