@@ -21,12 +21,12 @@ export default function Header() {
   const STAGE_URL = process.env.REACT_APP_STAGE;
   const navigate = useNavigate();
 
-  const [trigger, setTrigger] = useState('')
+  const [trigger, setTrigger] = useState("");
 
   const { register, handleSubmit, reset, watch } = useForm();
 
   const [user, setUser] = React.useState({});
-  const [stages, setStages] = useState([])
+  const [stages, setStages] = useState([]);
   React.useEffect(() => {
     axios
       .get(ME_URL, {
@@ -38,14 +38,14 @@ export default function Header() {
     console.log(user);
 
     axios
-    .get(STAGE_URL, {
-      headers: {
-        Authorization: "Token " + token.user.token,
-      },
-    })
-    .then((res) => {
-      setStages(res.data.results);
-    });
+      .get(STAGE_URL, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => {
+        setStages(res.data.results);
+      });
   }, []);
 
   const receiveNotification = (e) => {
@@ -96,7 +96,7 @@ export default function Header() {
       })
       .then((res) => {
         setDetails(res.data.assigned);
-        setTasker(res.data)
+        setTasker(res.data);
         console.error(res.data);
       });
   }, [trigger]);
@@ -202,7 +202,6 @@ export default function Header() {
         setPreviousTasks();
       });
   };
-
 
   const groups = useGroup();
   return (
@@ -360,35 +359,80 @@ export default function Header() {
           class="progress-bar bg-success"
           role="progressbar"
           aria-label="Success example"
-          style={{ width: (tasker?.stage?.name == 'Archieved' || tasker?.stage?.name == 'Completed')  ? '100%' : (tasker?.stage?.name == 'Pending' || tasker?.stage?.name == 'In-Progress') ? '50%' : (tasker?.stage?.name == 'New' || tasker?.stage?.name == 'Canceled') ? '0%' : '20%' }}
+          style={{
+            width:
+              tasker?.stage?.name == "Archieved" ||
+              tasker?.stage?.name == "Completed"
+                ? "100%"
+                : tasker?.stage?.name == "Pending" ||
+                  tasker?.stage?.name == "In-Progress"
+                ? "50%"
+                : tasker?.stage?.name == "New" ||
+                  tasker?.stage?.name == "Canceled"
+                ? "0%"
+                : "20%",
+          }}
           aria-defaultValuenow="25"
           aria-defaultValuemin="0"
           aria-defaultValuemax="100"
         ></div>
       </div>
-      <ul
-        style={{ display: 'flex', margin: '2rem'}}
-        id="mytab"
-        role="tablist"
-      >
-        {stages?.map((stage) => (
-          <div
-          className={`btn ${
-            stage.name == tasker?.stage?.name ? "btn-success" : "btn-secondary"
-          }  m-1`}
-          onClick={() => {
-            const Form = new FormData()
-            Form.append('stage', stage.id)
-            axios.patch(
-              TASK_URL + `${data.id}/`, Form, {headers: {
-                Authorization: "Token " + token.user.token,
+      <ul style={{ display: "flex", margin: "2rem" }} id="mytab" role="tablist">
+        {stages?.map((stage) =>
+          groups.l1 || groups.technician ? (
+            (stage.name == "Pending" ||
+              stage.name == "Completed" ||
+              stage.name == "In-Progress" ||
+              stage.name == "Canceled" ||
+              stage.name == "New") && (
+              <div
+                className={`btn ${
+                  stage.name == tasker?.stage?.name
+                    ? "btn-success"
+                    : "btn-secondary"
+                }  m-1`}
+                onClick={() => {
+                  const Form = new FormData();
+                  Form.append("stage", stage.id);
+                  axios
+                    .patch(TASK_URL + `${data.id}/`, Form, {
+                      headers: {
+                        Authorization: "Token " + token.user.token,
+                      },
+                    })
+                    .then((e) => {
+                      setTrigger(new Date());
+                    });
+                }}
+              >
+                {stage.name}
+              </div>
+            )
+          ) : (
+            <div
+              className={`btn ${
+                stage.name == tasker?.stage?.name
+                  ? "btn-success"
+                  : "btn-secondary"
+              }  m-1`}
+              onClick={() => {
+                const Form = new FormData();
+                Form.append("stage", stage.id);
+                axios
+                  .patch(TASK_URL + `${data.id}/`, Form, {
+                    headers: {
+                      Authorization: "Token " + token.user.token,
+                    },
+                  })
+                  .then((e) => {
+                    setTrigger(new Date());
+                  });
               }}
-            ).then((e)=> {
-              setTrigger(new Date())
-            })
-          }}
-        >{stage.name}</div>
-        ))}
+            >
+              {stage.name}
+            </div>
+          )
+        )}
       </ul>
       <div className="tab-content">
         <div
