@@ -565,6 +565,74 @@ export default function Header() {
                 </div>
               </div>
             </div>
+            <div className="row">
+              <div className="col-1 col-sm-2">
+                <label htmlFor="deadline" className="col-form-label text-muted">
+                  Package
+                </label>
+              </div>
+              <div className="col-3 col-sm-4">
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    name="deadline"
+                    disabled
+                    className="form-control"
+                    value={data.contract.package?.package__name ? data.contract.package?.package__name : 'Nohting to Show'}
+                  />
+                </div>
+              </div>
+              <div className="col-1 col-sm-2">
+                <label htmlFor="tag" className="col-form-label text-muted">
+                  Price
+                </label>
+              </div>
+              <div className="col-5 col-sm-4">
+                <div className="input-group">
+                  <input
+                    type="text"
+                    name="deadline"
+                    disabled
+                    className="form-control"
+                    value={data.contract.package?.price ? data.contract.package?.price : 'Nothing to Show'}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-1 col-sm-2">
+                <label htmlFor="deadline" className="col-form-label text-muted">
+                  Antenna
+                </label>
+              </div>
+              <div className="col-3 col-sm-4">
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    name="deadline"
+                    disabled
+                    className="form-control"
+                    value={data.contract.antenna?.antenna__name ? data.contract.antenna?.antenna__name : 'Nothing To Show'}
+                  />
+                </div>
+              </div>
+              <div className="col-1 col-sm-2">
+                <label htmlFor="tag" className="col-form-label text-muted">
+                  Router
+                </label>
+              </div>
+              <div className="col-5 col-sm-4">
+                <div className="input-group">
+                  <input
+                    type="text"
+                    name="deadline"
+                    disabled
+                    className="form-control"
+                    value={data.contract.router?.router__name ? data.contract.router?.router__name : 'Nothing to Show'}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
