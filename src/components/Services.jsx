@@ -6,7 +6,7 @@ import { Context } from '../context/Context';
 export const useSocket = () => {
     const [socket, setSocket] = useState(null);
     useEffect(() => {
-        const newSocket = io('http://localhost:4001/');
+        const newSocket = io('http://10.80.200.2:4001/');
 
         newSocket.on('connect', () => {
             console.log('Connected to WebSocket');

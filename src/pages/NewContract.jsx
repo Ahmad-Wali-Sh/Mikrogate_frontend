@@ -135,7 +135,7 @@ export default class NewContract extends Component {
     this.stepper1Node = document.querySelector("#stepper1");
     this.stepper = new Stepper(document.querySelector("#stepper1"));
 
-    this.socket = io('http://localhost:4001/')
+    this.socket = io('http://10.80.200.2:4001/')
 
     axios
       .get(this.packages_url + "?available=true", {
