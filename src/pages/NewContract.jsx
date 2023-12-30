@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import Stepper from "bs-stepper";
 import axios from "axios";
 import { NotificationManager } from "react-notifications";
+import { SendNotificationinClass } from "../components/Services";
+import io from 'socket.io-client';
 
 export default class NewContract extends Component {
   constructor(props) {
@@ -133,6 +135,8 @@ export default class NewContract extends Component {
     this.stepper1Node = document.querySelector("#stepper1");
     this.stepper = new Stepper(document.querySelector("#stepper1"));
 
+    this.socket = io('http://localhost:4001/')
+
     axios
       .get(this.packages_url + "?available=true", {
         headers: {
@@ -227,6 +231,33 @@ export default class NewContract extends Component {
     this.setState({ sales_id: this.state.sales_agent.id });
   }
 
+  componentWillUnmount() {
+    // Disconnect the socket when the component is unmounted
+    if (this.socket) {
+      this.socket.disconnect();
+    }
+  }
+
+  emitMessage = (content, contractId, to, assigned) => {
+    // Assuming 'this.socket' is declared in your class
+    if (this.socket) {
+      this.socket.emit('message', 'New Contract Arrived');
+    }
+    const API_URL = this.user_url?.slice(0, -8);
+    const Form = new FormData();
+    Form.append("content", content);
+    Form.append("contract", contractId);
+    assigned && Form.append('user_ids', assigned)
+    axios
+      .post(API_URL + "notification_create_" + to, Form, {
+        headers: {
+          Authorization: "Token " + this.token,
+        },
+      })
+      .then(() => {
+        console.log("Successful.");
+      }).catch((e) => console.error(e))
+  };
   copyToClip = (e) => {
     // const grandTotal = (model, object) => {
     //   for (let i = 0; i <= model.length; i += 1) {
@@ -348,7 +379,9 @@ export default class NewContract extends Component {
           Authorization: "Token " + this.token,
           "Content-Type": "multipart/form-data",
         },
-      });
+      }).then((res) => {
+        this.emitMessage('New Contract Arrived', res.data.id, 'noc')
+      })
       console.log(contractResponse);
       NotificationManager.success("Personal Info Added Successfully", "", 2000);
       // this.setState({message: contractResponse.statusText})

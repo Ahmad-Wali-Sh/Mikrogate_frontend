@@ -32,6 +32,7 @@
     "react-scripts": "^5.0.1",
     "react-use-websocket": "^4.2.0",
     "rsuite": "^5.15.2",
+    "socket.io-client": "^4.7.2",
     "web-vitals": "^2.1.4",
     "websocket": "^1.0.34",
     "zustand": "^4.4.7"

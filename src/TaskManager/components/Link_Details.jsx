@@ -4,6 +4,7 @@ import { Context } from "../../context/Context";
 import { useContext } from "react";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { useGroup } from "../../components/useUser";
+import { useRealtime } from "../../components/Services";
 
 export default function Link_Details(props) {
   const [LinkDetailsData, setLinkDetailsData] = React.useState([]);
@@ -57,6 +58,8 @@ export default function Link_Details(props) {
   };
   console.log(linkdetails.additional_details);
 
+  const { NotifySubmit } = useRealtime()
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     warningNotification();
@@ -85,7 +88,9 @@ export default function Link_Details(props) {
         headers: {
           Authorization: "Token " + token.user.token,
         },
-      });
+      }).then((res) => {
+        NotifySubmit('Link Details Report Submited.', res.data.task, 'noc')
+      })
       setTrigger((prev) => prev + 1);
       console.log(response);
       {

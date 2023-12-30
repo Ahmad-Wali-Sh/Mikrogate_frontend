@@ -6,6 +6,7 @@ import { Context } from "../../context/Context";
 import { useContext } from "react";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { useGroup } from "../../components/useUser";
+import { useRealtime } from "../../components/Services";
 
 export default function CheckList() {
   const url = process.env.REACT_APP_USER;
@@ -74,6 +75,8 @@ export default function CheckList() {
     });
   };
 
+  const { NotifySubmit } = useRealtime()
+
   const checklistSubmit = async (event) => {
     event.preventDefault();
     warningNotification();
@@ -94,7 +97,9 @@ export default function CheckList() {
         headers: {
           Authorization: "Token " + token.user.token,
         },
-      });
+      }).then((res) => {
+        NotifySubmit('Check List Report Submited.', res.data.task, 'noc')
+      })
       console.log(respone);
       setTrigger((prev) => prev + 1);
       submitNotification();

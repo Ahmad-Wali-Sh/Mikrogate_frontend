@@ -10,7 +10,7 @@ export const useGroup = () => {
     const fetchUser = async () => {
       const res = await axios.get(url, {
         headers: {
-          Authorization: "Token " + token.user.token,
+          Authorization: "Token " + token?.user?.token,
         },
       });
       setUser(res.data);

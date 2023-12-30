@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import CheckList from "../../../components/CheckList";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { useGroup } from "../../../../components/useUser";
+import { useRealtime } from "../../../../components/Services";
 
 export default function Troubleshoot() {
   const location = useLocation();
@@ -97,6 +98,8 @@ export default function Troubleshoot() {
     }
   };
   
+  const { NotifySubmit} = useRealtime()
+
   function TroubleshootSubmit(e) {
     e.preventDefault();
     warningNotification();
@@ -118,8 +121,10 @@ export default function Troubleshoot() {
         headers: {
           Authorization: "Token " + token.user.token,
         },
-      });
-      console.log(response);
+      }).then((res) => {
+        NotifySubmit('Troubleshoot Data Arrived.', res.data?.task, 'noc')
+      })
+      console.error(response);
       submitNotification();
       setTimeout(() => setTrigger(prev => prev + 1), 200)
       setTrigger(prev => prev + 1)

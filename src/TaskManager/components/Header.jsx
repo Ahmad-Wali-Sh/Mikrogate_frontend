@@ -8,6 +8,7 @@ import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { useGroup } from "../../components/useUser";
 import { useForm } from "react-hook-form";
 import { usePreviousTasks } from "../../components/State";
+import { useRealtime } from "../../components/Services";
 
 export default function Header() {
   const location = useLocation();
@@ -141,6 +142,8 @@ export default function Header() {
 
   const assign = details.map((item) => item.id);
 
+  const { NotifySubmit } = useRealtime()
+
   const MembersSubmit = async (e) => {
     e.preventDefault();
     warningNotification();
@@ -159,13 +162,9 @@ export default function Header() {
         headers: {
           Authorization: "Token " + token.user.token,
         },
-      });
-      console.log(response);
-      sendJsonMessage({
-        message: response.data.assigned.filter(function (item) {
-          return item !== user.id;
-        }),
-      });
+      }).then((res) => {
+          NotifySubmit('You are being assigned to a task.', data.id, 'users', res.data.assigned)
+      })
       submitNotification();
       axios
         .get(TASK_URL + `${data.id}/`, {

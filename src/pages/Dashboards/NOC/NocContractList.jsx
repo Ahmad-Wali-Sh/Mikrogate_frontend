@@ -15,10 +15,13 @@ import {
   useContractFilter,
   usePreviousContracts,
 } from "../../../components/State";
+import { useRealtime } from '../../../components/Services'
 
 export default function NocContractList() {
   const contractUrl = process.env.REACT_APP_NEW_CONTRACT;
   const token = useContext(Context);
+
+  const { NotifySubmit } = useRealtime()
 
   const CONTRACT = process.env.REACT_APP_NEW_CONTRACT;
   const STAGE_URL = process.env.REACT_APP_STAGE;
@@ -356,6 +359,10 @@ export default function NocContractList() {
             },
           })
           .then((res) => {
+            res.data.assigned?.map((assigne) => {
+              NotifySubmit('You are being assigned to a task.', res.data.id, 'users', assigne.id)
+            })
+            // NotifySubmit(`${res.data.project.name} Task Created.`, res.data.id, (res.data.project.name == 'Amendment' || res.data.project.name == 'Troubleshoot' || res.data.project.name == 'CPE' || res.data.project.name == 'Online Support') ? 'noc' : '')
             if (res.data.project.name == "Installation") {
               navigate("/task-manager/details", { state: { data: res.data } });
             }
@@ -1379,15 +1386,17 @@ export default function NocContractList() {
                             >
                               <i className="fa-solid fa-history"></i>
                             </Link>
-                            {(groups.noc_stuff || groups.noc_manager) && <Link
-                              className="btn btn-info btn-sm mr-1"
-                              to={{
-                                pathname: "/contract-details-noc",
-                              }}
-                              state={{ contract: contract }}
-                            >
-                              <i className="fa-solid fa-folder-open"></i>
-                            </Link>}
+                            {(groups.noc_stuff || groups.noc_manager) && (
+                              <Link
+                                className="btn btn-info btn-sm mr-1"
+                                to={{
+                                  pathname: "/contract-details-noc",
+                                }}
+                                state={{ contract: contract }}
+                              >
+                                <i className="fa-solid fa-folder-open"></i>
+                              </Link>
+                            )}
                             <button
                               type="button"
                               name="addTask"

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { Context } from "../../../context/Context";
 import NotificationManager from "react-notifications/lib/NotificationManager";
+import { useRealtime } from "../../../components/Services";
 
 export default function CPE() {
   const location = useLocation();
@@ -94,7 +95,8 @@ export default function CPE() {
       [event.target.name]: event.target.value,
     });
   }
-  console.log(OnlineSupportData);
+
+  const { NotifySubmit } = useRealtime()
 
   const OnlineSupportSubmit = async (e) => {
     e.preventDefault();
@@ -120,11 +122,14 @@ export default function CPE() {
       console.log(response);
       submitNotification();
       setTrigger((prev) => prev + 1);
+      NotifySubmit('CPE Task Created', response.data.task, 'noc')
     } catch (err) {
       console.log(err.message);
       errorNotification();
     }
   };
+
+
 
   return (
     <>

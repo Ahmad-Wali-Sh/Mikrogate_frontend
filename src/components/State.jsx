@@ -20,3 +20,7 @@ export const useAssignedFilter = create((set) => ({
   assignedFilter: [],
   setAssignedFilter: (state) => set(() => ({ assignedFilter: state })),
 }));
+export const useMessage = create((set) => ({
+  message: [],
+  setMessage: (state) => set(() => ({ message: state })),
+}));

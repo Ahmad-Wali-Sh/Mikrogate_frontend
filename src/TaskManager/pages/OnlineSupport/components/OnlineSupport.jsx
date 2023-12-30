@@ -4,6 +4,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { Context } from "../../../../context/Context";
 import NotificationManager from "react-notifications/lib/NotificationManager";
+import { useRealtime } from "../../../../components/Services";
 
 export default function OnlineSupport() {
   const location = useLocation();
@@ -56,7 +57,6 @@ export default function OnlineSupport() {
     });
     console.log(OnlineSupportData);
   }
-
   const OnlineSupportUpdate = async (e) => {
     e.preventDefault();
     warningNotification();
@@ -69,7 +69,6 @@ export default function OnlineSupport() {
       );
     });
 
-    console.log(count);
     try {
       const response = await axios({
         method: "PATCH",
@@ -78,7 +77,7 @@ export default function OnlineSupport() {
         headers: {
           Authorization: "Token " + token.user.token,
         },
-      });
+      })
       console.log(response);
       submitNotification();
       setTrigger((prev) => prev + 1);
@@ -116,7 +115,7 @@ export default function OnlineSupport() {
         headers: {
           Authorization: "Token " + token.user.token,
         },
-      });
+      })
       console.log(response);
       submitNotification();
       setTrigger((prev) => prev + 1);

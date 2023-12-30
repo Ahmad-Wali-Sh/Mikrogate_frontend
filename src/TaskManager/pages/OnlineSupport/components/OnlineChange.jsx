@@ -4,6 +4,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { Context } from "../../../../context/Context";
 import NotificationManager from "react-notifications/lib/NotificationManager";
+import { useRealtime } from "../../../../components/Services";
 
 export default function OnlineChange() {
   const location = useLocation();
@@ -18,6 +19,7 @@ export default function OnlineChange() {
 
   const [title, setTitle] = useState("");
   const [projectInput, setProjectInput] = useState();
+  const { NotifySubmit } = useRealtime()
 
   const ChangeToTroubleshoot = () => {
     const Form = new FormData();
@@ -31,6 +33,7 @@ export default function OnlineChange() {
       })
       .then((res) => {
         console.log(res.data);
+        NotifySubmit('Task Changed.', data.id, 'noc')
         axios
           .get(TASK_URL + res.data.id + "/", {
             headers: {

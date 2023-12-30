@@ -4,6 +4,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { Context } from "../../../../context/Context";
 import NotificationManager from "react-notifications/lib/NotificationManager";
+import { useRealtime } from "../../../../components/Services";
 
 export default function Amendment() {
   const location = useLocation();
@@ -36,6 +37,8 @@ export default function Amendment() {
     description: "",
     task: data.id,
   });
+
+  const { NotifySubmit } = useRealtime()
 
   const submitNotification = (e) => {
     NotificationManager.success("Sent!", "", 2000);
@@ -134,11 +137,12 @@ export default function Amendment() {
           Authorization: "Token " + token.user.token,
         },
       });
-      console.log(response);
+      console.error(response);
       submitNotification();
       setTrigger((prev) => prev + 1);
+      NotifySubmit(`Amendment Task Created.`, response.data.task,'noc')
     } catch (err) {
-      console.log(err.message);
+      console.error(err.message);
       errorNotification();
     }
   };
@@ -157,7 +161,7 @@ export default function Amendment() {
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                  Online Support
+                  Amendment
                 </h5>
                 <button
                   type="button"
