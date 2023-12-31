@@ -3,7 +3,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { NotificationManager } from "react-notifications";
 import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../context/Context";
-import { useRealtime, useSocket } from "./Services";
+import { useSocket } from "./Services";
 
 export default function Header() {
   const USER_API = process.env.REACT_APP_USER;
@@ -12,11 +12,11 @@ export default function Header() {
   const API_URL = USER_API.slice(0, -8);
   const prevLength = useRef();
 
-  const [audio] = useState(new Audio('../../dist/audio/notification.wav'))
+  const [audio] = useState(new Audio("../../dist/audio/notification.wav"));
 
   const PlayAudio = () => {
-    audio.play()
-  } 
+    audio.play();
+  };
 
   const receiveNotification = (e) => {
     NotificationManager.info("New Data Recieved", "Check Notifications!", 5000);
@@ -61,9 +61,7 @@ export default function Header() {
     };
   });
 
-  const { NotifySubmit } = useRealtime()
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   useEffect(() => {
     axios
@@ -73,8 +71,6 @@ export default function Header() {
         },
       })
       .then((res) => {
-        console.log(res.data.results);
-
         setNotifications(res.data.results);
       })
       .catch((e) => console.log(e));
@@ -85,7 +81,7 @@ export default function Header() {
     prevLength.current = notifications.length;
     if (notifications.length > notifLength) {
       receiveNotification("Wow it is working.");
-      PlayAudio()
+      PlayAudio();
       setNotifLength(notifications.length);
     }
   }, [notifications, notifLength]);
@@ -98,36 +94,43 @@ export default function Header() {
 
   const calculateTimeAgo = (timestamper) => {
     const now = new Date();
-    const timestamp = new Date(timestamper)
+    const timestamp = new Date(timestamper);
     const seconds = Math.floor((now - timestamp) / 1000);
 
     if (seconds < 60) {
-      return `${seconds} sec${seconds !== 1 ? 's' : ''} ago`;
+      return `${seconds} sec${seconds !== 1 ? "s" : ""} ago`;
     } else if (seconds < 3600) {
       const minutes = Math.floor(seconds / 60);
-      return `${minutes} min${minutes !== 1 ? 's' : ''} ago`;
+      return `${minutes} min${minutes !== 1 ? "s" : ""} ago`;
     } else if (seconds < 86400) {
       const hours = Math.floor(seconds / 3600);
-      return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+      return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
     } else {
       const days = Math.floor(seconds / 86400);
-      return `${days} day${days !== 1 ? 's' : ''} ago`;
+      return `${days} day${days !== 1 ? "s" : ""} ago`;
     }
   };
 
   const DeleteNotify = (id) => {
-      axios.delete(API_URL + "taskmanager/user-notification/" + id + '/', { headers: {
-        Authorization: "Token " + token.user.token,
-      }}).then((e) => setTriggerNotify(new Date()))
-  }
+    axios
+      .delete(API_URL + "taskmanager/user-notification/" + id + "/", {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((e) => setTriggerNotify(new Date()));
+  };
 
   const GoToTask = (taskId) => {
-    taskId && axios.get(
-        TASK_URL + taskId + '/', {headers: {
+    taskId &&
+      axios
+        .get(TASK_URL + taskId + "/", {
+          headers: {
             Authorization: "Token " + token.user.token,
-        }}
-    ).then((res) => {
-        if (res.data.project.name == "Installation") {
+          },
+        })
+        .then((res) => {
+          if (res.data.project.name == "Installation") {
             navigate("/task-manager/details", { state: { data: res.data } });
           }
           if (res.data.project.name == "Troubleshoot") {
@@ -160,18 +163,23 @@ export default function Header() {
               state: { data: res.data },
             });
           }
-    }).catch((e) => console.log(e))
-  }
+        })
+        .catch((e) => console.log(e));
+  };
 
   const GoToContract = (contractId) => {
-    axios.get(CONTRACT + contractId + '/', { headers: {
-      Authorization: "Token " + token.user.token,
-    }}).then((res) => {
-      navigate('/contract-details-noc', {
-        state: { contract: res.data}
+    axios
+      .get(CONTRACT + contractId + "/", {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
       })
-    })
-  }
+      .then((res) => {
+        navigate("/contract-details-noc", {
+          state: { contract: res.data },
+        });
+      });
+  };
   return (
     <div>
       <nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -214,9 +222,11 @@ export default function Header() {
               onBlurCapture={() => setDropdown(false)}
             >
               <i className="fa fa-bell"></i>
-              {notifications.length != 0 && <span className="badge badge-danger navbar-badge notification-badge">
-                {notifications.length != 0 && notifications.length}
-              </span>}
+              {notifications.length != 0 && (
+                <span className="badge badge-danger navbar-badge notification-badge">
+                  {notifications.length != 0 && notifications.length}
+                </span>
+              )}
             </a>
             <div
               className={` ${
@@ -229,12 +239,17 @@ export default function Header() {
               {notifications?.map((notify) => (
                 <>
                   <div className="dropdown-divider"></div>
-                  <div className="dropdown-item row" onClick={() => {
-                     notify.notification_detail?.task_id && GoToTask(notify.notification_detail?.task_id)
-                     notify.notification_detail?.contract_id && GoToContract(notify.notification_detail?.contract_id)
-                      setDropdown(false)
-                      DeleteNotify(notify.id)
-                  }}>
+                  <div
+                    className="dropdown-item row"
+                    onClick={() => {
+                      notify.notification_detail?.task_id &&
+                        GoToTask(notify.notification_detail?.task_id);
+                      notify.notification_detail?.contract_id &&
+                        GoToContract(notify.notification_detail?.contract_id);
+                      setDropdown(false);
+                      DeleteNotify(notify.id);
+                    }}
+                  >
                     <div className="col-12">
                       <div className="row">
                         <i className="fas fa-users col-2"></i>
@@ -242,7 +257,9 @@ export default function Header() {
                           {notify.notification_detail?.sender__name}
                         </small>
                         <small className="col-3 text-muted text-sm">
-                          {calculateTimeAgo(notify.notification_detail?.timestamp)}
+                          {calculateTimeAgo(
+                            notify.notification_detail?.timestamp
+                          )}
                         </small>
                       </div>
                       <div className="row">
@@ -252,7 +269,12 @@ export default function Header() {
                       </div>
                       <div className="row">
                         <small className="notification-text col-4 text-muted col-2">
-                          Id: {notify.notification_detail?.task__contract__contract_id ? notify.notification_detail?.task__contract__contract_id : notify.notification_detail?.contract__contract_id}
+                          Id:{" "}
+                          {notify.notification_detail
+                            ?.task__contract__contract_id
+                            ? notify.notification_detail
+                                ?.task__contract__contract_id
+                            : notify.notification_detail?.contract__contract_id}
                         </small>
                         <small className="notification-text col-8 text-muted col-2">
                           Title: {notify.notification_detail?.task__title}

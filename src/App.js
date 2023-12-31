@@ -2,7 +2,6 @@ import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import "./pages/cont.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
 import Packages from "./pages/Packages";
 import Footer from "./components/Footer";
 import NewContract from "./pages/NewContract";
@@ -21,7 +20,6 @@ import TestWebSocket from "./pages/Test/TestWebSocket";
 import History from "./pages/History";
 
 // TASK-MANAGER
-import TaskManager from "./TaskManager/pages/LandingPage/TaskManager";
 import TaskDetails from "./TaskManager/pages/Installation/TaskDetails";
 import TroubleshootDetails from "./TaskManager/pages/Troubleshoot/TroubleshootDetails";
 import OnlineSupportDetails from "./TaskManager/pages/OnlineSupport/OnlineSupportDetails";
@@ -66,7 +64,6 @@ export default function App() {
           <Route path="test_print" element={<TestPrint />} />
           <Route path="amendment-print" element={<AmedmentPrint />} />
           <Route path="history" element={<History />} />
-          {/* <Route path="/task-manager" element={<TaskManager />} /> */}
           <Route path="/task-manager/details" element={<TaskDetails />} />
           <Route path="/task-manager/troubleshoot" element={<TroubleshootDetails />} />
           <Route path="/task-manager/online_support" element={<OnlineSupportDetails />} />

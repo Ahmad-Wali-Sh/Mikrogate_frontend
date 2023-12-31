@@ -20,12 +20,10 @@ export default function Sidebar() {
     fetchUser();
   }, []);
 
-  const groups = useGroup()
+  const groups = useGroup();
   return (
     <div>
-      {/* <!-- Main Sidebar Container --> */}
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
-        {/* <!-- Brand Logo --> */}
         <a href="index3.html" className="brand-link">
           <img
             src="./dist/img/mg.png"
@@ -35,12 +33,8 @@ export default function Sidebar() {
           />
           <span className="brand-text font-weight-light">MIKROGATE</span>
         </a>
-
-        {/* <!-- Sidebar --> */}
         <div className="sidebar">
-          {/* <!-- Sidebar user panel (optional) --> */}
           <div className="user-panel mt-3 pb-3 mb-3 d-flex">
-            {/* {user.map((item) => ( */}
             <>
               <div className="image">
                 <img
@@ -55,12 +49,7 @@ export default function Sidebar() {
                 </a>
               </div>
             </>
-            {/* ))} */}
           </div>
-
-          {/* <!-- SidebarSearch Form --> */}
-
-          {/* <!-- Sidebar Menu --> */}
           <nav className="mt-2" role="navigation">
             <ul
               className="nav nav-pills nav-sidebar flex-column"
@@ -68,31 +57,6 @@ export default function Sidebar() {
               role="navigation"
               data-accordion="true"
             >
-              {(groups.noc_stuff || groups.noc_manager) && (
-                <li className="nav-item menu-close">
-                <div className="nav-link">
-                  <i className="nav-icon fa-solid fa-gauge"></i>
-                  <p>
-                    Administration
-                    <i className="fas fa-angle-left right"></i>
-                  </p>
-                </div>
-                <ul className="nav nav-treeview">
-                  <li className="nav-item">
-                    <Link to="/task-manager/noc" className="nav-link">
-                      <i className="fa-solid fa-people-roof nav-icon"></i>
-                      <p>Admin</p>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/task-manager/noc" className="nav-link">
-                      <i className="fa-solid fa-people-roof nav-icon"></i>
-                      <p>Manager</p>
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              )}
               {(groups.noc_stuff || groups.noc_manager || groups.l1) && (
                 <li
                   className={`nav-item ${
@@ -101,7 +65,7 @@ export default function Sidebar() {
                       : groups.noc_manager == true
                       ? "menu-open"
                       : groups.l1 == true
-                      ? 'menu-open'
+                      ? "menu-open"
                       : ""
                   }`}
                 >
@@ -225,12 +189,6 @@ export default function Sidebar() {
                     </p>
                   </div>
                   <ul className="nav nav-treeview">
-                    {/* <li className="nav-item">
-                      <Link to="/task-manager" className="nav-link">
-                        <i className="fa-solid fa-clipboard-user nav-icon"></i>
-                        <p>Task Manager</p>
-                      </Link>
-                    </li> */}
                     <li className="nav-item ">
                       <Link to="/task-manager/technicians" className="nav-link">
                         <i className="fa-solid fa-clipboard-user nav-icon"></i>
@@ -242,9 +200,7 @@ export default function Sidebar() {
               )}
             </ul>
           </nav>
-          {/* <!-- /.sidebar-menu --> */}
         </div>
-        {/* <!-- /.sidebar --> */}
       </aside>
     </div>
   );
