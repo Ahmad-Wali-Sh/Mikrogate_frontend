@@ -221,17 +221,7 @@ export default function TechniciansDashboard() {
   console.log(find);
   console.log(installtionCofirm);
 
-  React.useEffect(() => {
-    axios
-      .get(TASK_URL, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => {
-        setContenter(res.data.results);
-      });
-  }, []);
+
 
   const [stage, setStage] = useState([]);
 
@@ -352,38 +342,11 @@ export default function TechniciansDashboard() {
     }
   };
 
-  const [content, setContent] = useState([]);
-
-  const [search, setSearch] = React.useState({
-    search: "",
-  });
-
-  function SearchHandle(e) {
-    setSearch({ [e.target.name]: e.target.value });
-  }
-
-  const SearchSubmit = async (e) => {
-    e.preventDefault();
-    warningNotification();
-    const SearchForm = new FormData();
-    SearchForm.append("search", search.search);
-
-    axios
-      .get(TASK_URL + `?contracts=${search.search}`, {
-        headers: {
-          Authorization: "Token " + token.user.token,
-        },
-      })
-      .then((res) => {
-        setContenter(res.data.results);
-        searchSuccessNotification();
-      });
-  };
 
   useEffect(()=> {
       axios
     .get(
-      TASK_URL + `?assigned__id=${user.id}`,
+      TASK_URL + `?assigned__id=${user.id}&ordering=-created`,
       {
         headers: {
           Authorization: "Token " + token.user.token,

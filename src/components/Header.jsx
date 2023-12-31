@@ -250,6 +250,14 @@ export default function Header() {
                           {notify.notification_detail?.content}
                         </small>
                       </div>
+                      <div className="row">
+                        <small className="notification-text col-4 text-muted col-2">
+                          Id: {notify.notification_detail?.task__contract__contract_id ? notify.notification_detail?.task__contract__contract_id : notify.notification_detail?.contract__contract_id}
+                        </small>
+                        <small className="notification-text col-8 text-muted col-2">
+                          Title: {notify.notification_detail?.task__title}
+                        </small>
+                      </div>
                     </div>
                   </div>
                 </>
