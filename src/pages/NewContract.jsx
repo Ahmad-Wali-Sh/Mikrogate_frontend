@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import Stepper from "bs-stepper";
 import axios from "axios";
 import { NotificationManager } from "react-notifications";
-import { SendNotificationinClass } from "../components/Services";
 import io from 'socket.io-client';
 
 export default class NewContract extends Component {
@@ -379,16 +378,14 @@ export default class NewContract extends Component {
           Authorization: "Token " + this.token,
           "Content-Type": "multipart/form-data",
         },
-      }).then((res) => {
-        this.emitMessage('New Contract Arrived', res.data.id, 'noc')
       })
-      console.log(contractResponse);
+      this.emitMessage('New Contract Arrived', contractResponse?.data?.id, 'noc')
       NotificationManager.success("Personal Info Added Successfully", "", 2000);
       // this.setState({message: contractResponse.statusText})
 
       if (this.state.band != "") {
         const contractPackageData = new FormData();
-        contractPackageData.append("contract", contractResponse.data.id);
+        contractPackageData.append("contract", contractResponse?.data?.id);
         contractPackageData.append("package", this.state.band);
         contractPackageData.append("price", this.state.band_price);
 

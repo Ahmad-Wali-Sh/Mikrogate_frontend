@@ -12,6 +12,12 @@ export default function Header() {
   const API_URL = USER_API.slice(0, -8);
   const prevLength = useRef();
 
+  const [audio] = useState(new Audio('../../dist/audio/notification.wav'))
+
+  const PlayAudio = () => {
+    audio.play()
+  } 
+
   const receiveNotification = (e) => {
     NotificationManager.info("New Data Recieved", "Check Notifications!", 5000);
   };
@@ -79,6 +85,7 @@ export default function Header() {
     prevLength.current = notifications.length;
     if (notifications.length > notifLength) {
       receiveNotification("Wow it is working.");
+      PlayAudio()
       setNotifLength(notifications.length);
     }
   }, [notifications, notifLength]);
