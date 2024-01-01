@@ -27,7 +27,10 @@ export const useGroup = () => {
     admin: "",
     manager: "",
     l1: "",
+    finance: "",
   });
+
+  console.log(user)
   const checkForGroup = () => {
     if (user?.groups?.includes("NOC Stuff")) {
       setGroups((prev) => ({
@@ -63,6 +66,12 @@ export const useGroup = () => {
       setGroups((prev) => ({
         ...prev,
         l1: true,
+      }));
+    }
+    if (user?.groups?.includes("Finance")) {
+      setGroups((prev) => ({
+        ...prev,
+        finance: true,
       }));
     }
   };

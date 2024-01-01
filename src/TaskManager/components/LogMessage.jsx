@@ -85,7 +85,7 @@ export default function LogMessage(props) {
   });
 
   console.log(changes);
-  const [installationConfirm, setInstallationConfirm] = useState([])
+  const [installationConfirm, setInstallationConfirm] = useState([]);
 
   const [user, setUser] = React.useState({});
   React.useEffect(() => {
@@ -99,13 +99,14 @@ export default function LogMessage(props) {
     console.log(user);
 
     axios
-    .get(INSTALL_URL + '?task=' + props.id, {
-      headers: {
-        Authorization: "Token " + token.user.token,
-      },
-    }).then((res) => {
-      setInstallationConfirm(res.data.results)
-    })
+      .get(INSTALL_URL + "?task=" + props.id, {
+        headers: {
+          Authorization: "Token " + token.user.token,
+        },
+      })
+      .then((res) => {
+        setInstallationConfirm(res.data.results);
+      });
 
     axios
       .get(USERS_URL, {
@@ -225,44 +226,48 @@ export default function LogMessage(props) {
               </div>
             </form> */}
             <div className="content">
-              {installationConfirm && installationConfirm.map((install) => (
-                <div className="card-body shadow p-3 mb-2 bg-body rounded col-12">
-                <div className="row align-items-center ">
-                  <div className="col-1 col-md-1 col-sm-2 ">
-                    <label
-                      htmlFor="log_note"
-                      className="col-form-label"
-                    >
-                      <img
-                        src={install.user.avatar}
-                        alt=""
-                        className="avatar"
-                      />
-                    </label>
+              {installationConfirm &&
+                installationConfirm.map((install) => (
+                  <div className="card-body shadow p-3 mb-2 bg-body rounded col-12">
+                    <div className="row align-items-center ">
+                      <div className="col-1 col-md-1 col-sm-2 ">
+                        <label htmlFor="log_note" className="col-form-label">
+                          <img
+                            src={install.user.avatar}
+                            alt=""
+                            className="avatar"
+                          />
+                        </label>
+                      </div>
+                      <div className="col-5 mx-3 mb-1">{install.user.name}</div>
+                      <div
+                        className="col-3 offset-2 deadline text-muted mb-1"
+                        style={{ fontSize: "12px" }}
+                      >
+                        {new Date(install.created).getDate() ==
+                        new Date().getDate()
+                          ? "Today" + " " + created(install.created)
+                          : new Date(install.created)
+                              .toDateString()
+                              .slice(0, 10)}
+                      </div>
+                      <div className="col">
+                        <div className="row"></div>
+                      </div>
+                      <div className="col-11 col-md-11 col-sm-11 offset-1">
+                        {install.confirm ? (
+                          <span className="history-highlight-text-new">
+                            Installation Confirmed
+                          </span>
+                        ) : (
+                          <span className="history-highlight-text-old">
+                            Installation Declined
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <div className="col-5 mx-3 mb-1">
-                    {install.user.name}
-                  </div>
-                  <div
-                    className="col-3 offset-2 deadline text-muted mb-1"
-                    style={{ fontSize: "12px" }}
-                  >
-                    {new Date(install.created).getDate() ==
-                    new Date().getDate()
-                      ? "Today" + " " + created(install.created)
-                      : new Date(install.created)
-                          .toDateString()
-                          .slice(0, 10)}
-                  </div>
-                  <div className="col">
-                    <div className="row"></div>
-                  </div>
-                  <div className="col-11 col-md-11 col-sm-11 offset-1">
-                   {install.confirm ? <span className='history-highlight-text-new'>Installation Confirmed</span> : <span className='history-highlight-text-old'>Installation Declined</span>}
-                  </div>
-                </div>
-              </div>
-              ))}
+                ))}
               {changes &&
                 changes.map(
                   (change) =>
@@ -301,13 +306,49 @@ export default function LogMessage(props) {
                           <div className="col-11 col-md-11 col-sm-11 offset-1">
                             {change.action != 0 &&
                               change.changes.map((changeData) =>
-                                Object.entries(changeData).map((name) => (
-                                  <div>
-                                    <span className="history-highlight-text">{name[0].toUpperCase()}</span> changed
-                                    from <span className="history-highlight-text-old">{name[1][0]}</span> to{" "}
-                                    <span className="history-highlight-text-new">{name[1][1]}</span>{" "}
-                                  </div>
-                                ))
+                                Object.entries(changeData).map((name) =>
+                                  name[0] != "assigned" ? (
+                                    <div>
+                                      <span className="history-highlight-text">
+                                        {name[0].toUpperCase()}
+                                      </span>{" "}
+                                      changed from{" "}
+                                      <span className="history-highlight-text-old">
+                                        {name[1][0]}
+                                      </span>{" "}
+                                      to{" "}
+                                      <span className="history-highlight-text-new">
+                                        {name[1][1]}
+                                      </span>{" "}
+                                    </div>
+                                  ) : name[1].operation == 'add' ? (
+                                    <div>
+                                      <span className="history-highlight-text">
+                                        {name[0].toUpperCase()} Users:
+                                      </span>{" "}
+                                      <span className="history-highlight-text-old">
+                                        {name[1].objects.map((user) => (
+                                          <h6> - {user}</h6>
+                                        ))}
+                                      </span>
+                                      <span className="history-highlight-text-new">
+                                        {name[1][1]}
+                                      </span>
+                                    </div>
+                                  ) : <div>
+                                  <span className="history-highlight-text">
+                                    {'UN' + name[0].toUpperCase()} Users:
+                                  </span>{" "}
+                                  <span className="history-highlight-text-old">
+                                    {name[1].objects.map((user) => (
+                                      <h6> - {user}</h6>
+                                    ))}
+                                  </span>
+                                  <span className="history-highlight-text-new">
+                                    {name[1][1]}
+                                  </span>
+                                </div>
+                                )
                               )}
                           </div>
                         </div>

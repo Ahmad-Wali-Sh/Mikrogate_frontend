@@ -52,7 +52,7 @@ export default function Sidebar() {
           </div>
           <nav className="mt-2" role="navigation">
             <ul
-              className="nav nav-pills nav-sidebar flex-column"
+              className="nav  nav-sidebar flex-column"
               data-widget="treeview"
               role="navigation"
               data-accordion="true"
@@ -69,14 +69,8 @@ export default function Sidebar() {
                       : ""
                   }`}
                 >
-                  <div className="nav-link">
-                    <i className="nav-icon fa-solid fa-gauge"></i>
-                    <p>
-                      N.O.C
-                      <i className="fas fa-angle-left right"></i>
-                    </p>
-                  </div>
                   <ul className="nav nav-treeview">
+                    <div className="nav-header">Network Operation Center</div>
                     <li className="nav-item">
                       <Link to="/task-manager/noc" className="nav-link">
                         <i className="fa-solid fa-people-roof nav-icon"></i>
@@ -86,7 +80,7 @@ export default function Sidebar() {
                     <li className="nav-item ">
                       <Link to="/task-manager/technicians" className="nav-link">
                         <i className="fa-solid fa-clipboard-user nav-icon"></i>
-                        <p>Technicians</p>
+                        <p>My Tasks</p>
                       </Link>
                     </li>
                   </ul>
@@ -102,15 +96,8 @@ export default function Sidebar() {
                       : ""
                   }`}
                 >
-                  <div className="nav-link">
-                    <i className="nav-icon fa-solid fa-cart-shopping"></i>
-                    <p>
-                      SALES
-                      <i className="fas fa-angle-left right"></i>
-                    </p>
-                  </div>
                   <ul className="nav nav-treeview">
-                    <div className="nav-header">Contracts</div>
+                    <div className="nav-header">Sales</div>
                     <li
                       className={`nav-item ${
                         groups.sales_stuff == true
@@ -120,13 +107,6 @@ export default function Sidebar() {
                           : ""
                       }`}
                     >
-                      <a href="" className="nav-link">
-                        <i className="fa-solid fa-file-contract nav-icon"></i>
-                        <p>
-                          Contracts
-                          <i className="right fas fa-angle-left"></i>
-                        </p>
-                      </a>
                       <ul className="nav nav-treeview">
                         <li className="nav-item">
                           <Link className="nav-link" to="/search">
@@ -142,35 +122,32 @@ export default function Sidebar() {
                         </li>
                       </ul>
                     </li>
-                    <div className="nav-header">Package</div>
                     <li className="nav-item">
                       <Link to="/packages" className="nav-link">
                         <i className="fa-solid fa-box-open nav-icon"></i>
                         <p>Package List</p>
                       </Link>
+                      <Link className="nav-link" to="/antenna">
+                        <i className="fa-solid fa-satellite-dish nav-icon"></i>
+                        <p> Antenna</p>
+                      </Link>
+                      <Link className="nav-link" to="/routers/">
+                        <i className="fa-solid fa-router nav-icon"></i>
+                        <p> Router</p>
+                      </Link>
                     </li>
-                    <li className="nav-item">
-                      <a href="" className="nav-link">
-                        <i className="fa-solid fa-microchip nav-icon"></i>
-                        <p>
-                          Devices
-                          <i className="right fas fa-angle-left"></i>
-                        </p>
-                      </a>
-                      <ul className="nav nav-treeview">
-                        <li className="nav-item">
-                          <Link className="nav-link" to="/antenna">
-                            <i className="fa-solid fa-satellite-dish nav-icon"></i>
-                            <p> Antenna</p>
-                          </Link>
-                        </li>
-                        <li className="nav-item">
-                          <Link className="nav-link" to="/routers/">
-                            <i className="fa-solid fa-router nav-icon"></i>
-                            <p> Router</p>
-                          </Link>
-                        </li>
-                      </ul>
+                  </ul>
+                </li>
+              )}
+              {(groups.finance_manager || groups.finance) && (
+                <li className={`nav-item menu-open`}>
+                  <div className="nav-header">Finance</div>
+                  <ul className="nav nav-treeview">
+                    <li className="nav-item ">
+                      <Link to="/" className="nav-link">
+                        <i className="fa-solid fa-clipboard-user nav-icon"></i>
+                        <p>Finance</p>
+                      </Link>
                     </li>
                   </ul>
                 </li>
@@ -181,18 +158,12 @@ export default function Sidebar() {
                     groups.technician == true ? "menu-open" : ""
                   }`}
                 >
-                  <div className="nav-link">
-                    <i className="nav-icon fa-solid fa-bars-progress"></i>
-                    <p>
-                      Task Manager
-                      <i className="fas fa-angle-left right"></i>
-                    </p>
-                  </div>
+                  <div className="nav-header">Technicians</div>
                   <ul className="nav nav-treeview">
                     <li className="nav-item ">
                       <Link to="/task-manager/technicians" className="nav-link">
                         <i className="fa-solid fa-clipboard-user nav-icon"></i>
-                        <p>Technician</p>
+                        <p>My Tasks</p>
                       </Link>
                     </li>
                   </ul>
