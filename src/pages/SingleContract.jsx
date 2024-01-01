@@ -499,11 +499,12 @@ const ContractDetails = () => {
         packagePatchedData.append(key, parseInt(packageData[key]));
       }
     });
+    packagePatchedData.append('contract', contract.id)
 
     try {
       const res = await axios({
-        url: contractPackageURL + `${contractPackage.map((item) => item.id)}/`,
-        method: "PATCH",
+        url: contractPackageURL + `${contractPackage.length > 0 ? contractPackage.map((item) => item.id)+ '/' : ''}`,
+        method: contractPackage.length > 0 ? "PATCH" : 'POST',
         data: packagePatchedData,
         headers: {
           Authorization: "Token " + token,
