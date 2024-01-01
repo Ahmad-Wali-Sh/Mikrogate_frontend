@@ -581,6 +581,7 @@ const ContractDetails = () => {
       }
     });
 
+    paymentPatchedData.append('contract', contract.id)
     console.log(grandTotal());
 
     let contractPaymentUrl =
