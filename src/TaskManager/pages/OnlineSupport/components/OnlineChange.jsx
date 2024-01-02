@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { Context } from "../../../../context/Context";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { useRealtime } from "../../../../components/Services";
+import { useGroup } from "../../../../components/useUser";
 
 export default function OnlineChange() {
   const location = useLocation();
@@ -13,6 +14,8 @@ export default function OnlineChange() {
   const ONLINE_URL = process.env.REACT_APP_ONLINE;
   const TASK_URL = process.env.REACT_APP_TASK;
   const PROJECT_URL = process.env.REACT_APP_PROJECT;
+
+  const groups = useGroup()
 
   console.log(data);
   const navigate = useNavigate();
@@ -185,7 +188,9 @@ export default function OnlineChange() {
 
   return (
     <>
-      <div
+      {(groups.noc_manager || groups.noc_stuff || groups.l1) && (
+        <>
+        <div
         class="modal fade"
         id="exampleModal2"
         tabindex="-1"
@@ -291,6 +296,8 @@ export default function OnlineChange() {
           Change Task
         </button>
       </div>
+        </>
+      )}
     </>
   );
 }

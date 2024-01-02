@@ -144,7 +144,7 @@ export default function Sidebar() {
                   <div className="nav-header">Finance</div>
                   <ul className="nav nav-treeview">
                     <li className="nav-item ">
-                      <Link to="/" className="nav-link">
+                      <Link to="/finance/tasks" className="nav-link">
                         <i className="fa-solid fa-clipboard-user nav-icon"></i>
                         <p>Finance</p>
                       </Link>

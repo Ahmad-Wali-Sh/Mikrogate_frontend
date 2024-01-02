@@ -38,6 +38,7 @@ import CPETasks from "./pages/Dashboards/NOC/CPETasks";
 import OnlineSupportTasks from "./pages/Dashboards/NOC/OnlineSupportTasks";
 import AmendmentTasks from "./pages/Dashboards/NOC/AmendmentTasks";
 import SingleContractNoc from "./pages/SingleContractNoc";
+import FinanceTasks from "./pages/Dashboards/Finance/FinanceTasks";
 
 export default function App() {
   const { user } = useContext(Context);
@@ -68,6 +69,7 @@ export default function App() {
           <Route path="/task-manager/troubleshoot" element={<TroubleshootDetails />} />
           <Route path="/task-manager/online_support" element={<OnlineSupportDetails />} />
           <Route path="/task-manager/noc_assigned_details" element={<NocAssignedDetails />} />
+          <Route path="/finance/tasks" element={<FinanceTasks />} />
           <Route path="/task-manager/change_location" element={<ChangeLocationDetails />} />
           <Route path="/task-manager/amendment" element={<AmendmentDetails />} />
           <Route path="/task-manager/cpe" element={<CPEDetails />} />

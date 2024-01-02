@@ -142,7 +142,7 @@ export default function Header() {
 
   const assign = details.map((item) => item.id);
 
-  const { NotifySubmit } = useRealtime()
+  const { NotifySubmit } = useRealtime();
 
   const MembersSubmit = async (e) => {
     e.preventDefault();
@@ -163,8 +163,13 @@ export default function Header() {
           Authorization: "Token " + token.user.token,
         },
       }).then((res) => {
-          NotifySubmit('You are being assigned to a task.', data.id, 'users', res.data.assigned)
-      })
+        NotifySubmit(
+          "You are being assigned to a task.",
+          data.id,
+          "users",
+          res.data.assigned
+        );
+      });
       submitNotification();
       axios
         .get(TASK_URL + `${data.id}/`, {
@@ -205,7 +210,27 @@ export default function Header() {
   const groups = useGroup();
   return (
     <>
-      <h1>{data.title}</h1>
+      <div>
+        <br />
+        <br />
+        <h2>{data.title}</h2>
+        <div className="row gap-3">
+          <div
+            className={`col-2 badge badge-pill badge-${
+              data.installation_confirmed ? "success" : "danger"
+            } p-2`}
+          >
+            Install Confirmation
+          </div>
+          <div
+            className={`col-2 badge badge-pill badge-${
+              data.payment_cleared ? "success" : "danger"
+            } p-2`}
+          >
+            Payment Clearence
+          </div>
+        </div>
+      </div>
       <div className="members mt-3">
         <ul>
           {details.map((member) => (
@@ -377,13 +402,43 @@ export default function Header() {
         ></div>
       </div>
       <ul style={{ display: "flex", margin: "2rem" }} id="mytab" role="tablist">
-        {stages?.map((stage) =>
-          groups.l1 || groups.technician ? (
-            (stage.name == "Pending" ||
-              stage.name == "Completed" ||
-              stage.name == "In-Progress" ||
-              stage.name == "Canceled" ||
-              stage.name == "New") && (
+        {(groups.noc_stuff ||
+          groups.technician ||
+          groups.l1 ||
+          groups.noc_manager ||
+          groups.sales_manager ||
+          groups.sales_manager) &&
+          stages?.map((stage) =>
+            groups.l1 || groups.technician ? (
+              (stage.name == "Pending" ||
+                stage.name == "Completed" ||
+                stage.name == "In-Progress" ||
+                stage.name == "Canceled" ||
+                stage.name == "New") && (
+                <div
+                  className={`btn ${
+                    stage.name == tasker?.stage?.name
+                      ? "btn-success"
+                      : "btn-secondary"
+                  }  m-1`}
+                  onClick={() => {
+                    const Form = new FormData();
+                    Form.append("stage", stage.id);
+                    axios
+                      .patch(TASK_URL + `${data.id}/`, Form, {
+                        headers: {
+                          Authorization: "Token " + token.user.token,
+                        },
+                      })
+                      .then((e) => {
+                        setTrigger(new Date());
+                      });
+                  }}
+                >
+                  {stage.name}
+                </div>
+              )
+            ) : (
               <div
                 className={`btn ${
                   stage.name == tasker?.stage?.name
@@ -407,31 +462,7 @@ export default function Header() {
                 {stage.name}
               </div>
             )
-          ) : (
-            <div
-              className={`btn ${
-                stage.name == tasker?.stage?.name
-                  ? "btn-success"
-                  : "btn-secondary"
-              }  m-1`}
-              onClick={() => {
-                const Form = new FormData();
-                Form.append("stage", stage.id);
-                axios
-                  .patch(TASK_URL + `${data.id}/`, Form, {
-                    headers: {
-                      Authorization: "Token " + token.user.token,
-                    },
-                  })
-                  .then((e) => {
-                    setTrigger(new Date());
-                  });
-              }}
-            >
-              {stage.name}
-            </div>
-          )
-        )}
+          )}
       </ul>
       <div className="tab-content">
         <div
@@ -504,7 +535,7 @@ export default function Header() {
               </div>
               <div className="col-1 col-sm-2">
                 <label htmlFor="tag" className="col-form-label text-muted">
-                Organization
+                  Organization
                 </label>
               </div>
               <div className="col-5 col-sm-4">
@@ -531,9 +562,9 @@ export default function Header() {
                 </div>
               </div>
             </div>
-            
+
             <div className="row">
-            <div className="col-1 col-sm-2">
+              <div className="col-1 col-sm-2">
                 <label htmlFor="project" className="col-form-label text-muted">
                   Customer ID
                 </label>
@@ -570,7 +601,6 @@ export default function Header() {
                   />
                 </div>
               </div>
-              
             </div>
             <div className="row">
               <div className="col-1 col-sm-2">
@@ -585,7 +615,11 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.package?.package__name ? data.contract.package?.package__name : 'Nohting to Show'}
+                    value={
+                      data.contract.package?.package__name
+                        ? data.contract.package?.package__name
+                        : "Nohting to Show"
+                    }
                   />
                 </div>
               </div>
@@ -601,7 +635,11 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.package?.price ? data.contract.package?.price + ' AF' : ''}
+                    value={
+                      data.contract.package?.price
+                        ? data.contract.package?.price + " AF"
+                        : ""
+                    }
                   />
                 </div>
               </div>
@@ -619,7 +657,11 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.antenna?.antenna__name ? data.contract.antenna?.antenna__name : ''}
+                    value={
+                      data.contract.antenna?.antenna__name
+                        ? data.contract.antenna?.antenna__name
+                        : ""
+                    }
                   />
                 </div>
               </div>
@@ -635,7 +677,11 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.antenna?.condition ? data.contract.antenna?.condition : ''}
+                    value={
+                      data.contract.antenna?.condition
+                        ? data.contract.antenna?.condition
+                        : ""
+                    }
                   />
                 </div>
               </div>
@@ -653,7 +699,11 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.router?.router__name ? data.contract.router?.router__name : ''}
+                    value={
+                      data.contract.router?.router__name
+                        ? data.contract.router?.router__name
+                        : ""
+                    }
                   />
                 </div>
               </div>
@@ -669,7 +719,11 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.router?.condition ? data.contract.router?.condition : ''}
+                    value={
+                      data.contract.router?.condition
+                        ? data.contract.router?.condition
+                        : ""
+                    }
                   />
                 </div>
               </div>
@@ -687,7 +741,7 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.contact ? data.contract.contact : ''}
+                    value={data.contract.contact ? data.contract.contact : ""}
                   />
                 </div>
               </div>
@@ -703,7 +757,7 @@ export default function Header() {
                     name="deadline"
                     disabled
                     className="form-control"
-                    value={data.contract.address ? data.contract.address : ''}
+                    value={data.contract.address ? data.contract.address : ""}
                   />
                 </div>
               </div>
