@@ -294,7 +294,7 @@ export default function NocContractList() {
     title: "",
     assigned: [],
     deadline: "",
-    project: 1,
+    project: '',
     description: "",
     stage: 1,
     contract: 1,
@@ -407,8 +407,6 @@ export default function NocContractList() {
       errorNotification();
     }
   };
-
-  console.log(form.assigned);
 
   const [search, setSearch] = React.useState({
     search: "",
