@@ -621,11 +621,11 @@ export default function NocAssigned() {
                     >
                       <i className="fa-solid fa-folder-open"></i>
                     </Link>
-                    <button className={`btn btn-${task.archieved ? 'secondary' : 'warning'} btn-sm ml-1`} onClick={() => {
+                    {(groups.noc_stuff || groups.noc_manager) && <button className={`btn btn-${task.archieved ? 'secondary' : 'warning'} btn-sm ml-1`} onClick={() => {
                       archieveTask(task)
                     }}>
                       <i className="fa-solid fa-archive"></i>
-                    </button>
+                    </button>}
                   </td>
                 </tr>
               </>
