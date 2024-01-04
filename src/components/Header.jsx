@@ -11,6 +11,7 @@ export default function Header() {
   const CONTRACT = process.env.REACT_APP_NEW_CONTRACT;
   const API_URL = USER_API.slice(0, -8);
   const prevLength = useRef();
+  const dropdownRef = useRef()
 
   const [audio] = useState(new Audio("../../dist/audio/notification.wav"));
 
@@ -121,6 +122,19 @@ export default function Header() {
       .then((e) => setTriggerNotify(new Date()));
   };
 
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdown(false)
+      }
+    }
+    document.addEventListener('click', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, [])
+
   const GoToTask = (taskId) => {
     taskId &&
       axios
@@ -180,6 +194,18 @@ export default function Header() {
         });
       });
   };
+
+  const clearNotifications = () => {
+      notifications?.map((notify) => {
+        axios.delete(API_URL + "taskmanager/user-notification/" + notify.id + '/' , {headers: {
+          Authorization: "Token " + token.user.token,
+        }}).then(() => {
+          setTriggerNotify(new Date())
+        }).catch((e) => {
+          console.log(e);
+        })
+      })
+  } 
   return (
     <div>
       <nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -213,13 +239,12 @@ export default function Header() {
         {
           // Dropdown for Notifications
         }
-        <ul className="navbar-nav ml-auto">
-          <li className="nav-item dropdown">
+        <ul className="navbar-nav ml-auto" ref={dropdownRef}>
+          <li className="nav-item dropdown" >
             <a
               className="nav-link notification-icon"
               data-toggle="dropdown"
               onClick={() => setDropdown((prev) => !prev)}
-              onBlurCapture={() => setDropdown(false)}
             >
               <i className="fa fa-bell"></i>
               {notifications.length != 0 && (
@@ -235,7 +260,7 @@ export default function Header() {
                   : "dropdown-notification-hidden"
               }`}
             >
-              <span className="dropdown-header">Notification Center</span>
+              <span className="dropdown-header">Notification Center [{notifications.length}]</span>
               {notifications?.map((notify) => (
                 <>
                   <div className="dropdown-divider"></div>
@@ -285,9 +310,14 @@ export default function Header() {
                 </>
               ))}
               <div className="dropdown-divider"></div>
-              <a className="dropdown-footer">
-                {notifications.length} Notifications
-              </a>
+              {notifications.length > 0 && <a className="dropdown-footer" onClick={() => {
+                clearNotifications()
+              }}>
+                Clear Notifications
+              </a>}
+              {notifications.length == 0 && <a className="dropdown-footer">
+                No Notification
+              </a>}
             </div>
           </li>
         </ul>
