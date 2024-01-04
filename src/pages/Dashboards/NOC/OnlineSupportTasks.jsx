@@ -135,9 +135,7 @@ export default function OnlineSupportTasks() {
         TASK_URL +
           `?user=&contract__contract_number=${
             assignedFilter.contractNumbere ? assignedFilter.contractNumbere : ""
-          }&project=${ProjectReturn('Online Support')?.[0]?.id}&deadline_after=&deadline_before=&tag=&stage=&stage_net=${
-            assignedFilter.archivedShow ? "" : 6
-          }&assigned__id=&created_after=&created_before=&contract__contract_id=${
+          }&project=${ProjectReturn('Online Support')?.[0]?.id}&deadline_after=&deadline_before=&tag=&stage=&archieved=${assignedFilter.archivedShow ? '' : false}&assigned__id=&created_after=&created_before=&contract__contract_id=${
             assignedFilter.contractId ? assignedFilter.contractId : ""
           }`,
         {
@@ -447,6 +445,21 @@ export default function OnlineSupportTasks() {
       });
   };
 
+  
+  const archieveTask = (task) => {
+    const Form = new FormData()
+    Form.append('archieved', !task.archieved)
+    axios
+      .patch(TASK_URL + task.id + '/', Form, { headers: {
+        Authorization: "Token " + token.user.token,
+      }}).then(() => {
+        setTrigger(new Date())
+        task.archieved == false && NotificationManager.info('Task Archieved Successfuly.')
+        task.archieved == true && NotificationManager.warning('Task Unarchieved Successfuly.')
+      })
+  }
+
+
   return (
     <div className="content-wrapper">
       <div className="content-header">
@@ -520,7 +533,7 @@ export default function OnlineSupportTasks() {
           <tbody>
             {tasks.map((task) => (
               <>
-                <tr key={task.id}>
+                <tr key={task.id} className={task.archieved ? 'archived-bg' : ''}>
                   <td>{++i}.</td>
                   <td>
                     <a>{task.contract.contract_number}</a>
@@ -597,7 +610,7 @@ export default function OnlineSupportTasks() {
                   <td>{task.user.name}</td>
                   <td>
                     <Link
-                      className="text-decoration-none"
+                      className="btn btn-primary btn-sm mr-1"
                       to={
                         task.project.name == "Installation"
                           ? "/task-manager/details"
@@ -617,8 +630,13 @@ export default function OnlineSupportTasks() {
                       }
                       state={{ data: task }}
                     >
-                      More...
+                      <i className="fa-solid fa-folder-open"></i>
                     </Link>
+                    <button className={`btn btn-${task.archieved ? 'secondary' : 'warning'} btn-sm ml-1`} onClick={() => {
+                      archieveTask(task)
+                    }}>
+                      <i className="fa-solid fa-archive"></i>
+                    </button>
                   </td>
                 </tr>
               </>

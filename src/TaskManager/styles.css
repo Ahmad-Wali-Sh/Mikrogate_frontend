@@ -617,6 +617,10 @@ input, select {
 
 }
 
+.archived-bg{
+  background-color: #d3d5d7;
+}
+
 .dropdown-notification-show{
   position: absolute;
   width: 17rem;

@@ -46,6 +46,7 @@ export default function NocTask() {
       deadline: watch("deadline"),
       assigned: watch("assigned"),
       contract: watch("contract"),
+      archieved: watch('archieved')
     });
     
   }, [
@@ -56,7 +57,8 @@ export default function NocTask() {
     watch("sort_order"),
     watch("stage"),
     watch("user"),
-    watch("created_before")
+    watch("created_before"),
+    watch('archieved')
   ]);
   console.log(taskFilter);
 
@@ -75,6 +77,7 @@ export default function NocTask() {
         deadline: taskFilter.deadline ? taskFilter.deadline : '',
         assigned:taskFilter.assigned ? taskFilter.assigned : '',
         contract: taskFilter.contract ? taskFilter.contract : '',
+        archieved: taskFilter.archieved ? taskFilter.archieved : false,
       })
     }, 1000);
   }, [])
@@ -156,9 +159,7 @@ export default function NocTask() {
             data.tag
           }&user=${data.user}&assigned__id=${
             data.assigned
-          }&contract__contract_id=${data.contract__contract_id}&stage_net=${
-            data.stage != 6 ? 6 : ""
-          }`,
+          }&contract__contract_id=${data.contract__contract_id}&archieved=${data.archieved}`,
         {
           headers: {
             Authorization: "Token " + token.user.token,
@@ -172,7 +173,6 @@ export default function NocTask() {
       });
   };
 
-  console.log(contractNumber);
 
   useEffect(() => {
     axios
@@ -438,6 +438,20 @@ export default function NocTask() {
     search: "",
   });
 
+    
+  const archieveTask = (task) => {
+    const Form = new FormData()
+    Form.append('archieved', !task.archieved)
+    axios
+      .patch(TASK_URL + task.id + '/', Form, { headers: {
+        Authorization: "Token " + token.user.token,
+      }}).then(() => {
+        handleSubmit(TaskSearchHandle)()
+        task.archieved == false && NotificationManager.info('Task Archieved Successfuly.')
+        task.archieved == true && NotificationManager.warning('Task Unarchieved Successfuly.')
+      })
+  }
+
 
 
   return (
@@ -456,10 +470,9 @@ export default function NocTask() {
                     onSubmit={handleSubmit(TaskSearchHandle)}
                   >
                     <div className="row">
-                      <div className="col-md-12">
+                      <div className="col-12">
                         <div className="row">
-                          <br />
-                          <div className="col-6">
+                          <div className="col-3">
                             <div class="form-group">
                               <div className="form-group">
                                 <label>Created by:</label>
@@ -501,6 +514,20 @@ export default function NocTask() {
                                 <option value="contract">Contract</option>
                                 <option value="created">Date</option>
                                 <option value="deadline">Deadline</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div className="col-3">
+                            <div className="form-group">
+                              <label>Archieved Tasks:</label>
+                              <select
+                                className="form-control"
+                                style={{ width: "100%" }}
+                                {...register("archieved")}
+                              >
+                                <option value=""></option>
+                                <option value={true}>Show</option>
+                                <option value={false}>Hide</option>
                               </select>
                             </div>
                           </div>
@@ -1024,7 +1051,7 @@ export default function NocTask() {
           <tbody>
             {tasks?.map((task) => (
               <>
-                <tr key={task.id}>
+                <tr key={task.id} className={task.archieved ? 'archived-bg' : ''}>
                   <td>{++i}.</td>
                   <td>
                     <a>{task.contract.contract_number}</a>
@@ -1110,7 +1137,7 @@ export default function NocTask() {
                   <td>{task.user.name}</td>
                   <td>
                     <Link
-                      className="text-decoration-none"
+                      className="btn btn-primary btn-sm mr-1"
                       to={
                         task.project.name == "Installation"
                           ? "/task-manager/details"
@@ -1128,8 +1155,13 @@ export default function NocTask() {
                       }
                       state={{ data: task }}
                     >
-                      More...
+                      <i className="fa-solid fa-folder-open"></i>
                     </Link>
+                    <button className={`btn btn-${task.archieved ? 'secondary' : 'warning'} btn-sm ml-1`} onClick={() => {
+                      archieveTask(task)
+                    }}>
+                      <i className="fa-solid fa-archive"></i>
+                    </button>
                   </td>
                 </tr>
               </>

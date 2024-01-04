@@ -208,6 +208,20 @@ export default function Header() {
   };
 
   const groups = useGroup();
+
+  const archieveTask = (task) => {
+    const Form = new FormData()
+    Form.append('archieved', !task.archieved)
+    axios
+      .patch(TASK_URL + task.id + '/', Form, { headers: {
+        Authorization: "Token " + token.user.token,
+      }}).then((e) => {
+        setTasker(e.data)
+        tasker.archieved == false && NotificationManager.info('Task Archieved Successfuly.')
+        tasker.archieved == true && NotificationManager.warning('Task Unarchieved Successfuly.')
+      })
+  }
+
   return (
     <>
       <div>
@@ -264,6 +278,15 @@ export default function Header() {
                 data-bs-target="#deleteModal"
               >
                 <i className="fa-solid fa-trash"></i>
+              </button>
+              <button
+                type="button"
+                className={`btn btn-${tasker.archieved ? 'secondary' : 'warning'} rounded-circle circle-width mx-3`}
+                onClick={()=> {
+                    archieveTask(tasker)
+                }}
+              >
+                <i className="fa-solid fa-archive"></i>
               </button>
             </>
           )}

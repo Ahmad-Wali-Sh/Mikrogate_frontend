@@ -19,7 +19,11 @@ export default function TechniciansDashboard() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      archieved: false
+    }
+  });
 
   const [contracts, setContracts] = useState([]);
   const [contractNumber, setContractNumber] = useState([]);
@@ -82,11 +86,17 @@ export default function TechniciansDashboard() {
       });
   }, []);
 
+  useEffect(() => {
+    reset({
+      archieved: false
+    })
+  }, [])
+
   const TaskSearchHandle = (data) => {
     axios
       .get(
         TASK_URL +
-          `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${data.project}&stage=${data.stage}&tag=${data.tag}&assigned__id=${user.id}&contract__contract_id=${data.contract__contract_id}&stage_net=${data.stage != 6 ? 6 : ''}`,
+          `?contract__contract_number=${data.contract}&created_after=${data.created_after}&created_before=${data.created_before}&deadline_after=${data.deadline}&deadline_before=${data.deadline}&ordering=${data.sort_order}${data.order_by}&project=${data.project}&stage=${data.stage}&tag=${data.tag}&assigned__id=${user.id}&contract__contract_id=${data.contract__contract_id}&archieved=${data.archieved}`,
         {
           headers: {
             Authorization: "Token " + token.user.token,
@@ -346,7 +356,7 @@ export default function TechniciansDashboard() {
   useEffect(()=> {
       axios
     .get(
-      TASK_URL + `?assigned__id=${user.id}&ordering=-created`,
+      TASK_URL + `?assigned__id=${user.id}&ordering=-created&archieved=${false}`,
       {
         headers: {
           Authorization: "Token " + token.user.token,
@@ -364,7 +374,7 @@ export default function TechniciansDashboard() {
     <div className="content-wrapper">
       <div className="content-header">
         <div className="container-fluid">
-          <div className="row">
+          <div className="row ">
             <div className="col-12">
               <section className="content">
                 <div className="container-fluid">
@@ -482,6 +492,20 @@ export default function TechniciansDashboard() {
                                 name="date2"
                                 {...register("deadline")}
                               />
+                            </div>
+                          </div>
+                          <div className="col-3">
+                            <div className="form-group">
+                              <label>Archieved Tasks:</label>
+                              <select
+                                className="form-control"
+                                style={{ width: "100%" }}
+                                {...register("archieved")}
+                              >
+                                <option value=""></option>
+                                <option value={true}>Show</option>
+                                <option value={false} selected>Hide</option>
+                              </select>
                             </div>
                           </div>
                         </div>
@@ -875,7 +899,7 @@ export default function TechniciansDashboard() {
           <tbody>
             {tasks.map((task) => (
               <>
-                <tr key={task.id}>
+                <tr key={task.id} className={task.archieved ? 'archived-bg' : ''}>
                   <td>{++i}.</td>
                   <td>
                     <br />
@@ -936,7 +960,6 @@ export default function TechniciansDashboard() {
                             },
                           })
                           .then((res) => {
-                            console.log(res.data);
                             handleSubmit(TaskSearchHandle);
                           })
                           .catch((err) => console.log(err));

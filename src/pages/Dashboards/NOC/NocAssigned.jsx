@@ -122,16 +122,13 @@ export default function NocAssigned() {
       });
   };
 
-  console.log(assignedFilter);
   useEffect(() => {
     axios
       .get(
         TASK_URL +
           `?user=&contract__contract_number=${
             assignedFilter.contractNumbere ? assignedFilter.contractNumbere : ""
-          }&project=2&deadline_after=&deadline_before=&tag=&stage=&stage_net=${
-            assignedFilter.archivedShow ? "" : 6
-          }&assigned__id=&created_after=&created_before=&contract__contract_id=${
+          }&project=2&deadline_after=&deadline_before=&tag=&stage=&archieved=${assignedFilter.archivedShow ? '' : false}&assigned__id=&created_after=&created_before=&contract__contract_id=${
             assignedFilter.contractId ? assignedFilter.contractId : ""
           }`,
         {
@@ -440,6 +437,20 @@ export default function NocAssigned() {
       });
   };
 
+
+  const archieveTask = (task) => {
+    const Form = new FormData()
+    Form.append('archieved', !task.archieved)
+    axios
+      .patch(TASK_URL + task.id + '/', Form, { headers: {
+        Authorization: "Token " + token.user.token,
+      }}).then(() => {
+        setTrigger(new Date())
+        task.archieved == false && NotificationManager.info('Task Archieved Successfuly.')
+        task.archieved == true && NotificationManager.warning('Task Unarchieved Successfuly.')
+      })
+  }
+
   return (
     <div className="content-wrapper">
       <div className="content-header">
@@ -513,7 +524,7 @@ export default function NocAssigned() {
           <tbody>
             {tasks.map((task) => (
               <>
-                <tr key={task.id}>
+                <tr key={task.id} className={task.archieved ? 'archived-bg' : ''}>
                   <td>{++i}.</td>
                   <td>
                     <a>{task.contract.contract_number}</a>
@@ -590,7 +601,7 @@ export default function NocAssigned() {
                   <td>{task.user.name}</td>
                   <td>
                     <Link
-                      className="text-decoration-none"
+                      className="btn btn-primary btn-sm mr-1"
                       to={
                         task.project.name == "Installation"
                           ? "/task-manager/details"
@@ -608,8 +619,13 @@ export default function NocAssigned() {
                       }
                       state={{ data: task }}
                     >
-                      More...
+                      <i className="fa-solid fa-folder-open"></i>
                     </Link>
+                    <button className={`btn btn-${task.archieved ? 'secondary' : 'warning'} btn-sm ml-1`} onClick={() => {
+                      archieveTask(task)
+                    }}>
+                      <i className="fa-solid fa-archive"></i>
+                    </button>
                   </td>
                 </tr>
               </>
