@@ -229,20 +229,20 @@ export default function Header() {
         <br />
         <h2>{data.title}</h2>
         <div className="row gap-3">
-          <div
+          {data.installation_confirmed && <div
             className={`col-2 badge badge-pill badge-${
               data.installation_confirmed ? "success" : "danger"
             } p-2`}
           >
-            Install Confirmation
-          </div>
-          <div
+            Install Confirmed
+          </div>}
+          {data.troubleshoot_cost > 0 && <div
             className={`col-2 badge badge-pill badge-${
               data.payment_cleared ? "success" : "danger"
             } p-2`}
           >
             Payment Clearence
-          </div>
+          </div>}
         </div>
       </div>
       <div className="members mt-3">
