@@ -10,7 +10,7 @@ const AmendmentPrint = () => {
   const contractAntennaURL = process.env.REACT_APP_CONTRACT_ANTENNA;
   const contractRouterURl = process.env.REACT_APP_CONTRACT_ROUTER;
   const contractPaymentURL = process.env.REACT_APP_CONTRACT_PAYMENT;
-  const ME_URL = process.env.REACT_APP_USERS;
+  const ME_URL = process.env.REACT_APP_USER;
   const contractOtherServiceURL = process.env.REACT_APP_CONTRACT_OTHER_SERVICE;
   const [user, setUser] = useState([]);
 
@@ -18,11 +18,12 @@ const AmendmentPrint = () => {
     axios
       .get(ME_URL, {
         headers: {
-          Authorization: "Token " + token,
+          Authorization: "Token " + token.user.token,
+          "Content-Type": "application/json",
         },
-      })
-      .then((res) => setUser(res.data.results));
-    console.log(user);
+      }).then((res) => {
+        setUser(res.data)
+      });
   }, []);
 
   const [contractPackage, setContractPackage] = useState([]);
