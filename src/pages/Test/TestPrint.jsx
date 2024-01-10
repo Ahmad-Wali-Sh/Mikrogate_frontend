@@ -12,6 +12,18 @@ const TestPrint = () => {
   const contractRouterURl = process.env.REACT_APP_CONTRACT_ROUTER;
   const contractPaymentURL = process.env.REACT_APP_CONTRACT_PAYMENT;
   const contractOtherServiceURL = process.env.REACT_APP_CONTRACT_OTHER_SERVICE;
+  const [user, setUser] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(ME_URL, {
+        headers: {
+          Authorization: "Token " + token,
+        },
+      })
+      .then((res) => setUser(res.data.results));
+    console.log(user);
+  }, []);
 
   const [contractPackage, setContractPackage] = useState([]);
   const [contractAntenna, setContractAntenna] = useState([]);
@@ -357,7 +369,7 @@ const TestPrint = () => {
                       {contractPayment.map((item) => item.currency.name)}
                       <br />
                       <br />
-                      {contract.user.name}
+                      {user?.name ? user?.name : ''}
                     </address>
                   </div>
                 </div>
