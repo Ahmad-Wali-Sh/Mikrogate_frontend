@@ -10,6 +10,7 @@ const TestPrint = () => {
   const contractPackageURL = process.env.REACT_APP_CONTRACT_PACKAGE;
   const contractAntennaURL = process.env.REACT_APP_CONTRACT_ANTENNA;
   const contractRouterURl = process.env.REACT_APP_CONTRACT_ROUTER;
+  const ME_URL = process.env.REACT_APP_USERS;
   const contractPaymentURL = process.env.REACT_APP_CONTRACT_PAYMENT;
   const contractOtherServiceURL = process.env.REACT_APP_CONTRACT_OTHER_SERVICE;
   const [user, setUser] = useState([]);
