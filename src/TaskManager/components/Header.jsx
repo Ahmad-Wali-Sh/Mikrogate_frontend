@@ -272,15 +272,6 @@ export default function Header() {
               </button>
               <button
                 type="button"
-                name="addTask"
-                className="btn btn-secondary rounded-circle circle-width mx-3"
-                data-bs-toggle="modal"
-                data-bs-target="#deleteModal"
-              >
-                <i className="fa-solid fa-trash"></i>
-              </button>
-              <button
-                type="button"
                 className={`btn btn-${tasker.archieved ? 'secondary' : 'warning'} rounded-circle circle-width mx-3`}
                 onClick={()=> {
                     archieveTask(tasker)
@@ -290,6 +281,15 @@ export default function Header() {
               </button>
             </>
           )}
+              {(groups.noc_manager || groups.noc_stuff || groups.sales_stuff || groups.sales_manager) && <button
+                type="button"
+                name="addTask"
+                className="btn btn-secondary rounded-circle circle-width mx-3"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteModal"
+              >
+                <i className="fa-solid fa-trash"></i>
+              </button>}
         </ul>
 
         <div
